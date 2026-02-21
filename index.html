@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharmacie Rahmane · Thiès, Sénégal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+<style>
+/* ═══════════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════════ */
+:root {
+  /* Palette Sénégal — vert forêt, or soleil, ivoire */
+  --jade:    #0A4A3A;
+  --forest:  #0F6B52;
+  --emerald: #1A9C73;
+  --mint:    #B8E8D8;
+  --gold:    #C9960C;
+  --gold2:   #F0B429;
+  --gold3:   #FEF3C7;
+  --ivory:   #FAFAF7;
+  --cream:   #F5F3EE;
+  --sand:    #EAE6DC;
+  --linen:   #E8E4DA;
+  --coal:    #1A1F1C;
+  --slate:   #2D3830;
+  --stone:   #5A6660;
+  --mist:    #8FA89F;
+  --dew:     #C8D8D3;
+
+  /* Semantic */
+  --bg:      var(--ivory);
+  --surface: #FFFFFF;
+  --border:  #E2DDD4;
+  --shadow:  0 1px 3px rgba(10,74,58,.06), 0 4px 16px rgba(10,74,58,.08);
+  --shadow-md: 0 4px 24px rgba(10,74,58,.12), 0 1px 4px rgba(10,74,58,.06);
+  --shadow-lg: 0 12px 48px rgba(10,74,58,.18);
+  --shadow-xl: 0 24px 80px rgba(10,74,58,.22);
+
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'Outfit', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --sidebar-w: 270px;
+  --topbar-h:  64px;
+
+  /* Transitions */
+  --ease: cubic-bezier(.22,.68,0,1.2);
+  --ease-in: cubic-bezier(.4,0,1,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--coal); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--dew); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--mist); }
+
+/* ═══════════════════════════════════════════
+   LOGIN SCREEN — luxueux, tropical
+═══════════════════════════════════════════ */
+#loginScreen {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.login-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(26,156,115,.35) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 20%, rgba(201,150,12,.18) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 60% 80%, rgba(10,74,58,.4) 0%, transparent 60%),
+    linear-gradient(155deg, #071F18 0%, #0A3D2E 40%, #0F5A44 70%, #0A3D2E 100%);
+}
+/* Motif batik géométrique */
+.login-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    repeating-conic-gradient(rgba(201,150,12,.06) 0deg 15deg, transparent 15deg 30deg),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.015) 0px, rgba(255,255,255,.015) 1px, transparent 1px, transparent 28px);
+  opacity: 1;
+}
+.login-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 40% 40% at 50% 50%, rgba(240,180,41,.05) 0%, transparent 70%);
+}
+.login-card {
+  position: relative; z-index: 1;
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(32px) saturate(1.5);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 28px;
+  padding: 0;
+  width: 440px; max-width: 95vw;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12);
+  animation: loginReveal .8s var(--ease) both;
+  overflow: hidden;
+}
+@keyframes loginReveal { from { opacity:0; transform:translateY(32px) scale(.97); } to { opacity:1; transform:none; } }
+
+.login-header {
+  padding: 44px 44px 32px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(201,150,12,.08) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  position: relative;
+}
+.login-logo-wrap {
+  width: 80px; height: 80px; margin: 0 auto 16px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(201,150,12,.2) 0%, rgba(26,156,115,.2) 100%);
+  border: 1px solid rgba(201,150,12,.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+}
+#loginLogoImg { width: 72px; height: 72px; object-fit: contain; border-radius: 14px; display: none; }
+.login-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.9rem; font-weight: 700;
+  color: #fff; letter-spacing: -.01em;
+  line-height: 1.2;
+}
+.login-header p { color: var(--gold2); font-size: .78rem; margin-top: 6px; letter-spacing: .12em; text-transform: uppercase; }
+
+.login-body { padding: 32px 44px 44px; }
+.login-field { margin-bottom: 18px; }
+.login-field label { display: block; color: rgba(255,255,255,.5); font-size: .72rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+.login-field input {
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius-sm); color: #fff;
+  font-family: var(--font-body); font-size: .95rem; outline: none;
+  transition: all .25s;
+}
+.login-field input::placeholder { color: rgba(255,255,255,.25); }
+.login-field input:focus { background: rgba(255,255,255,.11); border-color: var(--gold2); box-shadow: 0 0 0 3px rgba(240,180,41,.15); }
+
+.btn-login {
+  width: 100%; padding: 16px; border: none; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+  color: var(--jade); font-family: var(--font-body); font-size: 1rem; font-weight: 700;
+  cursor: pointer; letter-spacing: .04em; margin-top: 6px;
+  transition: all .25s; position: relative; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(201,150,12,.4);
+}
+.btn-login::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, transparent 50%); }
+.btn-login:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,150,12,.5); }
+.btn-login:disabled { opacity: .5; cursor: not-allowed; }
+.login-err { background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.3); color: #FCA5A5; padding: 10px 14px; border-radius: var(--radius-xs); font-size: .82rem; margin-top: 12px; display: none; }
+.login-att { color: rgba(255,255,255,.35); font-size: .75rem; text-align: center; margin-top: 10px; }
+
+/* ═══════════════════════════════════════════
+   CONNECTING OVERLAY
+═══════════════════════════════════════════ */
+#connectOverlay {
+  position: fixed; inset: 0; z-index: 9998;
+  background: linear-gradient(155deg, #071F18, #0A3D2E);
+  display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+}
+.loader-ring {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.1);
+  border-top-color: var(--gold2);
+  animation: spin .9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#connectOverlay p { color: rgba(255,255,255,.6); font-size: .9rem; }
+
+/* ═══════════════════════════════════════════
+   APP LAYOUT
+═══════════════════════════════════════════ */
+#app { display: none; }
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
+  display: flex; flex-direction: column; z-index: 200;
+  background: var(--jade);
+  background-image: linear-gradient(180deg, #0A4A3A 0%, #072E24 100%);
+  box-shadow: 2px 0 32px rgba(0,0,0,.2);
+  overflow-y: auto; overflow-x: hidden;
+}
+/* Motif décoratif sidebar */
+.sidebar::before {
+  content: '';
+  position: absolute; top: 0; right: 0; width: 100%; height: 100%;
+  background-image: repeating-linear-gradient(-45deg, rgba(255,255,255,.012) 0px, rgba(255,255,255,.012) 1px, transparent 1px, transparent 20px);
+  pointer-events: none;
+}
+
+.sidebar-brand {
+  padding: 28px 22px 22px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  display: flex; align-items: center; gap: 14px; position: relative;
+}
+.brand-logo {
+  width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(201,150,12,.25), rgba(26,156,115,.15));
+  border: 1px solid rgba(201,150,12,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+#sidebarLogoImg { width: 44px; height: 44px; object-fit: contain; border-radius: 10px; display: none; }
+.brand-text { flex: 1; min-width: 0; }
+.brand-text h2 { font-family: var(--font-display); color: #fff; font-size: 1rem; font-weight: 600; line-height: 1.2; }
+.brand-text p { color: rgba(184,232,216,.6); font-size: .68rem; margin-top: 2px; letter-spacing: .06em; }
+
+.conn-pill {
+  margin: 12px 16px;
+  padding: 7px 12px; border-radius: 99px;
+  display: flex; align-items: center; gap: 7px;
+  font-size: .72rem; font-weight: 600;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+}
+.conn-pill.ok { color: #6EE7B7; }
+.conn-pill.ko { color: #FCA5A5; }
+.conn-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.conn-pill.ok .conn-dot { background: #10B981; animation: pulseGlow 2s infinite; }
+.conn-pill.ko .conn-dot { background: #EF4444; }
+@keyframes pulseGlow { 0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.4);} 50%{box-shadow:0 0 0 5px rgba(16,185,129,0);} }
+
+.sidebar-user {
+  margin: 0 14px 12px; padding: 14px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.07);
+  border-radius: var(--radius-sm); display: flex; align-items: center; gap: 10px;
+}
+.user-av {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--jade);
+}
+.user-av img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; display: none; }
+.user-nm { color: #fff; font-size: .85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-rl { color: rgba(184,232,216,.55); font-size: .7rem; }
+
+/* NAV */
+.nav-grp { padding: 10px 12px 4px; }
+.nav-lbl { color: rgba(255,255,255,.25); font-size: .65rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
+.nav-it {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  cursor: pointer; color: rgba(255,255,255,.55);
+  font-size: .85rem; font-weight: 500;
+  transition: all .2s; margin-bottom: 2px; user-select: none;
+  position: relative;
+}
+.nav-it:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.85); }
+.nav-it.active { background: rgba(255,255,255,.12); color: #fff; }
+.nav-it.active::before { content: ''; position: absolute; left: 0; top: 25%; bottom: 25%; width: 3px; background: var(--gold2); border-radius: 0 3px 3px 0; }
+.nav-ic { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+.nav-it.active .nav-ic { filter: none; }
+.nav-badge { margin-left: auto; background: var(--gold); color: var(--jade); font-size: .62rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+
+.sidebar-foot { margin-top: auto; padding: 16px; border-top: 1px solid rgba(255,255,255,.07); }
+.btn-logout {
+  width: 100%; padding: 11px; border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius-sm);
+  background: transparent; color: rgba(255,255,255,.5);
+  font-family: var(--font-body); font-size: .82rem; cursor: pointer;
+  transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-logout:hover { background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.3); color: #FCA5A5; }
+
+/* MAIN */
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100; height: var(--topbar-h);
+  background: rgba(250,250,247,.92); backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px; display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 1px 0 var(--border), 0 2px 8px rgba(10,74,58,.04);
+}
+.tb-left h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 600; color: var(--coal); letter-spacing: -.01em; }
+.tb-left p { font-size: .72rem; color: var(--stone); margin-top: 1px; }
+.tb-right { display: flex; align-items: center; gap: 10px; }
+.tb-time { font-family: var(--font-mono); font-size: .75rem; color: var(--stone); background: var(--sand); padding: 5px 12px; border-radius: 99px; }
+
+/* BUTTONS */
+.btn-p {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 20px; border: none; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--jade) 0%, var(--forest) 100%);
+  color: #fff; font-family: var(--font-body); font-size: .85rem; font-weight: 600;
+  cursor: pointer; transition: all .25s;
+  box-shadow: 0 2px 8px rgba(10,74,58,.3);
+}
+.btn-p:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10,74,58,.35); }
+.btn-s {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--slate); font-family: var(--font-body); font-size: .85rem; font-weight: 500;
+  cursor: pointer; transition: all .2s;
+}
+.btn-s:hover { border-color: var(--forest); color: var(--forest); background: rgba(15,107,82,.03); }
+.btn-g {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 18px; border: 1.5px solid rgba(201,150,12,.3); border-radius: var(--radius-sm);
+  background: var(--gold3); color: var(--gold); font-family: var(--font-body); font-size: .85rem; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+}
+.btn-g:hover { background: var(--gold); color: var(--jade); }
+.btn-d {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border: 1.5px solid rgba(239,68,68,.2); border-radius: var(--radius-sm);
+  background: #FEF2F2; color: #DC2626; font-family: var(--font-body); font-size: .82rem; font-weight: 500;
+  cursor: pointer; transition: all .2s;
+}
+.btn-d:hover { background: #DC2626; color: #fff; }
+
+/* CONTENT */
+.content { padding: 28px 32px; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; animation: pageIn .3s var(--ease) both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* CARDS */
+.card {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  transition: box-shadow .25s;
+}
+.card:hover { box-shadow: var(--shadow-md); }
+.card-head { padding: 22px 26px 0; display: flex; align-items: center; justify-content: space-between; }
+.card-ttl { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--coal); }
+.card-body { padding: 20px 26px 26px; }
+
+/* KPI GRID */
+.kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+.kpi {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); padding: 22px 24px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow); transition: all .25s;
+}
+.kpi:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.kpi-stripe { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: var(--radius) var(--radius) 0 0; }
+.kpi-lbl { font-size: .72rem; font-weight: 700; color: var(--stone); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+.kpi-val { font-family: var(--font-mono); font-size: 1.65rem; font-weight: 500; color: var(--coal); line-height: 1; }
+.kpi-val small { font-size: .72rem; color: var(--mist); margin-left: 4px; font-family: var(--font-body); }
+.kpi-sub { font-size: .72rem; color: var(--mist); margin-top: 8px; }
+.kpi-ico { position: absolute; right: 20px; top: 20px; font-size: 1.8rem; opacity: .08; }
+.kpi-trend { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: .72rem; font-weight: 600; padding: 3px 8px; border-radius: 99px; }
+.kpi-trend.up { color: #059669; background: rgba(5,150,105,.1); }
+.kpi-trend.neutral { color: var(--stone); background: var(--sand); }
+
+/* CHARTS */
+.charts-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 24px; }
+.chart-wrap canvas { max-height: 220px; }
+
+/* TABLE */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+thead th {
+  padding: 12px 16px; text-align: left;
+  font-size: .68rem; font-weight: 700; color: var(--stone);
+  letter-spacing: .08em; text-transform: uppercase;
+  background: var(--cream); border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+thead th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+tbody td { padding: 14px 16px; border-bottom: 1px solid rgba(226,221,212,.5); vertical-align: middle; }
+tbody tr:hover { background: rgba(10,74,58,.025); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 99px; font-size: .7rem; font-weight: 600; white-space: nowrap;
+}
+.bg-ok { background: rgba(5,150,105,.1); color: #065F46; }
+.bg-wait { background: rgba(201,150,12,.12); color: #92400E; }
+.bg-prog { background: rgba(59,130,246,.1); color: #1E40AF; }
+.bg-no { background: rgba(239,68,68,.1); color: #991B1B; }
+.bg-gray { background: var(--sand); color: var(--stone); }
+
+/* AMOUNT */
+.amt { font-family: var(--font-mono); font-weight: 500; }
+
+/* FORM */
+.form-g { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ff { display: flex; flex-direction: column; gap: 7px; }
+.ff.s2 { grid-column: span 2; }
+.ff label { font-size: .74rem; font-weight: 700; color: var(--stone); letter-spacing: .05em; text-transform: uppercase; }
+.ff label .req { color: #DC2626; margin-left: 2px; }
+.ff input, .ff select, .ff textarea {
+  padding: 12px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: var(--font-body); font-size: .9rem; color: var(--coal);
+  background: var(--surface); outline: none; transition: all .2s;
+  appearance: none; -webkit-appearance: none;
+}
+.ff select { background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%235A6660' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+.ff input:focus, .ff select:focus, .ff textarea:focus { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(15,107,82,.1); }
+.ff textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.f-actions { display: flex; gap: 10px; margin-top: 8px; padding-top: 18px; border-top: 1px solid var(--border); }
+
+/* MODAL */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(7,30,23,.5);
+  backdrop-filter: blur(8px); z-index: 500;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-bg.open { display: flex; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: var(--surface); border-radius: var(--radius);
+  width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  animation: modalIn .3s var(--ease) both;
+}
+@keyframes modalIn { from { opacity:0; transform:translateY(20px) scale(.97); } to { opacity:1; transform:none; } }
+.modal-head { padding: 26px 28px 0; display: flex; align-items: center; justify-content: space-between; }
+.modal-head h3 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; }
+.modal-x { background: var(--cream); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; color: var(--stone); transition: all .2s; display: flex; align-items: center; justify-content: center; }
+.modal-x:hover { background: var(--sand); color: var(--coal); }
+.modal-body { padding: 22px 28px 28px; }
+
+/* FILTERS */
+.filter-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.search-wrap {
+  flex: 1; min-width: 200px; display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 9px 16px; transition: border-color .2s;
+}
+.search-wrap:focus-within { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(15,107,82,.08); }
+.search-wrap input { border: none; outline: none; font-family: var(--font-body); font-size: .88rem; flex: 1; background: transparent; color: var(--coal); }
+.search-wrap span { color: var(--mist); font-size: .9rem; }
+
+/* CHIPS */
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.chip {
+  padding: 6px 14px; border-radius: 99px; font-size: .74rem; font-weight: 600;
+  cursor: pointer; border: 1.5px solid transparent; transition: all .18s;
+  white-space: nowrap; user-select: none;
+}
+.chip-all { background: var(--cream); color: var(--stone); border-color: var(--border); }
+.chip-all.on { background: var(--jade); color: #fff; border-color: var(--jade); }
+
+/* TYPES */
+.types-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 12px; }
+.type-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; background: var(--surface);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow); transition: all .2s;
+}
+.type-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.type-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+.type-nm { flex: 1; font-size: .88rem; font-weight: 600; }
+.type-cnt { font-size: .72rem; color: var(--mist); }
+.type-lock { font-size: .75rem; color: var(--dew); }
+
+/* USERS */
+.users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap: 16px; }
+.user-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 20px 22px;
+  box-shadow: var(--shadow); transition: all .25s;
+  position: relative; overflow: hidden;
+}
+.user-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.user-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.uc-av { width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; }
+.uc-name { font-weight: 700; font-size: .95rem; margin-bottom: 3px; }
+.uc-login { font-family: var(--font-mono); font-size: .74rem; color: var(--stone); }
+
+/* JOURNAL */
+.log-it { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.log-it:last-child { border-bottom: none; }
+.log-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.log-txt { flex: 1; }
+.log-act { font-size: .85rem; font-weight: 600; }
+.log-det { font-size: .78rem; color: var(--stone); margin-top: 2px; }
+.log-ts { font-family: var(--font-mono); font-size: .7rem; color: var(--mist); white-space: nowrap; }
+
+/* LOGO UPLOAD */
+.logo-zone {
+  border: 2px dashed var(--border); border-radius: var(--radius);
+  padding: 40px; text-align: center; cursor: pointer;
+  transition: all .25s; background: var(--cream);
+}
+.logo-zone:hover { border-color: var(--forest); background: rgba(15,107,82,.03); }
+.logo-zone.drag { border-color: var(--gold); background: rgba(201,150,12,.04); }
+.logo-preview { max-width: 180px; max-height: 120px; border-radius: var(--radius-sm); margin: 0 auto 16px; display: block; box-shadow: var(--shadow-md); }
+
+/* SECTION TITLE */
+.sec-title { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
+.sec-title h2 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; }
+.sec-title p { font-size: .8rem; color: var(--stone); margin-top: 3px; }
+
+/* SYNC ROW */
+.sync-row { display: flex; align-items: center; gap: 8px; font-size: .73rem; color: var(--mist); margin-bottom: 18px; }
+.sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #10B981; animation: pulseGlow 2s infinite; }
+
+/* TOAST */
+.toast-wrap { position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+.toast {
+  padding: 14px 20px; border-radius: var(--radius-sm); font-size: .85rem;
+  max-width: 340px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 10px;
+  animation: toastIn .35s var(--ease) both;
+  border: 1px solid transparent;
+}
+@keyframes toastIn { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:none; } }
+.toast.ok { background: #ECFDF5; color: #065F46; border-color: rgba(5,150,105,.2); }
+.toast.err { background: #FEF2F2; color: #991B1B; border-color: rgba(239,68,68,.2); }
+.toast.warn { background: var(--gold3); color: #92400E; border-color: rgba(201,150,12,.2); }
+
+/* PDF PRINT STYLES */
+@media print {
+  #loginScreen, #connectOverlay, .sidebar, .topbar, .filter-bar, .chips, .btn-p, .btn-s, .btn-g, .btn-d, .modal-bg, .toast-wrap, .sync-row, #topAction, .tb-right { display: none !important; }
+  .main { margin-left: 0 !important; }
+  .content { padding: 0 !important; }
+  .page { display: block !important; }
+  body { background: white; font-size: 12px; }
+  .card, .kpi { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+  .kpi-grid { grid-template-columns: repeat(4,1fr); gap: 8px; }
+  .charts-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  /* En-tête PDF professionnel */
+  body::before {
+    content: '';
+    display: block;
+    height: 80px;
+    background: linear-gradient(135deg, #0A4A3A, #0F6B52);
+    margin-bottom: 20px;
+    border-radius: 0 0 12px 12px;
+  }
+  .content::before {
+    content: attr(data-pdf-header);
+    display: block;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px; font-weight: 700;
+    color: #0A4A3A; margin-bottom: 4px;
+  }
+  table { font-size: 11px; }
+  thead th { background: #F0FDF4 !important; }
+  .badge { border: 1px solid currentColor; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 960px) { .kpi-grid { grid-template-columns: 1fr 1fr; } .charts-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { :root { --sidebar-w: 0px; } .sidebar { transform: translateX(-260px); } .main { margin-left: 0; } .kpi-grid { grid-template-columns: 1fr; } }
+
+/* DECORATIVE DIVIDER */
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 24px 0; }
+.tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 99px; font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<!-- CONNECTING -->
+<div id="connectOverlay" style="display:none">
+  <div class="loader-ring"></div>
+  <p id="connectMsg">Connexion à la base de données…</p>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo-wrap" id="loginLogoWrap">
+        <span id="loginLogoEmoji">☪️</span>
+        <img id="loginLogoImg" alt="Logo">
+      </div>
+      <h1>Pharmacie Rahmane</h1>
+      <p>Thiès · Sénégal · Système de Gestion</p>
+    </div>
+    <div class="login-body">
+      <div class="login-field"><label>Identifiant</label><input type="text" id="loginInput" placeholder="Votre identifiant" autocomplete="username"></div>
+      <div class="login-field"><label>Mot de passe</label><input type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="btn-login" id="btnLogin" onclick="doLogin()">Se connecter →</button>
+      <div class="login-err" id="loginErr"></div>
+      <div class="login-att" id="loginAtt"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo" id="brandLogo">
+        <span id="brandEmoji">☪️</span>
+        <img id="sidebarLogoImg" alt="">
+      </div>
+      <div class="brand-text">
+        <h2>Pharmacie Rahmane</h2>
+        <p>Thiès · Sénégal</p>
+      </div>
+    </div>
+
+    <div class="conn-pill ok" id="connPill">
+      <div class="conn-dot"></div>
+      <span id="connTxt">Connecté · Temps réel</span>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-av" id="sideAv">A</div>
+      <div style="flex:1;min-width:0">
+        <div class="user-nm" id="sideNm">Utilisateur</div>
+        <div class="user-rl" id="sideRl">Rôle</div>
+      </div>
+    </div>
+
+    <div class="nav-grp">
+      <div class="nav-lbl">Principal</div>
+      <div class="nav-it active" onclick="go('dashboard')"><span class="nav-ic">📊</span>Tableau de bord</div>
+      <div class="nav-it" onclick="go('registre')"><span class="nav-ic">📋</span>Registre<span class="nav-badge" id="nbBadge">0</span></div>
+      <div class="nav-it" onclick="go('recap')"><span class="nav-ic">📈</span>Récapitulatif</div>
+    </div>
+
+    <div class="nav-grp" id="adminNav">
+      <div class="nav-lbl">Administration</div>
+      <div class="nav-it" onclick="go('parametres')"><span class="nav-ic">⚙️</span>Paramètres & Logo</div>
+      <div class="nav-it" onclick="go('types')"><span class="nav-ic">🏷️</span>Types de dépenses</div>
+      <div class="nav-it" onclick="go('users')"><span class="nav-ic">👥</span>Utilisateurs</div>
+      <div class="nav-it" onclick="go('journal')"><span class="nav-ic">🔍</span>Journal d'accès</div>
+    </div>
+
+    <div class="nav-grp">
+      <div class="nav-lbl">Rapports</div>
+      <div class="nav-it" onclick="exportPDF()"><span class="nav-ic">📄</span>Rapport PDF</div>
+      <div class="nav-it" onclick="exportCSV()"><span class="nav-ic">📤</span>Exporter CSV</div>
+    </div>
+
+    <div class="sidebar-foot">
+      <button class="btn-logout" onclick="deconnecter()">🚪 Déconnecter</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <h3 id="pageTitle">Tableau de bord</h3>
+        <p id="pageSub">Vue d'ensemble · Pharmacie Rahmane</p>
+      </div>
+      <div class="tb-right">
+        <span class="tb-time" id="tbTime">--:--</span>
+        <button class="btn-s" onclick="exportPDF()" style="font-size:.82rem;padding:8px 14px">🖨️ PDF</button>
+        <button class="btn-p" id="topAction" onclick="ouvrirSaisie()">➕ Nouvelle dépense</button>
+      </div>
+    </div>
+
+    <div class="content" id="mainContent">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="page active" id="page-dashboard">
+        <div class="sync-row" id="syncRow"><div class="sync-dot"></div><span id="syncTxt">Synchronisation…</span></div>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kpi-stripe" style="background:linear-gradient(90deg,var(--jade),var(--emerald))"></div><div class="kpi-ico">💰</div><div class="kpi-lbl">Total Général</div><div class="kpi-val" id="kTotal">0 <small>FCFA</small></div><div class="kpi-trend neutral" id="kTotalSub">0 opérations</div></div>
+          <div class="kpi"><div class="kpi-stripe" style="background:linear-gradient(90deg,var(--gold),var(--gold2))"></div><div class="kpi-ico">📅</div><div class="kpi-lbl">Ce mois</div><div class="kpi-val" id="kMois">0 <small>FCFA</small></div><div class="kpi-trend neutral" id="kMoisSub">0 opérations</div></div>
+          <div class="kpi"><div class="kpi-stripe" style="background:linear-gradient(90deg,#3B82F6,#60A5FA)"></div><div class="kpi-ico">🔢</div><div class="kpi-lbl">Opérations</div><div class="kpi-val" id="kOps">0</div><div class="kpi-trend neutral">Toutes périodes</div></div>
+          <div class="kpi"><div class="kpi-stripe" style="background:linear-gradient(90deg,#8B5CF6,#A78BFA)"></div><div class="kpi-ico">⚖️</div><div class="kpi-lbl">Moyenne</div><div class="kpi-val" id="kMoy">0 <small>FCFA</small></div><div class="kpi-trend neutral">Par opération</div></div>
+        </div>
+        <div class="charts-grid">
+          <div class="card chart-wrap"><div class="card-head"><span class="card-ttl">Répartition par type</span></div><div class="card-body"><canvas id="chartPie"></canvas></div></div>
+          <div class="card chart-wrap"><div class="card-head"><span class="card-ttl">Évolution mensuelle</span><span style="font-size:.73rem;color:var(--mist)">12 derniers mois</span></div><div class="card-body"><canvas id="chartBar"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-ttl">Dernières opérations</span><button class="btn-s" onclick="go('registre')" style="font-size:.78rem;padding:7px 12px">Voir tout →</button></div>
+          <div class="card-body" style="padding-top:14px"><div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Bénéficiaire</th><th>Montant</th><th>Statut</th></tr></thead><tbody id="tbRecent"></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ── REGISTRE ── -->
+      <div class="page" id="page-registre">
+        <div class="filter-bar">
+          <div class="search-wrap"><span>🔍</span><input type="text" id="searchIn" placeholder="Rechercher description, bénéficiaire, référence…" oninput="renderReg()"></div>
+          <button class="btn-s" onclick="reinit()">✖ Tout afficher</button>
+        </div>
+        <div class="chips" id="typeChips"></div>
+        <div class="card">
+          <div class="card-head">
+            <div><span class="card-ttl">Registre des dépenses</span><div style="font-size:.73rem;color:var(--mist);margin-top:2px" id="regCount">0 opération(s)</div></div>
+            <div style="display:flex;gap:8px">
+              <button class="btn-s" onclick="exportCSV()" style="font-size:.8rem;padding:8px 12px">📤 CSV</button>
+              <button class="btn-p" onclick="ouvrirSaisie()" id="btnAddReg">➕ Ajouter</button>
+            </div>
+          </div>
+          <div class="card-body" style="padding-top:14px"><div class="tbl-wrap"><table><thead><tr><th>N°</th><th>Date</th><th>Type</th><th>Description</th><th>Bénéficiaire</th><th>Réf.</th><th>Montant</th><th>Statut</th><th></th></tr></thead><tbody id="tbReg"></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ── RECAP ── -->
+      <div class="page" id="page-recap">
+        <div class="card">
+          <div class="card-head"><span class="card-ttl">Récapitulatif par type</span><span id="recapTot" style="font-size:.8rem;color:var(--stone)"></span></div>
+          <div class="card-body"><div class="tbl-wrap"><table><thead><tr><th>Type</th><th>Opérations</th><th>Total FCFA</th><th>% du total</th><th>Moyenne</th></tr></thead><tbody id="tbRecap"></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ── PARAMÈTRES ── -->
+      <div class="page" id="page-parametres">
+        <div class="sec-title"><div><h2>Paramètres & Logo</h2><p>Personnalisez l'identité visuelle de votre pharmacie</p></div></div>
+
+        <!-- Logo upload -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-head"><span class="card-ttl">🖼️ Logo de la pharmacie</span></div>
+          <div class="card-body">
+            <p style="font-size:.85rem;color:var(--stone);margin-bottom:16px;line-height:1.6">Le logo apparaît dans la sidebar, sur l'écran de connexion et sur les rapports PDF. Formats acceptés : PNG, JPG, SVG (recommandé : carré, fond transparent).</p>
+            <div class="logo-zone" id="logoZone" onclick="document.getElementById('logoFile').click()" ondragover="e=>e.preventDefault()" ondrop="handleLogoDrop(event)">
+              <img id="logoPreview" class="logo-preview" style="display:none" alt="Logo">
+              <div id="logoPlaceholder">
+                <div style="font-size:2.5rem;margin-bottom:10px">🖼️</div>
+                <p style="font-size:.9rem;font-weight:600;color:var(--slate)">Cliquez ou glissez votre logo ici</p>
+                <p style="font-size:.78rem;color:var(--mist);margin-top:4px">PNG, JPG, SVG · Max 2 MB</p>
+              </div>
+            </div>
+            <input type="file" id="logoFile" accept="image/*" style="display:none" onchange="chargerLogo(event)">
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <button class="btn-p" onclick="document.getElementById('logoFile').click()">📁 Choisir un fichier</button>
+              <button class="btn-d" onclick="supprimerLogo()" id="btnDelLogo" style="display:none">🗑️ Supprimer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Infos pharmacie -->
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-head"><span class="card-ttl">🏥 Informations de la pharmacie</span></div>
+          <div class="card-body">
+            <div class="form-g">
+              <div class="ff"><label>Nom de la pharmacie</label><input type="text" id="pNom" value="Pharmacie Rahmane" placeholder="Nom officiel"></div>
+              <div class="ff"><label>Ville</label><input type="text" id="pVille" value="Thiès, Sénégal" placeholder="Ville"></div>
+              <div class="ff"><label>Adresse email</label><input type="email" id="pEmail" value="rahmanepharmacie@gmail.com" placeholder="email@pharmacie.sn"></div>
+              <div class="ff"><label>Téléphone</label><input type="tel" id="pTel" placeholder="+221 XX XXX XX XX"></div>
+              <div class="ff"><label>Propriétaire</label><input type="text" id="pProp" value="Dr. Khady Diene" placeholder="Nom du propriétaire"></div>
+              <div class="ff"><label>Numéro de licence</label><input type="text" id="pLic" placeholder="Ex: PH-2025-001"></div>
+            </div>
+            <div class="f-actions">
+              <button class="btn-p" onclick="sauvegarderParams()">💾 Enregistrer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Changer mot de passe -->
+        <div class="card">
+          <div class="card-head"><span class="card-ttl">🔑 Changer mon mot de passe</span></div>
+          <div class="card-body">
+            <div class="form-g" style="max-width:480px">
+              <div class="ff"><label>Ancien mot de passe</label><input type="password" id="pwdAncien" placeholder="••••••••"></div>
+              <div class="ff"><label>Nouveau mot de passe</label><input type="password" id="pwdNouv" placeholder="Min. 6 caractères"></div>
+              <div class="ff"><label>Confirmer</label><input type="password" id="pwdConf" placeholder="Répéter le nouveau"></div>
+            </div>
+            <div class="f-actions"><button class="btn-p" onclick="changerMdp()">🔒 Mettre à jour</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TYPES ── -->
+      <div class="page" id="page-types">
+        <div class="sec-title"><div><h2>Types de dépenses</h2><p>Catégories personnalisées pour votre pharmacie</p></div><button class="btn-p" onclick="ouvrirModalType()">➕ Nouveau type</button></div>
+        <div class="card" style="margin-bottom:18px"><div class="card-body" style="font-size:.85rem;color:var(--stone);line-height:1.7;padding:18px 24px">
+          ℹ️ Ajoutez autant de types que nécessaire. Ils apparaîtront dans le formulaire de saisie, les graphiques et les rapports. Les types <span style="font-size:.7rem;background:var(--sand);padding:2px 8px;border-radius:99px;font-weight:600">🔒 Système</span> ne peuvent pas être supprimés.
+        </div></div>
+        <div class="types-grid" id="typesGrid"></div>
+      </div>
+
+      <!-- ── USERS ── -->
+      <div class="page" id="page-users">
+        <div class="sec-title"><div><h2>Gestion des utilisateurs</h2><p>Accès contrôlé depuis la France 🇫🇷 vers le Sénégal 🇸🇳</p></div><button class="btn-p" onclick="ouvrirModalUser()">➕ Nouvel utilisateur</button></div>
+        <div class="users-grid" id="usersGrid"></div>
+      </div>
+
+      <!-- ── JOURNAL ── -->
+      <div class="page" id="page-journal">
+        <div class="sec-title"><div><h2>Journal d'accès & Audit</h2><p>Traçabilité complète de toutes les actions</p></div><button class="btn-d" onclick="viderJournal()">🗑️ Vider</button></div>
+        <div class="card"><div class="card-body" id="journalList"></div></div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- ── MODAL SAISIE ── -->
+<div class="modal-bg" id="mSaisie">
+  <div class="modal">
+    <div class="modal-head"><h3 id="mSaisieTtl">➕ Nouvelle dépense</h3><button class="modal-x" onclick="closeModal('mSaisie')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-g">
+        <div class="ff"><label>Date <span class="req">*</span></label><input type="date" id="fDate"></div>
+        <div class="ff"><label>Type de dépense <span class="req">*</span></label><select id="fType"><option value="">-- Choisir --</option></select></div>
+        <div class="ff s2"><label>Description / Libellé <span class="req">*</span></label><input type="text" id="fLibelle" placeholder="Ex : Achat médicaments génériques…"></div>
+        <div class="ff"><label>Bénéficiaire / Fournisseur</label><input type="text" id="fBenef" placeholder="Nom du bénéficiaire"></div>
+        <div class="ff"><label>Mode de paiement</label><select id="fMode"><option>Virement bancaire</option><option>Espèces</option><option>Chèque</option><option>Mobile Money</option><option>Orange Money</option><option>Wave</option></select></div>
+        <div class="ff"><label>Référence / N° Pièce</label><input type="text" id="fRef" placeholder="Ex : VIR-2025-001"></div>
+        <div class="ff"><label>Montant (FCFA) <span class="req">*</span></label><input type="number" id="fMontant" placeholder="0" min="0"></div>
+        <div class="ff"><label>Statut</label><select id="fStatut"><option>En attente</option><option>En cours</option><option>Validé</option><option>Annulé</option><option>Litigieux</option></select></div>
+        <div class="ff s2"><label>Observations</label><textarea id="fObs" placeholder="Notes complémentaires…"></textarea></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn-p" onclick="saveDep()">💾 Enregistrer</button>
+        <button class="btn-s" onclick="closeModal('mSaisie')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL TYPE ── -->
+<div class="modal-bg" id="mType">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-head"><h3>🏷️ Nouveau type de dépense</h3><button class="modal-x" onclick="closeModal('mType')">✕</button></div>
+    <div class="modal-body">
+      <div class="ff" style="margin-bottom:16px"><label>Nom du type <span class="req">*</span></label><input type="text" id="tNom" placeholder="Ex : Loyer, Assurance, Formation…" oninput="updatePreview()"></div>
+      <div class="ff" style="margin-bottom:16px">
+        <label>Couleur</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px">
+          <div class="color-opt" data-c="#0A4A3A" style="width:32px;height:32px;border-radius:50%;background:#0A4A3A;cursor:pointer;border:3px solid transparent;transition:all .15s" onclick="pickColor('#0A4A3A')"></div>
+          <div class="color-opt" data-c="#C0392B" style="width:32px;height:32px;border-radius:50%;background:#C0392B;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#C0392B')"></div>
+          <div class="color-opt" data-c="#CA6F1E" style="width:32px;height:32px;border-radius:50%;background:#CA6F1E;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#CA6F1E')"></div>
+          <div class="color-opt" data-c="#1E8449" style="width:32px;height:32px;border-radius:50%;background:#1E8449;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#1E8449')"></div>
+          <div class="color-opt" data-c="#9A7C09" style="width:32px;height:32px;border-radius:50%;background:#9A7C09;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#9A7C09')"></div>
+          <div class="color-opt" data-c="#8E44AD" style="width:32px;height:32px;border-radius:50%;background:#8E44AD;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#8E44AD')"></div>
+          <div class="color-opt" data-c="#2E86C1" style="width:32px;height:32px;border-radius:50%;background:#2E86C1;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#2E86C1')"></div>
+          <div class="color-opt" data-c="#16A085" style="width:32px;height:32px;border-radius:50%;background:#16A085;cursor:pointer;border:3px solid transparent;" onclick="pickColor('#16A085')"></div>
+          <input type="color" id="tColorPicker" value="#0A4A3A" style="width:36px;height:32px;border:1.5px solid var(--border);border-radius:8px;padding:1px;cursor:pointer;" oninput="pickColor(this.value)">
+        </div>
+        <input type="hidden" id="tColor" value="#0A4A3A">
+      </div>
+      <div class="ff" style="margin-bottom:0">
+        <label>Aperçu</label>
+        <div id="tPreview" style="padding:10px 16px;border-radius:var(--radius-sm);display:inline-flex;align-items:center;gap:10px;font-size:.85rem;font-weight:600;margin-top:4px;background:#0A4A3A22;color:#0A4A3A">
+          <div style="width:10px;height:10px;border-radius:50%;background:#0A4A3A"></div><span>Nouveau type</span>
+        </div>
+      </div>
+      <div class="f-actions">
+        <button class="btn-p" onclick="saveType()">✅ Créer</button>
+        <button class="btn-s" onclick="closeModal('mType')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL USER ── -->
+<div class="modal-bg" id="mUser">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3>👤 Nouvel utilisateur</h3><button class="modal-x" onclick="closeModal('mUser')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-g">
+        <div class="ff"><label>Identifiant <span class="req">*</span></label><input type="text" id="uLogin" placeholder="ex : amadou"></div>
+        <div class="ff"><label>Mot de passe <span class="req">*</span></label><input type="password" id="uPwd" placeholder="Min. 6 caractères"></div>
+        <div class="ff"><label>Nom complet</label><input type="text" id="uNom" placeholder="Prénom Nom"></div>
+        <div class="ff"><label>Rôle <span class="req">*</span></label><select id="uRole"><option value="Administrateur">Administrateur (accès complet)</option><option value="Saisie" selected>Saisie (registre + lecture)</option><option value="Lecture">Lecture seule</option></select></div>
+        <div class="ff s2"><label>Email</label><input type="email" id="uEmail" placeholder="utilisateur@pharmacie.sn"></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn-p" onclick="saveUser()">✅ Créer le compte</button>
+        <button class="btn-s" onclick="closeModal('mUser')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL PDF ── -->
+<div class="modal-bg" id="mPDF">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-head"><h3>📄 Exporter en PDF</h3><button class="modal-x" onclick="closeModal('mPDF')">✕</button></div>
+    <div class="modal-body">
+      <p style="font-size:.85rem;color:var(--stone);margin-bottom:18px;line-height:1.6">Choisissez le rapport à exporter. Le PDF sera généré avec le logo et les informations de votre pharmacie.</p>
+      <div style="display:grid;gap:10px">
+        <button class="btn-s" onclick="imprimerPage('dashboard')" style="justify-content:flex-start;gap:12px;padding:14px 18px;font-size:.88rem"><span style="font-size:1.1rem">📊</span><div style="text-align:left"><div style="font-weight:600">Tableau de bord</div><div style="font-size:.75rem;color:var(--mist)">KPIs + Graphiques + Dernières opérations</div></div></button>
+        <button class="btn-s" onclick="imprimerPage('registre')" style="justify-content:flex-start;gap:12px;padding:14px 18px;font-size:.88rem"><span style="font-size:1.1rem">📋</span><div style="text-align:left"><div style="font-weight:600">Registre complet</div><div style="font-size:.75rem;color:var(--mist)">Toutes les dépenses · filtrées si actif</div></div></button>
+        <button class="btn-s" onclick="imprimerPage('recap')" style="justify-content:flex-start;gap:12px;padding:14px 18px;font-size:.88rem"><span style="font-size:1.1rem">📈</span><div style="text-align:left"><div style="font-weight:600">Récapitulatif par type</div><div style="font-size:.75rem;color:var(--mist)">Totaux · pourcentages · moyennes</div></div></button>
+        <button class="btn-g" onclick="genRapportMensuel()" style="justify-content:flex-start;gap:12px;padding:14px 18px;font-size:.88rem;margin-top:4px"><span style="font-size:1.1rem">📑</span><div style="text-align:left"><div style="font-weight:600">Rapport mensuel signable</div><div style="font-size:.75rem">Avec entête officielle + zone de signature</div></div></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ════════════════════════════════════════════════
+// CONFIG SUPABASE — À REMPLIR
+// ════════════════════════════════════════════════
+const SUPA_URL    = 'https://tmshposkrebpwhtuxfaf.supabase.co';   // ex: https://abcdefgh.supabase.co
+const SUPA_KEY    = 'sb_publishable_-E-ip-mGp3p2G_z01gWTrw_92s9DDUX';       // ex: eyJhbGciOiJIUzI1NiIs...
+const SUPA_SECRET = 'Le10092019$aissa@'; // ⚠️ Identique à app.secret dans Supabase
+const DB_OK = SUPA_URL !== 'https://tmshposkrebpwhtuxfaf.supabase.co';
+
+// ── ÉTAT ─────────────────────────────────────
+const A = {
+  user: null, role: null, logo: null,
+  dep: [], users: [], logs: [], types: [], params: {},
+  editId: null, filterType: '', selColor: '#0A4A3A',
+  attempts: 0, cPie: null, cBar: null,
+};
+
+// ── TYPES PAR DÉFAUT ──────────────────────────
+const DEF_TYPES = [
+  {id:'t1',nom:'Virement',couleur:'#1A5276',systeme:true},
+  {id:'t2',nom:'Créance',couleur:'#C0392B',systeme:true},
+  {id:'t3',nom:'Frais diverses',couleur:'#CA6F1E',systeme:true},
+  {id:'t4',nom:"Chiffre d'affaires",couleur:'#1E8449',systeme:true},
+  {id:'t5',nom:'Fournisseurs comptants',couleur:'#9A7C09',systeme:true},
+  {id:'t6',nom:'Relevée bancaire',couleur:'#7F8C8D',systeme:true},
+];
+const DEF_USERS = [
+  {id:'u1',login:'aminata',pwd:hp('Admin@2026!'),role:'Administrateur',nom:'Dr. Aminata Nguer (Admin)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u2',login:'khady',pwd:hp('Khady@2026!'),role:'Administrateur',nom:'Dr. Khady Diene (Propriétaire)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u3',login:'Compta',pwd:hp('Compta@2026'),role:'Lecture',nom:'Compta (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+];
+const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Grand Standing EDK, Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
+
+// ── UTILS ─────────────────────────────────────
+function hp(p){let r='';for(let i=0;i<p.length;i++)r+=String(p.charCodeAt(i)^(i*7+13)).padStart(3,'0');return r;}
+function fd(d){if(!d)return'-';const[y,m,j]=d.split('-');return`${j}/${m}/${y}`;}
+function fdt(dt){const d=new Date(dt);return d.toLocaleDateString('fr-FR')+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+function gid(){return'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,7);}
+function tc(n){const t=A.types.find(x=>x.nom===n);return t?t.couleur:'#7F8C8D';}
+function tb(n){return tc(n)+'22';}
+const SB={'Validé':'bg-ok','En cours':'bg-prog','En attente':'bg-wait','Annulé':'bg-no','Litigieux':'bg-no'};
+const RC={'Administrateur':{bg:'rgba(10,74,58,.1)',c:'#0A4A3A'},'Saisie':{bg:'rgba(15,107,82,.1)',c:'#0F6B52'},'Lecture':{bg:'rgba(90,102,96,.12)',c:'#5A6660'}};
+
+function toast(m,t='ok'){
+  const c=document.getElementById('toastWrap');
+  const el=document.createElement('div');
+  el.className=`toast ${t}`;
+  el.innerHTML=(t==='ok'?'✅':t==='err'?'❌':'⚠️')+' '+m;
+  c.appendChild(el);
+  setTimeout(()=>el.style.opacity='0',3000);
+  setTimeout(()=>el.remove(),3400);
+}
+
+// ── LOCAL STORAGE ─────────────────────────────
+function save(){
+  try{
+    localStorage.setItem('ph3_dep',JSON.stringify(A.dep));
+    localStorage.setItem('ph3_usr',JSON.stringify(A.users));
+    localStorage.setItem('ph3_log',JSON.stringify(A.logs.slice(0,200)));
+    localStorage.setItem('ph3_types',JSON.stringify(A.types));
+    localStorage.setItem('ph3_params',JSON.stringify(A.params));
+    if(A.logo)localStorage.setItem('ph3_logo',A.logo);
+    else localStorage.removeItem('ph3_logo');
+  }catch(e){}
+}
+function load(){
+  try{
+    A.dep    = JSON.parse(localStorage.getItem('ph3_dep')||'[]');
+    A.users  = JSON.parse(localStorage.getItem('ph3_usr')||JSON.stringify(DEF_USERS));
+    A.logs   = JSON.parse(localStorage.getItem('ph3_log')||'[]');
+    A.types  = JSON.parse(localStorage.getItem('ph3_types')||JSON.stringify(DEF_TYPES));
+    A.params = JSON.parse(localStorage.getItem('ph3_params')||JSON.stringify(DEF_PARAMS));
+    A.logo   = localStorage.getItem('ph3_logo')||null;
+    if(!A.users.length)A.users=[...DEF_USERS];
+    if(!A.types.length)A.types=[...DEF_TYPES];
+    if(!Object.keys(A.params).length)A.params={...DEF_PARAMS};
+  }catch(e){A.dep=[];A.users=[...DEF_USERS];A.logs=[];A.types=[...DEF_TYPES];A.params={...DEF_PARAMS};}
+}
+
+// ── SUPABASE ──────────────────────────────────
+async function sb(table,method='GET',body=null,filter=''){
+  if(!DB_OK)throw new Error('no db');
+  const r=await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`,{
+    method,
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':'return=minimal','x-app-secret':SUPA_SECRET},
+    body:body?JSON.stringify(body):null
+  });
+  if(!r.ok)throw new Error(await r.text());
+  if(method==='GET')return r.json();
+  return r.status===204?null:r.json().catch(()=>null);
+}
+const dbG=(t,f='')=>sb(t,'GET',null,'?order=created_at.asc'+f);
+const dbI=(t,d)=>sb(t,'POST',d);
+const dbU=(t,id,d)=>sb(t,'PATCH',d,`?id=eq.${id}`);
+const dbD=(t,id)=>sb(t,'DELETE',null,`?id=eq.${id}`);
+
+async function alog(action,detail=''){
+  const e={ts:new Date().toISOString(),utilisateur:A.user,role:A.role,action,detail};
+  A.logs.unshift({id:gid(),...e});
+  if(DB_OK)dbI('journal',e).catch(()=>{});
+  save();
+}
+
+// ── BOOT ─────────────────────────────────────
+async function boot(){
+  // Charger immédiatement depuis localStorage (instantané)
+  load();
+  applyLogo();
+  // Login visible de suite — pas d'attente réseau
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('connectOverlay').style.display = 'none';
+}
+
+// Appelé APRÈS le login réussi — charge les données Supabase en arrière-plan
+async function syncFromDB(){
+  if(!DB_OK){ setConn(false); return; }
+  setConn(true);
+  document.getElementById('syncTxt').textContent = '🔄 Synchronisation en cours…';
+  try{
+    // Charger dépenses + types en priorité (affichage principal)
+    const [dep, types] = await Promise.all([
+      dbG('depenses'),
+      dbG('types_depenses').catch(()=>[])
+    ]);
+    A.dep   = dep   && dep.length   ? dep   : A.dep;
+    A.types = types && types.length ? types : A.types;
+
+    // Init types si première fois
+    if(!types || !types.length){
+      for(const t of DEF_TYPES) await dbI('types_depenses',t).catch(()=>{});
+      A.types = [...DEF_TYPES];
+    }
+    refresh();
+    document.getElementById('syncTxt').textContent = '🟢 Synchronisé · ' + new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+    // Charger utilisateurs + journal en arrière-plan (moins urgent)
+    const [usr, logs] = await Promise.all([
+      dbG('utilisateurs'),
+      dbG('journal')
+    ]);
+    A.users = usr  && usr.length  ? usr  : A.users;
+    A.logs  = logs && logs.length ? logs : A.logs;
+    if(!usr || !usr.length){
+      for(const u of DEF_USERS) await dbI('utilisateurs',u).catch(()=>{});
+      A.users = [...DEF_USERS];
+    }
+    save();
+    setConn(true);
+  }catch(e){
+    console.warn('Sync DB failed:', e);
+    setConn(false);
+    document.getElementById('syncTxt').textContent = '🔴 Hors ligne — données locales';
+  }
+}
+
+function setConn(ok){
+  const el=document.getElementById('connPill');
+  const t=document.getElementById('connTxt');
+  el.className=`conn-pill ${ok?'ok':'ko'}`;
+  t.textContent=ok?'Connecté · Temps réel':(DB_OK?'Mode hors ligne':'Mode local');
+}
+
+// ── LOGO ─────────────────────────────────────
+function applyLogo(){
+  const logo=A.logo;
+  // Login
+  const le=document.getElementById('loginLogoEmoji');
+  const li=document.getElementById('loginLogoImg');
+  const bl=document.getElementById('brandEmoji');
+  const bi=document.getElementById('sidebarLogoImg');
+  const del=document.getElementById('btnDelLogo');
+  if(logo){
+    le.style.display='none';li.src=logo;li.style.display='block';
+    bl.style.display='none';bi.src=logo;bi.style.display='block';
+    document.getElementById('logoPreview').src=logo;
+    document.getElementById('logoPreview').style.display='block';
+    document.getElementById('logoPlaceholder').style.display='none';
+    if(del)del.style.display='inline-flex';
+  }else{
+    le.style.display='block';li.style.display='none';
+    bl.style.display='block';bi.style.display='none';
+    document.getElementById('logoPreview').style.display='none';
+    document.getElementById('logoPlaceholder').style.display='block';
+    if(del)del.style.display='none';
+  }
+}
+
+function chargerLogo(e){
+  const file=e.target.files[0];
+  if(!file)return;
+  if(file.size>2*1024*1024){toast('Fichier trop volumineux (max 2 MB)','warn');return;}
+  const r=new FileReader();
+  r.onload=ev=>{A.logo=ev.target.result;save();applyLogo();toast('Logo mis à jour ✓');};
+  r.readAsDataURL(file);
+}
+function handleLogoDrop(e){
+  e.preventDefault();
+  const file=e.dataTransfer.files[0];
+  if(!file||!file.type.startsWith('image/'))return;
+  const r=new FileReader();
+  r.onload=ev=>{A.logo=ev.target.result;save();applyLogo();toast('Logo mis à jour ✓');};
+  r.readAsDataURL(file);
+}
+function supprimerLogo(){if(!confirm('Supprimer le logo ?'))return;A.logo=null;save();applyLogo();toast('Logo supprimé');}
+
+// ── PARAMS ───────────────────────────────────
+function chargerParams(){
+  const p=A.params;
+  document.getElementById('pNom').value=p.nom||'Pharmacie Rahmane';
+  document.getElementById('pVille').value=p.ville||'Thiès, Sénégal';
+  document.getElementById('pEmail').value=p.email||'rahmanepharmacie@gmail.com';
+  document.getElementById('pTel').value=p.tel||'';
+  document.getElementById('pProp').value=p.prop||'Dr. Khady Diene';
+  document.getElementById('pLic').value=p.lic||'';
+}
+function sauvegarderParams(){
+  A.params={
+    nom:document.getElementById('pNom').value,
+    ville:document.getElementById('pVille').value,
+    email:document.getElementById('pEmail').value,
+    tel:document.getElementById('pTel').value,
+    prop:document.getElementById('pProp').value,
+    lic:document.getElementById('pLic').value,
+  };
+  save();
+  alog('PARAMS','Informations pharmacie mises à jour');
+  toast('Paramètres enregistrés ✓');
+  // Mettre à jour brand
+  document.querySelector('.brand-text h2').textContent=A.params.nom||'Pharmacie Rahmane';
+}
+function changerMdp(){
+  const anc=document.getElementById('pwdAncien').value;
+  const nv=document.getElementById('pwdNouv').value;
+  const co=document.getElementById('pwdConf').value;
+  if(!anc||!nv||!co){toast('Tous les champs sont requis','warn');return;}
+  const u=A.users.find(x=>x.login===A.user);
+  if(!u||u.pwd!==hp(anc)){toast('Ancien mot de passe incorrect','err');return;}
+  if(nv.length<4){toast('Nouveau mot de passe trop court (min 4)','warn');return;}
+  if(nv!==co){toast('Les mots de passe ne correspondent pas','err');return;}
+  u.pwd=hp(nv);
+  if(DB_OK)dbU('utilisateurs',u.id,{pwd:hp(nv)}).catch(()=>{});
+  save();
+  alog('CHANGEMENT MDP',A.user);
+  toast('Mot de passe modifié ✓');
+  ['pwdAncien','pwdNouv','pwdConf'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ── LOGIN ─────────────────────────────────────
+async function doLogin(){
+  const login=document.getElementById('loginInput').value.trim();
+  const pwd=document.getElementById('pwdInput').value;
+  const err=document.getElementById('loginErr');
+  const btn=document.getElementById('btnLogin');
+  err.style.display='none';
+  btn.disabled=true;btn.textContent='Connexion…';
+  try{
+    const u=A.users.find(x=>x.login.toLowerCase()===login.toLowerCase()&&x.actif);
+    if(u&&u.pwd===hp(pwd)){
+      A.user=u.login;A.role=u.role;A.attempts=0;
+      u.derniere_connexion=new Date().toISOString();
+      save();
+      // Afficher l'app immédiatement avec les données locales
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('app').style.display='block';
+      initApp();
+      // Puis synchroniser Supabase en arrière-plan
+      syncFromDB().then(()=>{
+        if(DB_OK) dbU('utilisateurs',u.id,{derniere_connexion:u.derniere_connexion}).catch(()=>{});
+        alog('CONNEXION',`${u.login} [${u.role}]`);
+      });
+    }else{
+      A.attempts++;
+      const left=3-A.attempts;
+      err.textContent=left>0?`Identifiant ou mot de passe incorrect. ${left} tentative(s) restante(s).`:'ACCÈS BLOQUÉ — Contactez Dr. Aminata Nguer.';
+      err.style.display='block';
+      if(left<=0){document.getElementById('loginInput').disabled=true;document.getElementById('pwdInput').disabled=true;btn.disabled=true;}
+    }
+  }finally{if(!document.getElementById('loginInput').disabled){btn.disabled=false;btn.textContent='Se connecter →';}}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementById('loginScreen').style.display!=='none')doLogin();});
+
+// ── INIT APP ──────────────────────────────────
+function initApp(){
+  const u=A.users.find(x=>x.login===A.user);
+  document.getElementById('sideAv').textContent=A.user[0].toUpperCase();
+  document.getElementById('sideNm').textContent=u?u.nom:A.user;
+  document.getElementById('sideRl').textContent=A.role;
+  if(A.role!=='Administrateur'){document.getElementById('adminNav').style.display='none';}
+  if(A.role==='Lecture')document.getElementById('topAction').style.display='none';
+  setInterval(()=>{document.getElementById('tbTime').textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
+  if(DB_OK)setInterval(async()=>{
+    try{
+      const[dep,types]=await Promise.all([dbG('depenses'),dbG('types_depenses').catch(()=>A.types)]);
+      A.dep=dep||A.dep; A.types=types||A.types;
+      save(); refresh();
+      document.getElementById('syncTxt').textContent='🟢 Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){document.getElementById('syncTxt').textContent='🔴 Hors ligne';}
+  },30000);
+  refresh();go('dashboard');
+}
+
+// ── NAVIGATION ────────────────────────────────
+const PG={
+  dashboard:{t:'Tableau de bord',s:'Vue d\'ensemble · Temps réel'},
+  registre:{t:'Registre des dépenses',s:'Toutes les opérations'},
+  recap:{t:'Récapitulatif',s:'Analyse par type de dépense'},
+  parametres:{t:'Paramètres & Logo',s:'Personnalisation de votre pharmacie'},
+  types:{t:'Types de dépenses',s:'Catégories personnalisées'},
+  users:{t:'Utilisateurs',s:'Gestion des accès à distance'},
+  journal:{t:'Journal d\'accès',s:'Audit trail complet'},
+};
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-it').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-it').forEach(n=>{if((n.getAttribute('onclick')||'').includes(`'${id}'`))n.classList.add('active');});
+  const m=PG[id]||{};
+  document.getElementById('pageTitle').textContent=m.t||'';
+  document.getElementById('pageSub').textContent=m.s||'';
+  document.getElementById('topAction').style.display=(id==='registre'||id==='dashboard')&&A.role!=='Lecture'?'inline-flex':'none';
+  if(id==='users')renderUsers();
+  if(id==='journal')renderJournal();
+  if(id==='recap')renderRecap();
+  if(id==='registre')renderReg();
+  if(id==='types')renderTypes();
+  if(id==='parametres')chargerParams();
+  if(id==='dashboard')renderDash();
+}
+
+// ── DASHBOARD ─────────────────────────────────
+function renderDash(){
+  const dep=A.dep;
+  const tot=dep.reduce((s,d)=>s+Number(d.montant),0);
+  const nb=dep.length;
+  const moy=nb?tot/nb:0;
+  const now=new Date();
+  const mDep=dep.filter(d=>{const dd=new Date(d.date);return dd.getMonth()===now.getMonth()&&dd.getFullYear()===now.getFullYear();});
+  const mTot=mDep.reduce((s,d)=>s+Number(d.montant),0);
+
+  document.getElementById('kTotal').innerHTML=`${tot.toLocaleString('fr-FR')} <small>FCFA</small>`;
+  document.getElementById('kTotalSub').textContent=`${nb} opération(s)`;
+  document.getElementById('kMois').innerHTML=`${mTot.toLocaleString('fr-FR')} <small>FCFA</small>`;
+  document.getElementById('kMoisSub').textContent=`${mDep.length} opération(s) ce mois`;
+  document.getElementById('kOps').textContent=nb;
+  document.getElementById('kMoy').innerHTML=`${Math.round(moy).toLocaleString('fr-FR')} <small>FCFA</small>`;
+  document.getElementById('nbBadge').textContent=nb;
+
+  // Pie
+  const tt={};A.types.forEach(t=>tt[t.nom]=0);
+  dep.forEach(d=>{if(tt[d.type]!==undefined)tt[d.type]+=Number(d.montant);else tt[d.type]=(tt[d.type]||0)+Number(d.montant);});
+  const pl=Object.keys(tt).filter(t=>tt[t]>0);
+  const pd=pl.map(t=>tt[t]);
+  const pc=pl.map(t=>tc(t));
+  if(A.cPie)A.cPie.destroy();
+  A.cPie=new Chart(document.getElementById('chartPie').getContext('2d'),{
+    type:'doughnut',
+    data:{labels:pl,datasets:[{data:pd,backgroundColor:pc.map(c=>c+'CC'),borderColor:pc,borderWidth:2,hoverOffset:6}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Outfit',size:11},padding:14,usePointStyle:true}}},cutout:'62%'}
+  });
+
+  // Bar
+  const bl=[],bd=[];
+  for(let i=11;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    bl.push(d.toLocaleDateString('fr-FR',{month:'short',year:'2-digit'}));
+    bd.push(dep.filter(x=>{const dd=new Date(x.date);return dd.getMonth()===d.getMonth()&&dd.getFullYear()===d.getFullYear();}).reduce((s,x)=>s+Number(x.montant),0));
+  }
+  if(A.cBar)A.cBar.destroy();
+  A.cBar=new Chart(document.getElementById('chartBar').getContext('2d'),{
+    type:'bar',
+    data:{labels:bl,datasets:[{label:'Total FCFA',data:bd,backgroundColor:'rgba(10,74,58,.7)',borderColor:'#0A4A3A',borderWidth:1,borderRadius:8,borderSkipped:false}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v.toLocaleString('fr-FR'),font:{size:10}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+  });
+
+  // Recents
+  const rec=[...dep].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,6);
+  const tbody=document.getElementById('tbRecent');
+  tbody.innerHTML=rec.length===0
+    ?'<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--mist)">Aucune opération enregistrée</td></tr>'
+    :rec.map(d=>`<tr>
+      <td style="font-size:.8rem;white-space:nowrap;color:var(--stone)">${fd(d.date)}</td>
+      <td><span class="badge" style="background:${tb(d.type)};color:${tc(d.type)}">${d.type}</span></td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.libelle}</td>
+      <td style="color:var(--stone);font-size:.82rem">${d.benef||'-'}</td>
+      <td><span class="amt" style="color:var(--jade)">${Number(d.montant).toLocaleString('fr-FR')}</span> <span style="font-size:.7rem;color:var(--mist)">FCFA</span></td>
+      <td><span class="badge ${SB[d.statut]||'bg-gray'}">${d.statut}</span></td>
+    </tr>`).join('');
+
+  document.getElementById('syncTxt').textContent='🟢 Mis à jour · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ── REGISTRE ──────────────────────────────────
+let cft='';
+function renderChips(){
+  const c=document.getElementById('typeChips');
+  c.innerHTML=`<span class="chip chip-all ${!cft?'on':''}" onclick="setF('')">Tous</span>`
+    +A.types.map(t=>`<span class="chip ${cft===t.nom?'on':''}" style="background:${cft===t.nom?t.couleur:t.couleur+'18'};color:${t.couleur};border-color:${cft===t.nom?t.couleur:'transparent'}" onclick="setF('${t.nom.replace(/'/g,"\\'")}')">&#9679; ${t.nom}</span>`).join('');
+}
+function setF(t){cft=t;renderChips();renderReg();}
+function reinit(){document.getElementById('searchIn').value='';cft='';renderChips();renderReg();}
+function renderReg(){
+  renderChips();
+  const s=(document.getElementById('searchIn')?.value||'').toLowerCase();
+  let dep=[...A.dep];
+  if(cft)dep=dep.filter(d=>d.type===cft);
+  if(s)dep=dep.filter(d=>(d.libelle||'').toLowerCase().includes(s)||(d.benef||'').toLowerCase().includes(s)||(d.ref||'').toLowerCase().includes(s)||(d.type||'').toLowerCase().includes(s));
+  dep.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  document.getElementById('regCount').textContent=`${dep.length} opération(s)`;
+  const tbody=document.getElementById('tbReg');
+  tbody.innerHTML=dep.length===0
+    ?'<tr><td colspan="9" style="text-align:center;padding:48px;color:var(--mist)">Aucune dépense trouvée</td></tr>'
+    :dep.map((d,i)=>`<tr>
+      <td class="amt" style="font-size:.72rem;color:var(--mist)">#${String(i+1).padStart(3,'0')}</td>
+      <td style="font-size:.8rem;white-space:nowrap;color:var(--stone)">${fd(d.date)}</td>
+      <td><span class="badge" style="background:${tb(d.type)};color:${tc(d.type)};font-size:.68rem">${d.type}</span></td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem" title="${d.libelle}">${d.libelle}</td>
+      <td style="font-size:.8rem;color:var(--stone)">${d.benef||'-'}</td>
+      <td class="amt" style="font-size:.72rem;color:var(--mist)">${d.ref||'-'}</td>
+      <td><span class="amt" style="color:var(--jade)">${Number(d.montant).toLocaleString('fr-FR')}</span> <span style="font-size:.68rem;color:var(--mist)">FCFA</span></td>
+      <td><span class="badge ${SB[d.statut]||'bg-gray'}">${d.statut}</span></td>
+      <td>${A.role!=='Lecture'?`<div style="display:flex;gap:5px">
+        <button class="btn-s" onclick="editDep('${d.id}')" style="padding:5px 9px;font-size:.75rem">✏️</button>
+        <button class="btn-d" onclick="delDep('${d.id}')" style="padding:5px 9px;font-size:.75rem">🗑️</button>
+      </div>`:'<span style="font-size:.72rem;color:var(--mist)">—</span>'}</td>
+    </tr>`).join('');
+}
+
+// ── SAISIE ────────────────────────────────────
+function peupleSel(){
+  const s=document.getElementById('fType'),v=s.value;
+  s.innerHTML='<option value="">-- Choisir --</option>'+A.types.map(t=>`<option value="${t.nom}" ${v===t.nom?'selected':''}>${t.nom}</option>`).join('');
+}
+function ouvrirSaisie(){
+  if(A.role==='Lecture'){toast('Mode lecture seule','warn');return;}
+  A.editId=null;
+  document.getElementById('mSaisieTtl').textContent='➕ Nouvelle dépense';
+  document.getElementById('fDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('fType').value='';document.getElementById('fLibelle').value='';
+  document.getElementById('fBenef').value='';document.getElementById('fRef').value='';
+  document.getElementById('fMontant').value='';document.getElementById('fObs').value='';
+  document.getElementById('fStatut').value='En attente';
+  peupleSel();openModal('mSaisie');
+}
+function editDep(id){
+  const d=A.dep.find(x=>x.id===id);if(!d)return;
+  A.editId=id;
+  document.getElementById('mSaisieTtl').textContent='✏️ Modifier la dépense';
+  document.getElementById('fDate').value=d.date;peupleSel();
+  document.getElementById('fType').value=d.type;document.getElementById('fLibelle').value=d.libelle;
+  document.getElementById('fBenef').value=d.benef||'';document.getElementById('fMode').value=d.mode||'Espèces';
+  document.getElementById('fRef').value=d.ref||'';document.getElementById('fMontant').value=d.montant;
+  document.getElementById('fStatut').value=d.statut;document.getElementById('fObs').value=d.obs||'';
+  openModal('mSaisie');
+}
+async function saveDep(){
+  const date=document.getElementById('fDate').value;
+  const type=document.getElementById('fType').value;
+  const libelle=document.getElementById('fLibelle').value.trim();
+  const montant=Number(document.getElementById('fMontant').value);
+  if(!date||!type||!libelle||!montant){toast('Remplissez les champs obligatoires (*)','warn');return;}
+  const data={date,type,libelle,benef:document.getElementById('fBenef').value.trim(),mode:document.getElementById('fMode').value,ref:document.getElementById('fRef').value.trim(),montant,statut:document.getElementById('fStatut').value,obs:document.getElementById('fObs').value.trim(),created_by:A.user};
+  try{
+    if(A.editId){
+      if(DB_OK)await dbU('depenses',A.editId,data);
+      const i=A.dep.findIndex(x=>x.id===A.editId);if(i>-1)A.dep[i]={...A.dep[i],...data};
+      await alog('MODIFICATION',`${type} — ${libelle} — ${montant} FCFA`);
+      toast('Dépense modifiée ✓');
+    }else{
+      if(DB_OK){const r=await dbI('depenses',data);A.dep.push(r&&r[0]?r[0]:{id:gid(),...data});}
+      else A.dep.push({id:gid(),...data});
+      await alog('SAISIE',`${type} — ${libelle} — ${montant} FCFA`);
+      toast('Dépense enregistrée ✓');
+    }
+    save();closeModal('mSaisie');refresh();
+  }catch(e){toast('Erreur : '+e.message,'err');}
+}
+async function delDep(id){
+  const d=A.dep.find(x=>x.id===id);if(!d)return;
+  if(!confirm(`Supprimer ?\n\n${d.libelle}\n${Number(d.montant).toLocaleString('fr-FR')} FCFA\n\nAction irréversible.`))return;
+  try{
+    if(DB_OK)await dbD('depenses',id);
+    A.dep=A.dep.filter(x=>x.id!==id);
+    await alog('SUPPRESSION',`${d.type} — ${d.libelle} — ${d.montant} FCFA`);
+    save();refresh();toast('Dépense supprimée');
+  }catch(e){toast('Erreur','err');}
+}
+
+// ── RÉCAP ────────────────────────────────────
+function renderRecap(){
+  const tt={},nb={};
+  A.types.forEach(t=>{tt[t.nom]=0;nb[t.nom]=0;});
+  A.dep.forEach(d=>{if(!tt[d.type])tt[d.type]=0;if(!nb[d.type])nb[d.type]=0;tt[d.type]+=Number(d.montant);nb[d.type]++;});
+  const gT=Object.values(tt).reduce((s,v)=>s+v,0);
+  const gN=Object.values(nb).reduce((s,v)=>s+v,0);
+  document.getElementById('recapTot').textContent=`${gT.toLocaleString('fr-FR')} FCFA · ${gN} opérations`;
+  document.getElementById('tbRecap').innerHTML=A.types.map(t=>{
+    const p=gT>0?(tt[t.nom]/gT*100).toFixed(1):'0.0';
+    const m=nb[t.nom]>0?Math.round(tt[t.nom]/nb[t.nom]):0;
+    return`<tr>
+      <td><span class="badge" style="background:${t.couleur}18;color:${t.couleur}">${t.nom}</span></td>
+      <td class="amt">${nb[t.nom]}</td>
+      <td><span class="amt" style="color:var(--jade)">${tt[t.nom].toLocaleString('fr-FR')}</span> FCFA</td>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1;height:8px;background:var(--sand);border-radius:99px;overflow:hidden"><div style="width:${p}%;height:100%;background:${t.couleur};border-radius:99px"></div></div>
+        <span class="amt" style="font-size:.78rem;color:var(--stone);min-width:36px">${p}%</span>
+      </div></td>
+      <td class="amt" style="font-size:.83rem">${m.toLocaleString('fr-FR')} FCFA</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── TYPES ────────────────────────────────────
+function renderTypes(){
+  document.getElementById('typesGrid').innerHTML=A.types.map(t=>{
+    const cnt=A.dep.filter(d=>d.type===t.nom).length;
+    return`<div class="type-card">
+      <div class="type-dot" style="background:${t.couleur}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="type-nm">${t.nom}</div>
+        <div class="type-cnt">${cnt} opération(s)</div>
+      </div>
+      ${t.systeme?`<span class="type-lock">🔒</span>`:`<button class="btn-d" onclick="delType('${t.id}')" style="padding:5px 10px;font-size:.75rem">🗑️</button>`}
+    </div>`;
+  }).join('');
+}
+function pickColor(c){
+  A.selColor=c;
+  document.getElementById('tColor').value=c;
+  document.querySelectorAll('.color-opt').forEach(el=>{
+    el.style.border=el.dataset.c===c?`3px solid ${c}`:'3px solid transparent';
+    el.style.transform=el.dataset.c===c?'scale(1.2)':'scale(1)';
+  });
+  updatePreview();
+}
+function updatePreview(){
+  const c=A.selColor,n=document.getElementById('tNom').value||'Nouveau type';
+  const p=document.getElementById('tPreview');
+  p.style.background=c+'22';p.style.color=c;
+  p.querySelector('div').style.background=c;
+  p.querySelector('span').textContent=n;
+}
+function ouvrirModalType(){document.getElementById('tNom').value='';pickColor('#0A4A3A');openModal('mType');}
+async function saveType(){
+  const nom=document.getElementById('tNom').value.trim();
+  const couleur=document.getElementById('tColor').value;
+  if(!nom){toast('Entrez un nom','warn');return;}
+  if(A.types.find(t=>t.nom.toLowerCase()===nom.toLowerCase())){toast('Ce type existe déjà','warn');return;}
+  const nt={id:gid(),nom,couleur,systeme:false};
+  try{
+    if(DB_OK){const r=await dbI('types_depenses',nt).catch(()=>null);A.types.push(r&&r[0]?r[0]:nt);}
+    else A.types.push(nt);
+    await alog('NOUVEAU TYPE',nom+' ['+couleur+']');
+    save();closeModal('mType');renderTypes();
+    toast(`Type "${nom}" créé ✓`);
+  }catch(e){toast('Erreur','err');}
+}
+async function delType(id){
+  const t=A.types.find(x=>x.id===id);if(!t)return;
+  if(A.dep.some(d=>d.type===t.nom)){toast(`"${t.nom}" est utilisé par des dépenses existantes`,'warn');return;}
+  if(!confirm(`Supprimer le type "${t.nom}" ?`))return;
+  try{
+    if(DB_OK)await dbD('types_depenses',id).catch(()=>{});
+    A.types=A.types.filter(x=>x.id!==id);
+    await alog('SUPPRESSION TYPE',t.nom);
+    save();renderTypes();toast(`Type "${t.nom}" supprimé`);
+  }catch(e){toast('Erreur','err');}
+}
+
+// ── USERS ────────────────────────────────────
+function renderUsers(){
+  document.getElementById('usersGrid').innerHTML=A.users.map(u=>{
+    const rc=RC[u.role]||{};
+    return`<div class="user-card" style="opacity:${u.actif?1:.55}">
+      <div class="user-card::before" style="background:${rc.c}"></div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+        <div class="uc-av" style="background:${rc.bg};color:${rc.c}">${(u.nom||u.login)[0].toUpperCase()}</div>
+        <div>
+          <div class="uc-name">${u.nom||u.login}</div>
+          <div class="uc-login">@${u.login}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <span class="badge" style="background:${rc.bg};color:${rc.c}">${u.role}</span>
+        ${u.actif?'<span class="badge bg-ok">Actif</span>':'<span class="badge bg-no">Inactif</span>'}
+      </div>
+      <div style="font-size:.72rem;color:var(--mist);margin-bottom:12px">
+        ${u.email?`📧 ${u.email}<br>`:''}
+        ${u.derniere_connexion?'🕐 '+fdt(u.derniere_connexion):'Jamais connecté'}
+      </div>
+      <div style="display:flex;gap:6px">
+        ${u.actif
+          ?`<button class="btn-d" onclick="toggleU('${u.id}',false)" style="font-size:.74rem;padding:6px 10px">🚫 Désactiver</button>`
+          :`<button class="btn-p" onclick="toggleU('${u.id}',true)" style="font-size:.74rem;padding:6px 10px">✅ Activer</button>`}
+        ${u.login!==A.user?`<button class="btn-s" onclick="delUser('${u.id}')" style="font-size:.74rem;padding:6px 10px">🗑️</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function ouvrirModalUser(){['uLogin','uPwd','uNom','uEmail'].forEach(i=>document.getElementById(i).value='');document.getElementById('uRole').value='Saisie';openModal('mUser');}
+async function saveUser(){
+  const login=document.getElementById('uLogin').value.trim();
+  const pwd=document.getElementById('uPwd').value;
+  const nom=document.getElementById('uNom').value.trim();
+  const role=document.getElementById('uRole').value;
+  const email=document.getElementById('uEmail').value.trim();
+  if(!login||!pwd){toast('Login et mot de passe requis','warn');return;}
+  if(pwd.length<4){toast('Mot de passe trop court (min 4)','warn');return;}
+  if(A.users.find(u=>u.login.toLowerCase()===login.toLowerCase())){toast('Identifiant déjà utilisé','warn');return;}
+  const nu={id:gid(),login,pwd:hp(pwd),nom,role,email,actif:true,derniere_connexion:null};
+  try{
+    if(DB_OK){const r=await dbI('utilisateurs',nu).catch(()=>null);A.users.push(r&&r[0]?r[0]:nu);}
+    else A.users.push(nu);
+    await alog('CREATION USER',`${login} [${role}]`);
+    save();closeModal('mUser');renderUsers();toast(`Compte @${login} créé ✓`);
+  }catch(e){toast('Erreur','err');}
+}
+async function toggleU(id,actif){
+  const u=A.users.find(x=>x.id===id);if(!u)return;
+  if(!actif&&u.login===A.user){toast('Impossible de désactiver votre propre compte','warn');return;}
+  try{
+    if(DB_OK)await dbU('utilisateurs',id,{actif}).catch(()=>{});
+    u.actif=actif;await alog(actif?'ACTIVATION':'DESACTIVATION',u.login);
+    save();renderUsers();toast(`Compte @${u.login} ${actif?'activé':'désactivé'}`);
+  }catch(e){toast('Erreur','err');}
+}
+async function delUser(id){
+  const u=A.users.find(x=>x.id===id);if(!u||u.login===A.user)return;
+  if(!confirm(`Supprimer @${u.login} ?`))return;
+  try{
+    if(DB_OK)await dbD('utilisateurs',id).catch(()=>{});
+    A.users=A.users.filter(x=>x.id!==id);
+    await alog('SUPPRESSION USER',u.login);save();renderUsers();toast(`@${u.login} supprimé`);
+  }catch(e){toast('Erreur','err');}
+}
+
+// ── JOURNAL ───────────────────────────────────
+const LC={CONNEXION:'#10B981',DECONNEXION:'#9CA3AF',SAISIE:'#3B82F6',MODIFICATION:'#F59E0B',SUPPRESSION:'#EF4444','CREATION USER':'#8B5CF6',ACTIVATION:'#10B981',DESACTIVATION:'#EF4444','NOUVEAU TYPE':'#14B8A6','PARAMS':'#6366F1'};
+function renderJournal(){
+  const c=document.getElementById('journalList');
+  c.innerHTML=A.logs.length===0
+    ?'<div style="text-align:center;padding:48px;color:var(--mist)">Journal vide</div>'
+    :A.logs.slice(0,100).map(j=>`<div class="log-it">
+      <div class="log-dot" style="background:${LC[j.action]||'#9CA3AF'}"></div>
+      <div class="log-txt">
+        <div class="log-act">${j.action} <span style="color:var(--stone);font-weight:400">— ${j.utilisateur||j.user||'?'}</span> <span class="badge bg-gray" style="font-size:.65rem">${j.role||''}</span></div>
+        <div class="log-det">${j.detail||''}</div>
+      </div>
+      <div class="log-ts">${j.ts?fdt(j.ts):''}</div>
+    </div>`).join('');
+}
+async function viderJournal(){if(!confirm('Vider le journal ?'))return;A.logs=[];save();renderJournal();toast('Journal vidé');}
+
+// ── PDF ──────────────────────────────────────
+function exportPDF(){openModal('mPDF');}
+
+function imprimerPage(pageId){
+  closeModal('mPDF');
+  // Afficher la bonne page et lancer l'impression
+  go(pageId);
+  setTimeout(()=>{
+    // Injecter l'en-tête PDF temporairement
+    const hdr=document.createElement('div');
+    hdr.id='pdfHdr';
+    hdr.style.cssText='display:flex;align-items:center;gap:16px;padding:16px 24px;background:linear-gradient(135deg,#0A4A3A,#0F6B52);border-radius:12px;margin-bottom:20px;print-color-adjust:exact;-webkit-print-color-adjust:exact';
+    const logoSrc=A.logo?`<img src="${A.logo}" style="width:52px;height:52px;border-radius:10px;object-fit:contain;background:white;padding:4px">`:
+      `<div style="width:52px;height:52px;border-radius:10px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:26px">☪️</div>`;
+    hdr.innerHTML=`${logoSrc}<div>
+      <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.4rem;font-weight:700;color:white">${A.params.nom||'Pharmacie Rahmane'}</div>
+      <div style="font-size:.75rem;color:rgba(184,232,216,.8);margin-top:2px">${A.params.ville||'Thiès, Sénégal'} · ${A.params.email||'rahmanepharmacie@gmail.com'} · Généré le ${new Date().toLocaleDateString('fr-FR')}</div>
+    </div>`;
+    const content=document.getElementById('mainContent');
+    content.insertBefore(hdr,content.firstChild);
+    alog('IMPRESSION PDF',PG[pageId]?.t||pageId);
+    window.print();
+    setTimeout(()=>hdr.remove(),500);
+  },300);
+}
+
+function genRapportMensuel(){
+  closeModal('mPDF');
+  const mois=prompt('Mois (1-12) :',new Date().getMonth()+1);
+  if(!mois)return;
+  const annee=prompt('Année :',new Date().getFullYear());
+  if(!annee)return;
+  const m=parseInt(mois),y=parseInt(annee);
+  const pStr=new Date(y,m-1,1).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+  const dep=A.dep.filter(d=>{if(!d.date)return false;const dd=new Date(d.date);return dd.getMonth()===m-1&&dd.getFullYear()===y;});
+  const tot=dep.reduce((s,d)=>s+Number(d.montant),0);
+
+  // Créer une fenêtre d'impression
+  const win=window.open('','_blank','width=900,height=700');
+  const logoHtml=A.logo?`<img src="${A.logo}" style="width:80px;height:80px;object-fit:contain;border-radius:12px;background:white;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,.15)">`:'<span style="font-size:3rem">☪️</span>';
+  const rows=dep.map((d,i)=>`<tr style="background:${i%2===0?'#F0FDF4':'#fff'}">
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px;text-align:center">${i+1}</td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${fd(d.date)}</td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px"><span style="background:${tc(d.type)}22;color:${tc(d.type)};padding:2px 8px;border-radius:99px;font-weight:600;font-size:10px">${d.type}</span></td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${d.libelle}</td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${d.benef||'-'}</td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px;text-align:right;font-weight:600;font-family:monospace">${Number(d.montant).toLocaleString('fr-FR')}</td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px;text-align:center">${d.statut}</td>
+  </tr>`).join('');
+
+  win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">
+  <title>Rapport ${pStr} · ${A.params.nom||'Pharmacie Rahmane'}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Outfit',sans-serif;margin:0;padding:32px;color:#1A1F1C;background:#fff;}
+    @media print{body{padding:16px;}@page{margin:16mm;}}
+  </style></head><body>
+  <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#0A4A3A,#0F6B52);padding:28px 32px;border-radius:16px;margin-bottom:28px;print-color-adjust:exact;-webkit-print-color-adjust:exact">
+    <div style="display:flex;align-items:center;gap:20px">${logoHtml}
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:#fff">${A.params.nom||'Pharmacie Rahmane'}</div>
+        <div style="color:rgba(184,232,216,.8);font-size:.85rem;margin-top:4px">${A.params.ville||'Thiès, Sénégal'}${A.params.lic?' · Lic. '+A.params.lic:''}</div></div>
+    </div>
+    <div style="text-align:right;color:rgba(255,255,255,.8);font-size:.8rem">
+      <div style="font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:4px">RAPPORT MENSUEL</div>
+      <div>${pStr}</div><div>Généré le ${new Date().toLocaleDateString('fr-FR')}</div>
+      <div>Par : ${A.users.find(x=>x.login===A.user)?.nom||A.user}</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+    <div style="border:1px solid #E2DDD4;border-radius:10px;padding:16px;border-top:3px solid #0A4A3A"><div style="font-size:.65rem;font-weight:700;color:#5A6660;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Total du mois</div><div style="font-family:monospace;font-size:1.5rem;font-weight:600;color:#0A4A3A">${tot.toLocaleString('fr-FR')} FCFA</div></div>
+    <div style="border:1px solid #E2DDD4;border-radius:10px;padding:16px;border-top:3px solid #C9960C"><div style="font-size:.65rem;font-weight:700;color:#5A6660;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Opérations</div><div style="font-family:monospace;font-size:1.5rem;font-weight:600;color:#C9960C">${dep.length}</div></div>
+    <div style="border:1px solid #E2DDD4;border-radius:10px;padding:16px;border-top:3px solid #3B82F6"><div style="font-size:.65rem;font-weight:700;color:#5A6660;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Montant moyen</div><div style="font-family:monospace;font-size:1.5rem;font-weight:600;color:#1E40AF">${dep.length?Math.round(tot/dep.length).toLocaleString('fr-FR'):0} FCFA</div></div>
+  </div>
+  ${dep.length===0?'<div style="text-align:center;padding:48px;color:#9BB5AC;border:1px dashed #E2DDD4;border-radius:10px">Aucune opération pour cette période</div>':`
+  <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
+    <thead><tr style="background:#F0FDF4">
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase;text-align:center">N°</th>
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase">Date</th>
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase">Type</th>
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase">Description</th>
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase">Bénéficiaire</th>
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase;text-align:right">Montant (FCFA)</th>
+      <th style="padding:10px 12px;border:1px solid #E2DDD4;font-size:10px;font-weight:700;color:#5A6660;letter-spacing:.06em;text-transform:uppercase;text-align:center">Statut</th>
+    </thead><tbody>${rows}</tbody>
+    <tfoot><tr style="background:#0A4A3A;print-color-adjust:exact;-webkit-print-color-adjust:exact">
+      <td colspan="5" style="padding:12px;color:white;font-weight:700;font-size:13px;border:1px solid #0A4A3A">TOTAL GÉNÉRAL DU MOIS</td>
+      <td style="padding:12px;color:#F0B429;font-weight:700;font-family:monospace;font-size:13px;text-align:right;border:1px solid #0A4A3A">${tot.toLocaleString('fr-FR')}</td>
+      <td style="border:1px solid #0A4A3A"></td>
+    </tr></tfoot>
+  </table>`}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:48px;border-top:1px solid #E2DDD4;padding-top:24px">
+    <div><div style="font-size:.75rem;color:#5A6660;margin-bottom:36px;font-weight:600">SIGNATURE DU RESPONSABLE</div><div style="border-top:2px solid #1A1F1C;padding-top:8px;font-size:.8rem;color:#5A6660">${A.params.prop||'Dr. Khady Diene'}<br>${A.params.nom||'Pharmacie Rahmane'}</div></div>
+    <div><div style="font-size:.75rem;color:#5A6660;margin-bottom:36px;font-weight:600">VISA DU COMPTABLE</div><div style="border-top:2px solid #1A1F1C;padding-top:8px;font-size:.8rem;color:#5A6660">Dado Ba<br>Comptable</div></div>
+  </div>
+  <div style="text-align:center;margin-top:32px;padding:12px;background:#F5F3EE;border-radius:8px;font-size:.72rem;color:#8FA89F">
+    ${A.params.nom||'Pharmacie Rahmane'} · ${A.params.ville||'Thiès, Sénégal'} · ${A.params.email||'rahmanepharmacie@gmail.com'}${A.params.tel?' · '+A.params.tel:''}
+  </div>
+  <script>window.onload=()=>setTimeout(()=>window.print(),400);<\/script>
+  </body></html>`);
+  win.document.close();
+  alog('RAPPORT PDF MENSUEL',pStr+' — '+dep.length+' ops — '+tot.toLocaleString('fr-FR')+' FCFA');
+}
+
+function exportCSV(){
+  const h=['N°','Date','Type','Description','Bénéficiaire','Mode','Référence','Montant FCFA','Statut','Observations'];
+  const r=A.dep.map((d,i)=>[i+1,fd(d.date),d.type,d.libelle,d.benef||'',d.mode||'',d.ref||'',d.montant,d.statut,d.obs||'']);
+  const csv=[h,...r].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`Registre_PharmaRahmane_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();alog('EXPORT CSV',A.dep.length+' lignes');toast(`${A.dep.length} lignes exportées ✓`);
+}
+
+// ── MODALES ───────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ── DÉCONNEXION ───────────────────────────────
+async function deconnecter(){
+  if(!confirm('Se déconnecter ?'))return;
+  await alog('DECONNEXION',A.user);save();
+  A.user=null;A.role=null;A.attempts=0;
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  ['loginInput','pwdInput'].forEach(id=>{document.getElementById(id).value='';document.getElementById(id).disabled=false;});
+  const btn=document.getElementById('btnLogin');btn.disabled=false;btn.textContent='Se connecter →';
+  document.getElementById('loginErr').style.display='none';
+}
+
+// ── REFRESH ───────────────────────────────────
+function refresh(){renderDash();renderReg();}
+
+// ── START ─────────────────────────────────────
+boot();
+setTimeout(()=>pickColor('#0A4A3A'),200);
+</script>
+</body>
+</html>
