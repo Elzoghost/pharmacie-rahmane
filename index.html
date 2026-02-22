@@ -779,9 +779,37 @@ async function doLogin(){
   const btn=document.getElementById('lBtn');
   err.style.display='none';
   btn.disabled=true; btn.textContent='Connexion…';
+
   try{
-    const u=S.users.find(x=>x.login.toLowerCase()===login.toLowerCase()&&x.actif!==false);
-    if(u && u.pwd===hp(pwd)){
+    let u = null;
+
+    // ── 1. Vérification dans Supabase (si disponible) ──
+    if(DB_OK){
+      try{
+        const rows = await dbGet('utilisateurs', `?login=eq.${encodeURIComponent(login)}&actif=eq.true`);
+        if(rows && rows.length > 0){
+          const found = rows[0];
+          if(found.pwd === hp(pwd)){
+            u = found;
+            // Mettre à jour le cache local
+            const idx = S.users.findIndex(x=>x.id===found.id);
+            if(idx>-1) S.users[idx]={...S.users[idx],...found};
+            else S.users.push(found);
+            lsSave();
+          }
+        }
+      } catch(e){
+        console.warn('Auth Supabase échouée, fallback local:', e.message);
+      }
+    }
+
+    // ── 2. Fallback : vérification locale (si Supabase indisponible) ──
+    if(!u){
+      u = S.users.find(x=>x.login.toLowerCase()===login.toLowerCase() && x.actif!==false && x.pwd===hp(pwd));
+    }
+
+    // ── 3. Résultat ──
+    if(u){
       S.user=u.login; S.role=u.role; S.attempts=0;
       u.derniere_connexion=new Date().toISOString();
       lsSave();
@@ -795,7 +823,7 @@ async function doLogin(){
     } else {
       S.attempts++;
       const left=3-S.attempts;
-      err.textContent=left>0?`Identifiant ou mot de passe incorrect. ${left} tentative(s).`:'Accès bloqué.';
+      err.textContent=left>0?`Identifiant ou mot de passe incorrect. ${left} tentative(s) restante(s).`:"Accès bloqué — Contactez l'administrateur.";
       err.style.display='block';
       if(left<=0){['loginIn','pwdIn'].forEach(i=>document.getElementById(i).disabled=true);btn.disabled=true;}
     }
