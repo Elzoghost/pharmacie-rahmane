@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#064E3B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pharmacie Rahmane">
+<meta name="application-name" content="Pharmacie Rahmane">
+<meta name="description" content="Système de gestion · Pharmacie Rahmane · Thiès, Sénégal">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Pharmacie Rahmane · Thiès</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -361,7 +369,12 @@ tbody tr:last-child td { border-bottom: none; }
       <div class="snav-it" onclick="showPDF()"><span class="snav-ic">📄</span>Rapport PDF</div>
       <div class="snav-it" onclick="doCSV()"><span class="snav-ic">📤</span>Exporter CSV</div>
     </div>
-    <div class="sfoot"><button class="sfoot-btn" onclick="logout()">🚪 Déconnecter</button></div>
+    <div class="sfoot">
+      <button class="btn" id="btnInstall" onclick="installApp()" style="display:none;width:100%;margin-bottom:8px;background:linear-gradient(135deg,#D97706,#F59E0B);color:#064E3B;font-size:.78rem;padding:9px;justify-content:center;gap:7px;border-radius:8px">
+        📲 Installer l'application
+      </button>
+      <button class="sfoot-btn" onclick="logout()">🚪 Déconnecter</button>
+    </div>
   </aside>
 
   <main class="main">
@@ -633,7 +646,7 @@ const DEF_USERS = [
   {id:'u2',login:'khady',pwd:hp('Khady@2026!'),role:'Administrateur',nom:'Dr. Khady Diene',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
   {id:'u3',login:'Compta',pwd:hp('Compta@2026'),role:'Lecture',nom:'Compta (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
 ];
-const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Grand Standing EDK, Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
+const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Grand Standing EDK,Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
 
 // ═══════════════════════════════════════════
 //  UTILS
@@ -1461,6 +1474,41 @@ function refresh(){renderDash();renderReg();}
 //  DÉMARRAGE
 // ═══════════════════════════════════════════
 boot();
+</script>
+<script>
+// ── SERVICE WORKER (PWA) ──
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(r => console.log('SW enregistré'))
+      .catch(e => console.log('SW erreur:', e));
+  });
+}
+
+// ── INVITE D'INSTALLATION ──
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Afficher bouton d'installation dans la sidebar
+  const btn = document.getElementById('btnInstall');
+  if(btn) btn.style.display = 'flex';
+});
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  const btn = document.getElementById('btnInstall');
+  if(btn) btn.style.display = 'none';
+  toast('Application installée avec succès ! ✓');
+});
+function installApp(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(r => {
+      if(r.outcome === 'accepted') toast('Installation en cours…');
+      deferredPrompt = null;
+    });
+  }
+}
 </script>
 </body>
 </html>
