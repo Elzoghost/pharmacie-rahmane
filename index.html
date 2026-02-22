@@ -4,11 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pharmacie Rahmane · Thiès, Sénégal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ═══════════════════════════════════════════
    VARIABLES & RESET
@@ -168,7 +165,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--coal);
 #connectOverlay {
   position: fixed; inset: 0; z-index: 9998;
   background: linear-gradient(155deg, #071F18, #0A3D2E);
-  display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
 }
 .loader-ring {
   width: 56px; height: 56px; border-radius: 50%;
@@ -566,13 +563,13 @@ tbody tr:last-child td { border-bottom: none; }
 <body>
 
 <!-- CONNECTING -->
-<div id="connectOverlay" style="display:none">
+<div id="connectOverlay">
   <div class="loader-ring"></div>
   <p id="connectMsg">Connexion à la base de données…</p>
 </div>
 
 <!-- LOGIN -->
-<div id="loginScreen">
+<div id="loginScreen" style="display:none">
   <div class="login-bg"></div>
   <div class="login-card">
     <div class="login-header">
@@ -686,12 +683,6 @@ tbody tr:last-child td { border-bottom: none; }
       <div class="page" id="page-registre">
         <div class="filter-bar">
           <div class="search-wrap"><span>🔍</span><input type="text" id="searchIn" placeholder="Rechercher description, bénéficiaire, référence…" oninput="renderReg()"></div>
-          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-            <span style="font-size:.75rem;color:var(--stone);white-space:nowrap">Du</span>
-            <input type="date" id="fDateDu" onchange="renderReg()" style="padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:.82rem;color:var(--coal);background:var(--surface);outline:none;cursor:pointer">
-            <span style="font-size:.75rem;color:var(--stone)">au</span>
-            <input type="date" id="fDateAu" onchange="renderReg()" style="padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:.82rem;color:var(--coal);background:var(--surface);outline:none;cursor:pointer">
-          </div>
           <button class="btn-s" onclick="reinit()">✖ Tout afficher</button>
         </div>
         <div class="chips" id="typeChips"></div>
@@ -805,7 +796,7 @@ tbody tr:last-child td { border-bottom: none; }
       <div class="form-g">
         <div class="ff"><label>Date <span class="req">*</span></label><input type="date" id="fDate"></div>
         <div class="ff"><label>Type de dépense <span class="req">*</span></label><select id="fType"><option value="">-- Choisir --</option></select></div>
-        <div class="ff s2"><label>Description / Libellé <span class="req">*</span></label><input type="text" id="fLibelle" placeholder="Ex : Achat médicaments génériques…"></div>
+        <div class="ff s2"><label>Description / Libellé <span class="req">*</span></label><input type="text" id="fDesc" placeholder="Ex : Achat médicaments génériques…"></div>
         <div class="ff"><label>Bénéficiaire / Fournisseur</label><input type="text" id="fBenef" placeholder="Nom du bénéficiaire"></div>
         <div class="ff"><label>Mode de paiement</label><select id="fMode"><option>Virement bancaire</option><option>Espèces</option><option>Chèque</option><option>Mobile Money</option><option>Orange Money</option><option>Wave</option></select></div>
         <div class="ff"><label>Référence / N° Pièce</label><input type="text" id="fRef" placeholder="Ex : VIR-2025-001"></div>
@@ -898,10 +889,10 @@ tbody tr:last-child td { border-bottom: none; }
 // ════════════════════════════════════════════════
 // CONFIG SUPABASE — À REMPLIR
 // ════════════════════════════════════════════════
-const SUPA_URL    = 'https://tmshposkrebpwhtuxfaf.supabase.co';
-const SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtc2hwb3NrcmVicHdodHV4ZmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MDk1MDcsImV4cCI6MjA4NzI4NTUwN30.-znENe16nZTlSr3Wy40geLgsVSuLsIHAVfmG5AXsObs';
-const SUPA_SECRET = '7f9a8d2e0c4b6f1e9a3d7c8b2f4e6a1c9d3e7f0a8b2c4d6e8f1a3c5b7d9e0f2';
-const DB_OK = SUPA_URL.startsWith('https://') && SUPA_KEY.length > 20;
+const SUPA_URL    = 'https://tmshposkrebpwhtuxfaf.supabase.co';   // ex: https://abcdefgh.supabase.co
+const SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtc2hwb3NrcmVicHdodHV4ZmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MDk1MDcsImV4cCI6MjA4NzI4NTUwN30.-znENe16nZTlSr3Wy40geLgsVSuLsIHAVfmG5AXsObs';       // ex: eyJhbGciOiJIUzI1NiIs...
+const SUPA_SECRET = '7f9a8d2e0c4b6f1e9a3d7c8b2f4e6a1c9d3e7f0a8b2c4d6e8f1a3c5b7d9e0f2'; // ⚠️ Identique à app.secret dans Supabase
+const DB_OK = SUPA_URL !== false;
 
 // ── ÉTAT ─────────────────────────────────────
 const A = {
@@ -921,9 +912,9 @@ const DEF_TYPES = [
   {id:'t6',nom:'Relevée bancaire',couleur:'#7F8C8D',systeme:true},
 ];
 const DEF_USERS = [
-  {id:'u1',login:'aminata',pwd:hp('Admin@2026!'),role:'Administrateur',nom:'Dr. Aminata Nguer (Admin)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
-  {id:'u2',login:'khady',pwd:hp('Khady@2026!'),role:'Administrateur',nom:'Dr. Khady Diene (Propriétaire)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
-  {id:'u3',login:'dado',pwd:hp('Dado@2026'),role:'Lecture',nom:'Dado Ba (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u1',login:'aminata',pwd:hp('Admin@2025!'),role:'Administrateur',nom:'Dr. Aminata Nguer (Admin)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u2',login:'khady',pwd:hp('Khady@2025!'),role:'Administrateur',nom:'Dr. Khady Diene (Propriétaire)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u3',login:'dado',pwd:hp('Dado@2025'),role:'Lecture',nom:'Dado Ba (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
 ];
 const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
 
@@ -985,7 +976,7 @@ async function sb(table,method='GET',body=null,filter=''){
   if(method==='GET')return r.json();
   return r.status===204?null:r.json().catch(()=>null);
 }
-const dbG=(t,f='')=>sb(t,'GET',null,'?order='+(t==='journal'?'ts':'created_at')+'.asc'+f);
+const dbG=(t,f='')=>sb(t,'GET',null,'?order=created_at.asc'+f);
 const dbI=(t,d)=>sb(t,'POST',d);
 const dbU=(t,id,d)=>sb(t,'PATCH',d,`?id=eq.${id}`);
 const dbD=(t,id)=>sb(t,'DELETE',null,`?id=eq.${id}`);
@@ -999,54 +990,24 @@ async function alog(action,detail=''){
 
 // ── BOOT ─────────────────────────────────────
 async function boot(){
-  // Charger immédiatement depuis localStorage (instantané)
-  load();
+  document.getElementById('connectMsg').textContent='Chargement en cours…';
+  if(DB_OK){
+    try{
+      const[dep,usr,logs,types]=await Promise.all([
+        dbG('depenses'),dbG('utilisateurs'),dbG('journal'),dbG('types_depenses').catch(()=>[])
+      ]);
+      A.dep=dep||[];
+      A.users=usr&&usr.length?usr:[...DEF_USERS];
+      A.logs=logs||[];
+      A.types=types&&types.length?types:[...DEF_TYPES];
+      if(!usr||!usr.length){for(const u of DEF_USERS)await dbI('utilisateurs',u).catch(()=>{});}
+      if(!types||!types.length){for(const t of DEF_TYPES)await dbI('types_depenses',t).catch(()=>{});}
+      setConn(true);
+    }catch(e){load();setConn(false);}
+  }else{load();setConn(false);}
   applyLogo();
-  // Login visible de suite — pas d'attente réseau
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('connectOverlay').style.display = 'none';
-}
-
-// Appelé APRÈS le login réussi — charge les données Supabase en arrière-plan
-async function syncFromDB(){
-  if(!DB_OK){ setConn(false); return; }
-  setConn(true);
-  document.getElementById('syncTxt').textContent = '🔄 Synchronisation en cours…';
-  try{
-    // Charger dépenses + types en priorité (affichage principal)
-    const [dep, types] = await Promise.all([
-      dbG('depenses'),
-      dbG('types_depenses').catch(()=>[])
-    ]);
-    A.dep   = dep   && dep.length   ? dep   : A.dep;
-    A.types = types && types.length ? types : A.types;
-
-    // Init types si première fois
-    if(!types || !types.length){
-      for(const t of DEF_TYPES) await dbI('types_depenses',t).catch(()=>{});
-      A.types = [...DEF_TYPES];
-    }
-    refresh();
-    document.getElementById('syncTxt').textContent = '🟢 Synchronisé · ' + new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-
-    // Charger utilisateurs + journal en arrière-plan (moins urgent)
-    const [usr, logs] = await Promise.all([
-      dbG('utilisateurs'),
-      dbG('journal')
-    ]);
-    A.users = usr  && usr.length  ? usr  : A.users;
-    A.logs  = logs && logs.length ? logs : A.logs;
-    if(!usr || !usr.length){
-      for(const u of DEF_USERS) await dbI('utilisateurs',u).catch(()=>{});
-      A.users = [...DEF_USERS];
-    }
-    save();
-    setConn(true);
-  }catch(e){
-    console.warn('Sync DB failed:', e);
-    setConn(false);
-    document.getElementById('syncTxt').textContent = '🔴 Hors ligne — données locales';
-  }
+  document.getElementById('connectOverlay').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
 }
 
 function setConn(ok){
@@ -1154,16 +1115,12 @@ async function doLogin(){
     if(u&&u.pwd===hp(pwd)){
       A.user=u.login;A.role=u.role;A.attempts=0;
       u.derniere_connexion=new Date().toISOString();
+      if(DB_OK)dbU('utilisateurs',u.id,{derniere_connexion:u.derniere_connexion}).catch(()=>{});
       save();
-      // Afficher l'app immédiatement avec les données locales
+      await alog('CONNEXION',`${u.login} [${u.role}]`);
       document.getElementById('loginScreen').style.display='none';
       document.getElementById('app').style.display='block';
       initApp();
-      // Puis synchroniser Supabase en arrière-plan
-      syncFromDB().then(()=>{
-        if(DB_OK) dbU('utilisateurs',u.id,{derniere_connexion:u.derniere_connexion}).catch(()=>{});
-        alog('CONNEXION',`${u.login} [${u.role}]`);
-      });
     }else{
       A.attempts++;
       const left=3-A.attempts;
@@ -1184,14 +1141,7 @@ function initApp(){
   if(A.role!=='Administrateur'){document.getElementById('adminNav').style.display='none';}
   if(A.role==='Lecture')document.getElementById('topAction').style.display='none';
   setInterval(()=>{document.getElementById('tbTime').textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
-  if(DB_OK)setInterval(async()=>{
-    try{
-      const[dep,types]=await Promise.all([dbG('depenses'),dbG('types_depenses').catch(()=>A.types)]);
-      A.dep=dep||A.dep; A.types=types||A.types;
-      save(); refresh();
-      document.getElementById('syncTxt').textContent='🟢 Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-    }catch(e){document.getElementById('syncTxt').textContent='🔴 Hors ligne';}
-  },30000);
+  if(DB_OK)setInterval(async()=>{try{A.dep=await dbG('depenses');A.types=await dbG('types_depenses').catch(()=>A.types);refresh();document.getElementById('syncTxt').textContent='🟢 Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}catch(e){}},30000);
   refresh();go('dashboard');
 }
 
@@ -1233,19 +1183,10 @@ function renderDash(){
   const mDep=dep.filter(d=>{const dd=new Date(d.date);return dd.getMonth()===now.getMonth()&&dd.getFullYear()===now.getFullYear();});
   const mTot=mDep.reduce((s,d)=>s+Number(d.montant),0);
 
-  // Mois précédent pour comparaison
-  const prevDate=new Date(now.getFullYear(),now.getMonth()-1,1);
-  const prevDep=dep.filter(d=>{const dd=new Date(d.date);return dd.getMonth()===prevDate.getMonth()&&dd.getFullYear()===prevDate.getFullYear();});
-  const prevTot=prevDep.reduce((s,d)=>s+Number(d.montant),0);
-  const diffPct=prevTot>0?Math.round((mTot-prevTot)/prevTot*100):null;
-  const diffArrow=diffPct===null?'':diffPct>0?`↑ +${diffPct}% vs mois préc.`:`↓ ${diffPct}% vs mois préc.`;
-  const diffColor=diffPct===null?'neutral':diffPct>0?'up':'neutral';
-
   document.getElementById('kTotal').innerHTML=`${tot.toLocaleString('fr-FR')} <small>FCFA</small>`;
   document.getElementById('kTotalSub').textContent=`${nb} opération(s)`;
   document.getElementById('kMois').innerHTML=`${mTot.toLocaleString('fr-FR')} <small>FCFA</small>`;
-  document.getElementById('kMoisSub').className=`kpi-trend ${diffColor}`;
-  document.getElementById('kMoisSub').textContent=diffArrow||`${mDep.length} opération(s)`;
+  document.getElementById('kMoisSub').textContent=`${mDep.length} opération(s) ce mois`;
   document.getElementById('kOps').textContent=nb;
   document.getElementById('kMoy').innerHTML=`${Math.round(moy).toLocaleString('fr-FR')} <small>FCFA</small>`;
   document.getElementById('nbBadge').textContent=nb;
@@ -1285,7 +1226,7 @@ function renderDash(){
     :rec.map(d=>`<tr>
       <td style="font-size:.8rem;white-space:nowrap;color:var(--stone)">${fd(d.date)}</td>
       <td><span class="badge" style="background:${tb(d.type)};color:${tc(d.type)}">${d.type}</span></td>
-      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.libelle}</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.desc}</td>
       <td style="color:var(--stone);font-size:.82rem">${d.benef||'-'}</td>
       <td><span class="amt" style="color:var(--jade)">${Number(d.montant).toLocaleString('fr-FR')}</span> <span style="font-size:.7rem;color:var(--mist)">FCFA</span></td>
       <td><span class="badge ${SB[d.statut]||'bg-gray'}">${d.statut}</span></td>
@@ -1302,22 +1243,13 @@ function renderChips(){
     +A.types.map(t=>`<span class="chip ${cft===t.nom?'on':''}" style="background:${cft===t.nom?t.couleur:t.couleur+'18'};color:${t.couleur};border-color:${cft===t.nom?t.couleur:'transparent'}" onclick="setF('${t.nom.replace(/'/g,"\\'")}')">&#9679; ${t.nom}</span>`).join('');
 }
 function setF(t){cft=t;renderChips();renderReg();}
-function reinit(){
-  document.getElementById('searchIn').value='';
-  const du=document.getElementById('fDateDu');if(du)du.value='';
-  const au=document.getElementById('fDateAu');if(au)au.value='';
-  cft='';renderChips();renderReg();
-}
+function reinit(){document.getElementById('searchIn').value='';cft='';renderChips();renderReg();}
 function renderReg(){
   renderChips();
   const s=(document.getElementById('searchIn')?.value||'').toLowerCase();
   let dep=[...A.dep];
   if(cft)dep=dep.filter(d=>d.type===cft);
-  if(s)dep=dep.filter(d=>(d.libelle||'').toLowerCase().includes(s)||(d.benef||'').toLowerCase().includes(s)||(d.ref||'').toLowerCase().includes(s)||(d.type||'').toLowerCase().includes(s));
-  const du=(document.getElementById('fDateDu')?.value)||'';
-  const au=(document.getElementById('fDateAu')?.value)||'';
-  if(du)dep=dep.filter(d=>d.date>=du);
-  if(au)dep=dep.filter(d=>d.date<=au);
+  if(s)dep=dep.filter(d=>(d.desc||'').toLowerCase().includes(s)||(d.benef||'').toLowerCase().includes(s)||(d.ref||'').toLowerCase().includes(s)||(d.type||'').toLowerCase().includes(s));
   dep.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   document.getElementById('regCount').textContent=`${dep.length} opération(s)`;
   const tbody=document.getElementById('tbReg');
@@ -1327,7 +1259,7 @@ function renderReg(){
       <td class="amt" style="font-size:.72rem;color:var(--mist)">#${String(i+1).padStart(3,'0')}</td>
       <td style="font-size:.8rem;white-space:nowrap;color:var(--stone)">${fd(d.date)}</td>
       <td><span class="badge" style="background:${tb(d.type)};color:${tc(d.type)};font-size:.68rem">${d.type}</span></td>
-      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem" title="${d.libelle}">${d.libelle}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.84rem" title="${d.desc}">${d.desc}</td>
       <td style="font-size:.8rem;color:var(--stone)">${d.benef||'-'}</td>
       <td class="amt" style="font-size:.72rem;color:var(--mist)">${d.ref||'-'}</td>
       <td><span class="amt" style="color:var(--jade)">${Number(d.montant).toLocaleString('fr-FR')}</span> <span style="font-size:.68rem;color:var(--mist)">FCFA</span></td>
@@ -1349,7 +1281,7 @@ function ouvrirSaisie(){
   A.editId=null;
   document.getElementById('mSaisieTtl').textContent='➕ Nouvelle dépense';
   document.getElementById('fDate').value=new Date().toISOString().split('T')[0];
-  document.getElementById('fType').value='';document.getElementById('fLibelle').value='';
+  document.getElementById('fType').value='';document.getElementById('fDesc').value='';
   document.getElementById('fBenef').value='';document.getElementById('fRef').value='';
   document.getElementById('fMontant').value='';document.getElementById('fObs').value='';
   document.getElementById('fStatut').value='En attente';
@@ -1360,7 +1292,7 @@ function editDep(id){
   A.editId=id;
   document.getElementById('mSaisieTtl').textContent='✏️ Modifier la dépense';
   document.getElementById('fDate').value=d.date;peupleSel();
-  document.getElementById('fType').value=d.type;document.getElementById('fLibelle').value=d.libelle;
+  document.getElementById('fType').value=d.type;document.getElementById('fDesc').value=d.desc;
   document.getElementById('fBenef').value=d.benef||'';document.getElementById('fMode').value=d.mode||'Espèces';
   document.getElementById('fRef').value=d.ref||'';document.getElementById('fMontant').value=d.montant;
   document.getElementById('fStatut').value=d.statut;document.getElementById('fObs').value=d.obs||'';
@@ -1369,20 +1301,20 @@ function editDep(id){
 async function saveDep(){
   const date=document.getElementById('fDate').value;
   const type=document.getElementById('fType').value;
-  const libelle=document.getElementById('fLibelle').value.trim();
+  const desc=document.getElementById('fDesc').value.trim();
   const montant=Number(document.getElementById('fMontant').value);
-  if(!date||!type||!libelle||!montant){toast('Remplissez les champs obligatoires (*)','warn');return;}
-  const data={date,type,libelle,benef:document.getElementById('fBenef').value.trim(),mode:document.getElementById('fMode').value,ref:document.getElementById('fRef').value.trim(),montant,statut:document.getElementById('fStatut').value,obs:document.getElementById('fObs').value.trim(),created_by:A.user};
+  if(!date||!type||!desc||!montant){toast('Remplissez les champs obligatoires (*)','warn');return;}
+  const data={date,type,desc,benef:document.getElementById('fBenef').value.trim(),mode:document.getElementById('fMode').value,ref:document.getElementById('fRef').value.trim(),montant,statut:document.getElementById('fStatut').value,obs:document.getElementById('fObs').value.trim(),created_by:A.user};
   try{
     if(A.editId){
       if(DB_OK)await dbU('depenses',A.editId,data);
       const i=A.dep.findIndex(x=>x.id===A.editId);if(i>-1)A.dep[i]={...A.dep[i],...data};
-      await alog('MODIFICATION',`${type} — ${libelle} — ${montant} FCFA`);
+      await alog('MODIFICATION',`${type} — ${desc} — ${montant} FCFA`);
       toast('Dépense modifiée ✓');
     }else{
       if(DB_OK){const r=await dbI('depenses',data);A.dep.push(r&&r[0]?r[0]:{id:gid(),...data});}
       else A.dep.push({id:gid(),...data});
-      await alog('SAISIE',`${type} — ${libelle} — ${montant} FCFA`);
+      await alog('SAISIE',`${type} — ${desc} — ${montant} FCFA`);
       toast('Dépense enregistrée ✓');
     }
     save();closeModal('mSaisie');refresh();
@@ -1390,11 +1322,11 @@ async function saveDep(){
 }
 async function delDep(id){
   const d=A.dep.find(x=>x.id===id);if(!d)return;
-  if(!confirm(`Supprimer ?\n\n${d.libelle}\n${Number(d.montant).toLocaleString('fr-FR')} FCFA\n\nAction irréversible.`))return;
+  if(!confirm(`Supprimer ?\n\n${d.desc}\n${Number(d.montant).toLocaleString('fr-FR')} FCFA\n\nAction irréversible.`))return;
   try{
     if(DB_OK)await dbD('depenses',id);
     A.dep=A.dep.filter(x=>x.id!==id);
-    await alog('SUPPRESSION',`${d.type} — ${d.libelle} — ${d.montant} FCFA`);
+    await alog('SUPPRESSION',`${d.type} — ${d.desc} — ${d.montant} FCFA`);
     save();refresh();toast('Dépense supprimée');
   }catch(e){toast('Erreur','err');}
 }
@@ -1608,7 +1540,7 @@ function genRapportMensuel(){
     <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px;text-align:center">${i+1}</td>
     <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${fd(d.date)}</td>
     <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px"><span style="background:${tc(d.type)}22;color:${tc(d.type)};padding:2px 8px;border-radius:99px;font-weight:600;font-size:10px">${d.type}</span></td>
-    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${d.libelle}</td>
+    <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${d.desc}</td>
     <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px">${d.benef||'-'}</td>
     <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px;text-align:right;font-weight:600;font-family:monospace">${Number(d.montant).toLocaleString('fr-FR')}</td>
     <td style="padding:8px 12px;border:1px solid #E2DDD4;font-size:11px;text-align:center">${d.statut}</td>
@@ -1669,7 +1601,7 @@ function genRapportMensuel(){
 
 function exportCSV(){
   const h=['N°','Date','Type','Description','Bénéficiaire','Mode','Référence','Montant FCFA','Statut','Observations'];
-  const r=A.dep.map((d,i)=>[i+1,fd(d.date),d.type,d.libelle,d.benef||'',d.mode||'',d.ref||'',d.montant,d.statut,d.obs||'']);
+  const r=A.dep.map((d,i)=>[i+1,fd(d.date),d.type,d.desc,d.benef||'',d.mode||'',d.ref||'',d.montant,d.statut,d.obs||'']);
   const csv=[h,...r].map(row=>row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));
