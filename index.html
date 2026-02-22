@@ -686,6 +686,12 @@ tbody tr:last-child td { border-bottom: none; }
       <div class="page" id="page-registre">
         <div class="filter-bar">
           <div class="search-wrap"><span>🔍</span><input type="text" id="searchIn" placeholder="Rechercher description, bénéficiaire, référence…" oninput="renderReg()"></div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <span style="font-size:.75rem;color:var(--stone);white-space:nowrap">Du</span>
+            <input type="date" id="fDateDu" onchange="renderReg()" style="padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:.82rem;color:var(--coal);background:var(--surface);outline:none;cursor:pointer">
+            <span style="font-size:.75rem;color:var(--stone)">au</span>
+            <input type="date" id="fDateAu" onchange="renderReg()" style="padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:.82rem;color:var(--coal);background:var(--surface);outline:none;cursor:pointer">
+          </div>
           <button class="btn-s" onclick="reinit()">✖ Tout afficher</button>
         </div>
         <div class="chips" id="typeChips"></div>
@@ -892,10 +898,10 @@ tbody tr:last-child td { border-bottom: none; }
 // ════════════════════════════════════════════════
 // CONFIG SUPABASE — À REMPLIR
 // ════════════════════════════════════════════════
-const SUPA_URL    = 'https://tmshposkrebpwhtuxfaf.supabase.co';   // ex: https://abcdefgh.supabase.co
-const SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtc2hwb3NrcmVicHdodHV4ZmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MDk1MDcsImV4cCI6MjA4NzI4NTUwN30.-znENe16nZTlSr3Wy40geLgsVSuLsIHAVfmG5AXsObs';       // ex: eyJhbGciOiJIUzI1NiIs...
-const SUPA_SECRET = '7f9a8d2e0c4b6f1e9a3d7c8b2f4e6a1c9d3e7f0a8b2c4d6e8f1a3c5b7d9e0f2'; // ⚠️ Identique à app.secret dans Supabase
-const DB_OK = SUPA_URL !== false;
+const SUPA_URL    = 'https://tmshposkrebpwhtuxfaf.supabase.co';
+const SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtc2hwb3NrcmVicHdodHV4ZmFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MDk1MDcsImV4cCI6MjA4NzI4NTUwN30.-znENe16nZTlSr3Wy40geLgsVSuLsIHAVfmG5AXsObs';
+const SUPA_SECRET = '7f9a8d2e0c4b6f1e9a3d7c8b2f4e6a1c9d3e7f0a8b2c4d6e8f1a3c5b7d9e0f2';
+const DB_OK = SUPA_URL.startsWith('https://') && SUPA_KEY.length > 20;
 
 // ── ÉTAT ─────────────────────────────────────
 const A = {
@@ -915,11 +921,11 @@ const DEF_TYPES = [
   {id:'t6',nom:'Relevée bancaire',couleur:'#7F8C8D',systeme:true},
 ];
 const DEF_USERS = [
-  {id:'u1',login:'aminata',pwd:hp('Admin@2026!'),role:'Administrateur',nom:'Dr. Aminata Nguer (Admin)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
-  {id:'u2',login:'khady',pwd:hp('Khady@2026!'),role:'Administrateur',nom:'Dr. Khady Diene (Propriétaire)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
-  {id:'u3',login:'Compta',pwd:hp('Compta@2026'),role:'Lecture',nom:'Compta (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u1',login:'aminata',pwd:hp('Admin@2025!'),role:'Administrateur',nom:'Dr. Aminata Nguer (Admin)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u2',login:'khady',pwd:hp('Khady@2025!'),role:'Administrateur',nom:'Dr. Khady Diene (Propriétaire)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
+  {id:'u3',login:'dado',pwd:hp('Dado@2025'),role:'Lecture',nom:'Dado Ba (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
 ];
-const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Grand Standing EDK, Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
+const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
 
 // ── UTILS ─────────────────────────────────────
 function hp(p){let r='';for(let i=0;i<p.length;i++)r+=String(p.charCodeAt(i)^(i*7+13)).padStart(3,'0');return r;}
@@ -972,14 +978,14 @@ async function sb(table,method='GET',body=null,filter=''){
   if(!DB_OK)throw new Error('no db');
   const r=await fetch(`${SUPA_URL}/rest/v1/${table}${filter}`,{
     method,
-    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':'return=minimal','x-app-secret':SUPA_SECRET},
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':'return=minimal'},
     body:body?JSON.stringify(body):null
   });
   if(!r.ok)throw new Error(await r.text());
   if(method==='GET')return r.json();
   return r.status===204?null:r.json().catch(()=>null);
 }
-const dbG=(t,f='')=>sb(t,'GET',null,'?order=created_at.asc'+f);
+const dbG=(t,f='')=>sb(t,'GET',null,'?order='+(t==='journal'?'ts':'created_at')+'.asc'+f);
 const dbI=(t,d)=>sb(t,'POST',d);
 const dbU=(t,id,d)=>sb(t,'PATCH',d,`?id=eq.${id}`);
 const dbD=(t,id)=>sb(t,'DELETE',null,`?id=eq.${id}`);
@@ -1227,10 +1233,19 @@ function renderDash(){
   const mDep=dep.filter(d=>{const dd=new Date(d.date);return dd.getMonth()===now.getMonth()&&dd.getFullYear()===now.getFullYear();});
   const mTot=mDep.reduce((s,d)=>s+Number(d.montant),0);
 
+  // Mois précédent pour comparaison
+  const prevDate=new Date(now.getFullYear(),now.getMonth()-1,1);
+  const prevDep=dep.filter(d=>{const dd=new Date(d.date);return dd.getMonth()===prevDate.getMonth()&&dd.getFullYear()===prevDate.getFullYear();});
+  const prevTot=prevDep.reduce((s,d)=>s+Number(d.montant),0);
+  const diffPct=prevTot>0?Math.round((mTot-prevTot)/prevTot*100):null;
+  const diffArrow=diffPct===null?'':diffPct>0?`↑ +${diffPct}% vs mois préc.`:`↓ ${diffPct}% vs mois préc.`;
+  const diffColor=diffPct===null?'neutral':diffPct>0?'up':'neutral';
+
   document.getElementById('kTotal').innerHTML=`${tot.toLocaleString('fr-FR')} <small>FCFA</small>`;
   document.getElementById('kTotalSub').textContent=`${nb} opération(s)`;
   document.getElementById('kMois').innerHTML=`${mTot.toLocaleString('fr-FR')} <small>FCFA</small>`;
-  document.getElementById('kMoisSub').textContent=`${mDep.length} opération(s) ce mois`;
+  document.getElementById('kMoisSub').className=`kpi-trend ${diffColor}`;
+  document.getElementById('kMoisSub').textContent=diffArrow||`${mDep.length} opération(s)`;
   document.getElementById('kOps').textContent=nb;
   document.getElementById('kMoy').innerHTML=`${Math.round(moy).toLocaleString('fr-FR')} <small>FCFA</small>`;
   document.getElementById('nbBadge').textContent=nb;
@@ -1287,13 +1302,22 @@ function renderChips(){
     +A.types.map(t=>`<span class="chip ${cft===t.nom?'on':''}" style="background:${cft===t.nom?t.couleur:t.couleur+'18'};color:${t.couleur};border-color:${cft===t.nom?t.couleur:'transparent'}" onclick="setF('${t.nom.replace(/'/g,"\\'")}')">&#9679; ${t.nom}</span>`).join('');
 }
 function setF(t){cft=t;renderChips();renderReg();}
-function reinit(){document.getElementById('searchIn').value='';cft='';renderChips();renderReg();}
+function reinit(){
+  document.getElementById('searchIn').value='';
+  const du=document.getElementById('fDateDu');if(du)du.value='';
+  const au=document.getElementById('fDateAu');if(au)au.value='';
+  cft='';renderChips();renderReg();
+}
 function renderReg(){
   renderChips();
   const s=(document.getElementById('searchIn')?.value||'').toLowerCase();
   let dep=[...A.dep];
   if(cft)dep=dep.filter(d=>d.type===cft);
   if(s)dep=dep.filter(d=>(d.libelle||'').toLowerCase().includes(s)||(d.benef||'').toLowerCase().includes(s)||(d.ref||'').toLowerCase().includes(s)||(d.type||'').toLowerCase().includes(s));
+  const du=(document.getElementById('fDateDu')?.value)||'';
+  const au=(document.getElementById('fDateAu')?.value)||'';
+  if(du)dep=dep.filter(d=>d.date>=du);
+  if(au)dep=dep.filter(d=>d.date<=au);
   dep.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   document.getElementById('regCount').textContent=`${dep.length} opération(s)`;
   const tbody=document.getElementById('tbReg');
