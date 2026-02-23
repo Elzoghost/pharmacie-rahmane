@@ -1239,28 +1239,77 @@ function lsLoad(){
 }
 
 // ═══════════════════════════════════════════
-//  SUPABASE
-// ═══════════════════════════════════════════
-async function sbFetch(table,method='GET',body=null,qs=''){
-  const url=`${SUPA_URL}/rest/v1/${table}${qs}`;
-  const headers={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};
-  if(method==='POST')headers['Prefer']='return=representation';
-  const res=await fetch(url,{method,headers,body:body?JSON.stringify(body):null});
-  if(!res.ok){const e=await res.text();throw new Error(e);}
-  if(res.status===204)return null;
-  return res.json().catch(()=>null);
-}
-const dbGet  =(t,qs='')=>sbFetch(t,'GET',null,qs);
-const dbPost =(t,d)=>sbFetch(t,'POST',d);
-const dbPatch=(t,id,d)=>sbFetch(t,'PATCH',d,`?id=eq.${id}`);
-const dbDel  =(t,id)=>sbFetch(t,'DELETE',null,`?id=eq.${id}`);
+// ── SUPABASE SECURISE + ALIAS ─────────────────────────
+const TABLE_ALIASES = {
+  'credits': 'credits_patients',
+  'caisse': 'caisse_ops'
+};
 
-async function addLog(action,detail=''){
-  const e={ts:new Date().toISOString(),utilisateur:S.user,role:S.role,action,detail};
-  S.logs.unshift({id:uid(),...e});
-  if(DB_OK)dbPost('journal',e).catch(()=>{});
-  lsSave();
+async function sbFetch(table, method='GET', body=null, qs='') {
+  const actualTable = TABLE_ALIASES[table] || table; // utiliser alias si défini
+  const url = `${SUPA_URL}/rest/v1/${actualTable}${qs}`;
+  const headers = {
+    'apikey': SUPA_KEY,
+    'Authorization': 'Bearer ' + SUPA_KEY,
+    'Content-Type': 'application/json'
+  };
+  if (method === 'POST') headers['Prefer'] = 'return=representation';
+
+  try {
+    const res = await fetch(url, { method, headers, body: body ? JSON.stringify(body) : null });
+    if (!res.ok) {
+      const e = await res.text();
+      console.error(`Erreur fetch ${method} sur ${actualTable}`, res.status, e);
+      return null; // évite le throw qui bloque
+    }
+    if (res.status === 204) return null;
+    return await res.json().catch(() => null);
+  } catch (err) {
+    console.error('Erreur fetch', method, actualTable, err);
+    return null;
+  }
 }
+
+// ── WRAPPERS ─────────────────────────
+const dbGet   = (t, qs='') => sbFetch(t,'GET',null,qs);
+const dbPost  = (t, d) => sbFetch(t,'POST',d);
+const dbPatch = (t, id, d) => sbFetch(t,'PATCH',d,`?id=eq.${id}`);
+const dbDel   = (t, id) => sbFetch(t,'DELETE',null,`?id=eq.${id}`);
+
+// ── LOGGING SECURISE ───────────────
+async function addLog(action, detail='') {
+  const e = {
+    ts: new Date().toISOString(),
+    utilisateur: S.user || 'unknown',
+    role: S.role || 'unknown',
+    action,
+    detail
+  };
+
+  // Ajouter localement
+  S.logs.unshift({ id: uid(), ...e });
+
+  // Envoyer au journal Supabase si DB_OK
+  if (DB_OK) {
+    try { await dbPost('journal', e); }
+    catch(err) { console.error('Impossible d’ajouter au journal Supabase', err); }
+  }
+
+  // Sauvegarde locale
+  try { lsSave(); } catch(err) { console.warn('Erreur sauvegarde locale', err); }
+}
+
+// ── EXEMPLE D’UTILISATION ───────
+(async () => {
+  const credits = await dbGet('credits', '?order=created_at.asc');  // mappe automatiquement à credits_patients
+  console.log('credits_patients', credits);
+
+  const caisse = await dbGet('caisse', '?order=created_at.asc');    // mappe automatiquement à caisse_ops
+  console.log('caisse_ops', caisse);
+
+  await addLog('Test log', 'Vérification module Supabase');
+})();
+
 
 // ═══════════════════════════════════════════
 //  BOOT & SYNC
