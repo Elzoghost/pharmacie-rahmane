@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0B3D2E">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Pharmacie Rahmane">
@@ -1721,7 +1722,7 @@ async function saveDep(){
   const libelle=document.getElementById('fLib').value.trim();
   const montant=Number(document.getElementById('fMt').value);
   if(!date||!type||!libelle||!montant){toast('Champs obligatoires manquants (*)','warn');return;}
-  const data={date,type,libelle,benef:document.getElementById('fBenef').value.trim(),mode:document.getElementById('fMode').value,ref:document.getElementById('fRef').value.trim(),montant,statut:document.getElementById('fStat').value,obs:document.getElementById('fObs').value.trim(),created_by:S.user,files:S.pendingFiles};
+  const data={id:S.editId||uid(),date,type,libelle,benef:document.getElementById('fBenef').value.trim(),mode:document.getElementById('fMode').value,ref:document.getElementById('fRef').value.trim(),montant,statut:document.getElementById('fStat').value,obs:document.getElementById('fObs').value.trim(),created_by:S.user,files:S.pendingFiles};
   try{
     if(S.editId){
       if(DB_OK)await dbPatch('depenses',S.editId,data);
@@ -2404,8 +2405,17 @@ async function saveCredit(){
     notes:document.getElementById('crNotes').value.trim(),
     created_by:S.user,ts:new Date().toISOString()
   };
+  // S'assurer que rembs est bien du JSON pur (pas de références circulaires)
+  data.rembs=JSON.parse(JSON.stringify(data.rembs));
   let nc={id:uid(),...data,created_at:new Date().toISOString()};
-  if(DB_OK){const r=await dbPost('credits',nc).catch(()=>null);if(r&&r[0])nc=r[0];}
+  if(DB_OK){
+    const r=await dbPost('credits',nc).catch(e=>{
+      console.error('Supabase credits error:',e.message);
+      toast('⚠️ Sauvegarde cloud échouée — données sauvées localement','warn');
+      return null;
+    });
+    if(r&&r[0])nc=r[0];
+  }
   S.credits.push(nc);
   addLog('CRÉDIT',pat+' · '+mt.toLocaleString('fr-FR')+' FCFA');
   lsSave();closeModal('mCredit');renderCredits();toast('Crédit enregistré ✓');
@@ -2434,7 +2444,7 @@ async function saveRemb(){
   c.rembourse=Number(c.rembourse||0)+mt;
   c.rembs=[...(c.rembs||[]),remb];
   c.statut=c.rembourse>=Number(c.montant)?'Soldé':c.rembourse>0?'Partiellement remboursé':'En cours';
-  if(DB_OK)await dbPatch('credits',c.id,{rembourse:c.rembourse,rembs:c.rembs,statut:c.statut}).catch(()=>{});
+  if(DB_OK)await dbPatch('credits',c.id,{rembourse:c.rembourse,rembs:JSON.parse(JSON.stringify(c.rembs)),statut:c.statut}).catch(e=>console.error('Remb patch error:',e.message));
   addLog('REMBOURSEMENT',c.pat+' · '+mt.toLocaleString('fr-FR')+' FCFA');
   lsSave();closeModal('mRemb');renderCredits();
   toast(c.statut==='Soldé'?'Crédit soldé ! ✓':'Remboursement enregistré ✓');
