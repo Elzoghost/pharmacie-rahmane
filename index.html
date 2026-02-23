@@ -2897,17 +2897,7 @@ function renderCredits(){
   }).join('');
 }
 
-function openModalCredit(){
-  S.editCreditId=null;
-  document.getElementById('mCreditTtl').textContent='💳 Nouveau crédit';
-  ['crPat','crTel','crMeds','crNotes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('crDate').value=new Date().toISOString().split('T')[0];
-  document.getElementById('crMontant').value='';
-  document.getElementById('crAcompte').value='';
-  document.getElementById('crEcheance').value='';
-  document.getElementById('crStat').value='En cours';
-  openModal('mCredit');
-}
+
 function editCredit(id){
   const c=S.credits.find(x=>x.id===id);if(!c)return;
   S.editCreditId=id;
@@ -2923,32 +2913,8 @@ function editCredit(id){
   document.getElementById('crNotes').value=c.notes||'';
   openModal('mCredit');
 }
-async function saveCredit(){
-  const pat=document.getElementById('crPat').value.trim();
-  const montant=Number(document.getElementById('crMontant').value);
-  const meds=document.getElementById('crMeds').value.trim();
-  if(!pat||!montant||!meds){toast('Patient, médicaments et montant requis','warn');return;}
-  const data={pat,tel:document.getElementById('crTel').value.trim(),date:document.getElementById('crDate').value,meds,montant,acompte:Number(document.getElementById('crAcompte').value)||0,echeance:document.getElementById('crEcheance').value,stat:document.getElementById('crStat').value,notes:document.getElementById('crNotes').value.trim(),saisi_par:S.user};
-  if(S.editCreditId){
-    if(DB_OK)await dbPatch('credits',S.editCreditId,data).catch(()=>{});
-    const i=S.credits.findIndex(x=>x.id===S.editCreditId);
-    if(i>-1)S.credits[i]={...S.credits[i],...data};
-    addLog('CRÉDIT MODIFIÉ',pat);toast('Crédit modifié ✓');
-  }else{
-    const nc={id:uid(),...data,remboursements:[],created_at:new Date().toISOString()};
-    if(DB_OK){const r=await dbPost('credits',nc).catch(()=>null);if(r&&r[0])nc.id=r[0].id;}
-    S.credits.push(nc);
-    addLog('CRÉDIT',pat+' · '+montant.toLocaleString('fr-FR')+' FCFA');toast('Crédit enregistré ✓');
-  }
-  lsSave();closeModal('mCredit');renderCredits();
-}
-async function delCredit(id){
-  const c=S.credits.find(x=>x.id===id);if(!c)return;
-  if(!confirm('Supprimer ce crédit ?'))return;
-  if(DB_OK)await dbDel('credits',id).catch(()=>{});
-  S.credits=S.credits.filter(x=>x.id!==id);
-  lsSave();renderCredits();toast('Crédit supprimé');
-}
+
+
 function openRmb(id){
   const c=S.credits.find(x=>x.id===id);if(!c)return;
   S.rmbCreditId=id;
