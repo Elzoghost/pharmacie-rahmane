@@ -2552,7 +2552,7 @@ function renderCaisse(){
   tbody.innerHTML=[...ops].reverse().map(c=>`<tr>
     <td class="amt" style="font-size:.76rem;color:var(--muted)">${c.heure||'--:--'}</td>
     <td><span class="badge ${c.ctype==='recette'?'bv':'bn'}">${c.ctype==='recette'?'💚 Recette':'❤️ Dépense'}</span></td>
-    <td style="font-size:.8rem">${c.desc}</td>
+    <td style="font-size:.8rem">${c.libelle}</td>
     <td style="font-size:.76rem;color:var(--muted)">${c.mode||'–'}</td>
     <td style="font-size:.74rem;color:var(--muted)">${c.ref||'–'}</td>
     <td><span class="amt" style="color:${c.ctype==='recette'?'#059669':'#C0392B'}">${c.ctype==='recette'?'+':'−'}${Number(c.montant).toLocaleString('fr-FR')}</span> <span style="font-size:.64rem;color:var(--muted)">FCFA</span></td>
@@ -2575,7 +2575,7 @@ async function saveCaisse(){
   const mt=Number(document.getElementById('cMt').value);
   if(!desc||!mt){toast('Description et montant requis','warn');return;}
   const jour=document.getElementById('caisseJour')?.value||new Date().toISOString().split('T')[0];
-  const op={id:uid(),jour,ctype:document.getElementById('cType').value,heure:document.getElementById('cHeure').value,desc,montant:mt,mode:document.getElementById('cMode').value,ref:document.getElementById('cRef').value.trim(),saisi_par:S.user,ts:new Date().toISOString()};
+  const op={id:uid(),jour,ctype:document.getElementById('cType').value,heure:document.getElementById('cHeure').value,libelle:desc,montant:mt,mode:document.getElementById('cMode').value,ref:document.getElementById('cRef').value.trim(),saisi_par:S.user,ts:new Date().toISOString()};
   let saved=op;
   if(DB_OK){const r=await dbPost('caisse',op).catch(()=>null);if(r&&r[0])saved=r[0];}
   S.caisse.push(saved);
@@ -2588,7 +2588,7 @@ async function delCaisse(id){
   S.caisse=S.caisse.filter(c=>c.id!==id);
   lsSave();renderCaisse();toast('Opération supprimée');
 }
-function exportCaisseCSV(){const jour=document.getElementById('caisseJour')?.value||new Date().toISOString().split('T')[0];const ops=S.caisse.filter(c=>c.jour===jour);const esc=v=>String(v).replace(/;/g,',');const header='Heure;Type;Description;Mode;Reference;Montant FCFA';const rows=ops.map(c=>[c.heure,c.ctype,c.desc,c.mode||'',c.ref||'',c.montant].map(esc).join(';'));const blob=new Blob(['\uFEFF'+[header,...rows].join('\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Caisse_'+jour+'.csv';a.click();toast('Caisse export\u00e9e \u2713');}
+function exportCaisseCSV(){const jour=document.getElementById('caisseJour')?.value||new Date().toISOString().split('T')[0];const ops=S.caisse.filter(c=>c.jour===jour);const esc=v=>String(v).replace(/;/g,',');const header='Heure;Type;Description;Mode;Reference;Montant FCFA';const rows=ops.map(c=>[c.heure,c.ctype,c.libelle,c.mode||'',c.ref||'',c.montant].map(esc).join(';'));const blob=new Blob(['\uFEFF'+[header,...rows].join('\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Caisse_'+jour+'.csv';a.click();toast('Caisse export\u00e9e \u2713');}
 
 // ═══════════════════════════════════════════
 //  FOURNISSEURS
