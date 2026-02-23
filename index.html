@@ -24,6 +24,22 @@
   --shm:0 8px 32px rgba(11,61,46,.13);
   --shl:0 20px 60px rgba(11,61,46,.18);
 }
+[data-theme="dark"]{
+  --bg:#0A0F0D; --white:#111815; --border:#1E2E28;
+  --text:#E2EDE9; --sub:#8AADA5; --muted:#4A6B61;
+  --foam:#0F1C18; --honey:#1A1200; --snow:#0D1A15;
+  --sh:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.4);
+  --shm:0 8px 32px rgba(0,0,0,.5); --shl:0 20px 60px rgba(0,0,0,.6);
+}
+[data-theme="dark"] .topbar{background:rgba(10,15,13,.96);}
+[data-theme="dark"] thead th{background:#0F1C18;}
+[data-theme="dark"] .upload-zone{background:#0F1C18;}
+[data-theme="dark"] .logo-zone{background:#0F1C18;}
+[data-theme="dark"] .sbox{background:#111815;}
+[data-theme="dark"] .ff input,[data-theme="dark"] .ff select,[data-theme="dark"] .ff textarea{background:#111815;color:var(--text);}
+[data-theme="dark"] .stock-card{background:#111815;}
+[data-theme="dark"] .type-card{background:#111815;}
+[data-theme="dark"] .ucard{background:#111815;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:15px;scroll-behavior:smooth}
 body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
@@ -293,8 +309,81 @@ tbody tr:last-child td{border-bottom:none}
 .alerte-banner{background:linear-gradient(135deg,rgba(192,57,43,.08),rgba(192,57,43,.05));border:1px solid rgba(192,57,43,.2);border-radius:var(--rs);padding:12px 16px;display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:.82rem;color:#922B21;font-weight:600}
 
 @media(max-width:900px){.kpi-grid{grid-template-columns:1fr 1fr}.charts-grid{grid-template-columns:1fr}}
-@media(max-width:600px){.sidebar{display:none}.main{margin-left:0}.kpi-grid{grid-template-columns:1fr}}
-@media print{#loginScreen,.sidebar,.topbar,.fbar,.chips,.btn,.modal-bg,.toast-wrap,.sync-row,#topAct{display:none!important}.main{margin-left:0!important}.page{display:block!important}body{background:white}}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s cubic-bezier(.22,.68,0,1.2)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;display:none}
+  .mob-overlay.open{display:block}
+  .mob-top{display:flex!important}
+  .content{padding:14px 14px}
+}
+@media(min-width:769px){.mob-top{display:none!important}.mob-overlay{display:none!important}}
+@media(max-width:480px){.kpi-grid{grid-template-columns:1fr}.fg{grid-template-columns:1fr}.ff.s2{grid-column:span 1}}
+@media print{#loginScreen,.sidebar,.topbar,.fbar,.chips,.btn,.modal-bg,.toast-wrap,.sync-row,#topAct,.mob-top{display:none!important}.main{margin-left:0!important}.page{display:block!important}body{background:white}}
+
+/* ══ CAISSE ══ */
+.caisse-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.caisse-kpi{padding:20px 22px;border-radius:var(--r);border:1.5px solid var(--border);position:relative;overflow:hidden;background:var(--white);box-shadow:var(--sh)}
+.caisse-kpi-bar{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
+.solde-card{background:linear-gradient(135deg,#0B3D2E,#14845F);color:#fff;border-radius:var(--r);padding:22px 26px;margin-bottom:18px;box-shadow:var(--shm);position:relative;overflow:hidden}
+.solde-card::before{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06)}
+
+/* ══ FOURNISSEURS ══ */
+.fourn-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);transition:all .2s}
+.fourn-card:hover{box-shadow:var(--shm);transform:translateY(-2px)}
+
+/* ══ ORDONNANCES ══ */
+.ordo-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--sh);transition:all .18s;cursor:pointer}
+.ordo-card:hover{box-shadow:var(--shm);border-color:var(--forest)}
+
+/* ══ RECHERCHE GLOBALE ══ */
+.search-global{position:relative}
+.search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);box-shadow:var(--shm);z-index:300;max-height:380px;overflow-y:auto;display:none}
+.search-results.open{display:block}
+.sr-section{padding:8px 14px 4px;font-size:.62rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.sr-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background .12s;font-size:.82rem}
+.sr-item:hover{background:var(--foam)}
+.sr-item-ic{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+
+/* ══ ÉTIQUETTES ══ */
+.etiq-preview{width:200px;height:100px;border:2px solid #0B3D2E;border-radius:8px;padding:8px 10px;background:white;font-family:'Syne',sans-serif;display:inline-block;margin:8px;vertical-align:top}
+
+/* ══ DASHBOARD CAISSE ══ */
+.dcaisse-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.dcaisse-kpi{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.dcaisse-bar{position:absolute;top:0;left:0;right:0;height:3px}
+.caisse-chart-grid{display:grid;grid-template-columns:1.8fr 1fr;gap:14px;margin-bottom:14px}
+
+/* ══ CRÉDITS PATIENTS ══ */
+.credit-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);transition:all .2s;position:relative;overflow:hidden}
+.credit-card:hover{box-shadow:var(--shm);transform:translateY(-2px)}
+.credit-card.urgent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#C0392B,#E74C3C)}
+.credit-card.partiel::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#E9A820,#F1C40F)}
+.credit-card.ok::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#059669,#10B981)}
+.credit-prog{height:7px;background:var(--foam);border-radius:99px;overflow:hidden;margin:8px 0}
+.credit-prog-bar{height:100%;border-radius:99px;transition:width .5s ease}
+
+/* ══ WHATSAPP BTN ══ */
+.btn-wa{background:#25D366;color:#fff;border:none}
+.btn-wa:hover{background:#128C7E;transform:translateY(-1px)}
+
+/* ══ CRÉDITS ══ */
+.credit-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh);transition:all .2s;position:relative;overflow:hidden}
+.credit-card:hover{box-shadow:var(--shm);transform:translateY(-2px)}
+.credit-card.urgent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#C0392B,#E74C3C)}
+.credit-card.recent::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#E9A820,#F59E0B)}
+.credit-card.ok::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#059669,#10B981)}
+.progress-bar{height:8px;background:var(--foam);border-radius:99px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;border-radius:99px;transition:width .5s ease}
+
+/* ══ CAISSE DASHBOARD ══ */
+.caisse-chart-wrap{background:var(--white);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--sh);padding:20px 24px;margin-bottom:16px}
+.trend-up{color:#059669;font-weight:700}
+.trend-dn{color:#C0392B;font-weight:700}
+.solde-positif{color:#059669}
+.solde-negatif{color:#C0392B}
 </style>
 </head>
 <body>
@@ -331,24 +420,34 @@ tbody tr:last-child td{border-bottom:none}
     <div class="snav-grp">
       <div class="snav-lbl">Principal</div>
       <div class="snav-it active" onclick="go('dashboard')"><span class="snav-ic">📊</span>Tableau de bord</div>
+      <div class="snav-it" onclick="go('caisse')"><span class="snav-ic">💰</span>Caisse journalière</div>
       <div class="snav-it" onclick="go('registre')"><span class="snav-ic">📋</span>Registre<span class="snav-badge" id="nbBadge">0</span></div>
       <div class="snav-it" onclick="go('recap')"><span class="snav-ic">📈</span>Récapitulatif</div>
       <div class="snav-it" onclick="go('stocks')"><span class="snav-ic">📦</span>Stocks<span class="snav-badge" id="stockAlert" style="display:none;background:#C0392B">!</span></div>
+      <div class="snav-it" onclick="go('ordonnances')"><span class="snav-ic">💊</span>Ordonnances & Ventes</div>
+      <div class="snav-it" onclick="go('credits')"><span class="snav-ic">💳</span>Crédits patients<span class="snav-badge" id="creditBadge" style="display:none;background:#C0392B">!</span></div>
+      <div class="snav-it" onclick="go('fournisseurs')"><span class="snav-ic">🏭</span>Fournisseurs</div>
+      <div class="snav-it" onclick="go('credits')"><span class="snav-ic">💳</span>Crédits patients<span class="snav-badge" id="creditBadge" style="display:none;background:#C0392B">!</span></div>
     </div>
     <div class="snav-grp" id="adminNav">
       <div class="snav-lbl">Administration</div>
       <div class="snav-it" onclick="go('parametres')"><span class="snav-ic">⚙️</span>Paramètres & Logo</div>
       <div class="snav-it" onclick="go('types')"><span class="snav-ic">🏷️</span>Types de dépenses</div>
       <div class="snav-it" onclick="go('users')"><span class="snav-ic">👥</span>Utilisateurs</div>
+      <div class="snav-it" onclick="go('succursales')"><span class="snav-ic">🏥</span>Succursales</div>
       <div class="snav-it" onclick="go('journal')"><span class="snav-ic">🔍</span>Journal</div>
     </div>
     <div class="snav-grp">
       <div class="snav-lbl">Exports</div>
       <div class="snav-it" onclick="showPDF()"><span class="snav-ic">📄</span>Rapport PDF</div>
       <div class="snav-it" onclick="doCSV()"><span class="snav-ic">📤</span>Exporter CSV</div>
+      <div class="snav-it" onclick="go('etiquettes')"><span class="snav-ic">🏷️</span>Étiquettes médicaments</div>
+      <div class="snav-it" onclick="doBackup()"><span class="snav-ic">💾</span>Sauvegarde JSON</div>
+      <div class="snav-it" onclick="alertesStockWhatsApp()"><span class="snav-ic">📲</span>Alertes stock WhatsApp</div>
     </div>
     <div class="sfoot">
       <button class="btn" id="btnInstall" onclick="installApp()" style="display:none;width:100%;margin-bottom:8px;background:linear-gradient(135deg,var(--gold),var(--amber));color:var(--jade);font-size:.76rem;padding:9px;justify-content:center;border-radius:var(--rs)">📲 Installer l'app</button>
+      <button class="sfoot-btn" onclick="openModal('mWA')" style="color:#25D366;border-color:rgba(37,211,102,.2);margin-bottom:6px">📱 Alertes WhatsApp</button>
       <button class="sfoot-btn" onclick="logout()">🚪 Déconnecter</button>
     </div>
   </aside>
@@ -506,6 +605,156 @@ tbody tr:last-child td{border-bottom:none}
         <div class="users-grid" id="usersGrid"></div>
       </div>
 
+      <!-- ═══ SUCCURSALES ═══ -->
+      <div class="page" id="page-succursales">
+        <div class="sec-title">
+          <div><h2>Succursales</h2><p>Gérez plusieurs pharmacies / points de vente</p></div>
+          <button class="btn btn-p btn-sm" onclick="openModalSucc()">➕ Nouvelle succursale</button>
+        </div>
+        <div id="succGrid" class="stock-grid"></div>
+      </div>
+
+      <!-- ═══ CAISSE ═══ -->
+      <div class="page" id="page-caisse">
+        <div class="sec-title">
+          <div><h2>Caisse journalière</h2><p id="caisseDate"></p></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input type="date" id="caisseJour" onchange="renderCaisse()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Syne',sans-serif;font-size:.82rem;outline:none;background:var(--white)">
+            <button class="btn btn-p btn-sm" onclick="openModalCaisse('recette')">💚 Recette</button>
+            <button class="btn btn-d btn-sm" onclick="openModalCaisse('depense')">❤️ Dépense</button>
+            <button class="btn btn-s btn-sm" onclick="exportCaisseCSV()">📤 CSV</button>
+          </div>
+        </div>
+        <!-- KPIs caisse -->
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#059669,#10B981)"></div><div class="kpi-ico">💚</div><div class="kpi-lbl">Recettes du jour</div><div class="kpi-val" id="cRecettes">0<small>FCFA</small></div><div class="kpi-sub" id="cRecNb">0 op.</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#C0392B,#E74C3C)"></div><div class="kpi-ico">❤️</div><div class="kpi-lbl">Dépenses du jour</div><div class="kpi-val" id="cDepenses">0<small>FCFA</small></div><div class="kpi-sub" id="cDepNb">0 op.</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#0B3D2E,#14845F)"></div><div class="kpi-ico">💰</div><div class="kpi-lbl">Solde du jour</div><div class="kpi-val" id="cSoldeKpi">0<small>FCFA</small></div><div class="kpi-sub" id="cSoldeTrend">—</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#1A6B9A,#3498DB)"></div><div class="kpi-ico">📅</div><div class="kpi-lbl">Solde 30 jours</div><div class="kpi-val" id="cSolde30">0<small>FCFA</small></div><div class="kpi-sub">Cumul du mois</div></div>
+        </div>
+        <!-- Graphique 30 jours -->
+        <div class="caisse-chart-wrap">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div><span style="font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600">Évolution 30 derniers jours</span></div>
+            <div style="display:flex;gap:14px;font-size:.72rem"><span style="color:#059669;font-weight:600">● Recettes</span><span style="color:#C0392B;font-weight:600">● Dépenses</span><span style="color:#0B3D2E;font-weight:600">● Solde</span></div>
+          </div>
+          <canvas id="cCaisse30" style="max-height:200px"></canvas>
+        </div>
+        <!-- Opérations du jour -->
+        <div class="card">
+          <div class="card-h"><span class="card-t">Opérations du jour</span><span id="cTotJour" style="font-size:.76rem;color:var(--muted)"></span></div>
+          <div class="card-b" style="padding-top:12px"><div class="tbl-wrap"><table><thead><tr><th>Heure</th><th>Type</th><th>Description</th><th>Mode</th><th>Réf.</th><th>Montant</th><th></th></tr></thead><tbody id="tbCaisse"></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ CRÉDITS PATIENTS ═══ -->
+      <div class="page" id="page-credits">
+        <div class="sec-title">
+          <div><h2>Crédits patients</h2><p>Suivi des impayés et remboursements</p></div>
+          <button class="btn btn-p btn-sm" onclick="openModalCredit()">➕ Nouveau crédit</button>
+        </div>
+        <!-- KPIs crédits -->
+        <div class="kpi-grid" style="margin-bottom:16px">
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#C0392B,#E74C3C)"></div><div class="kpi-ico">💳</div><div class="kpi-lbl">Total impayé</div><div class="kpi-val" id="kCredTot">0<small>FCFA</small></div><div class="kpi-sub" id="kCredNb">0 patient(s)</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#E9A820,#F59E0B)"></div><div class="kpi-ico">⚠️</div><div class="kpi-lbl">Urgents (+30j)</div><div class="kpi-val" id="kCredUrgent">0<small>FCFA</small></div><div class="kpi-sub" id="kCredUrgentNb">crédits anciens</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#059669,#10B981)"></div><div class="kpi-ico">✅</div><div class="kpi-lbl">Remboursé ce mois</div><div class="kpi-val" id="kCredRembMois">0<small>FCFA</small></div><div class="kpi-sub">Ce mois-ci</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#1A6B9A,#3498DB)"></div><div class="kpi-ico">📊</div><div class="kpi-lbl">Taux recouvrement</div><div class="kpi-val" id="kCredTaux">0<small>%</small></div><div class="kpi-sub">Global</div></div>
+        </div>
+        <div class="fbar">
+          <div class="sbox"><span style="color:var(--muted)">🔍</span><input type="text" id="searchCredit" placeholder="Nom du patient…" oninput="renderCredits()"></div>
+          <select id="filterCreditStat" onchange="renderCredits()" style="padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Syne',sans-serif;font-size:.8rem;outline:none;background:var(--white);appearance:none;min-width:150px">
+            <option value="">Tous les statuts</option>
+            <option value="En cours">En cours</option>
+            <option value="Partiellement remboursé">Partiel</option>
+            <option value="Soldé">Soldé</option>
+          </select>
+        </div>
+        <div id="creditGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px"></div>
+      </div>
+
+      <!-- ═══ FOURNISSEURS ═══ -->
+      <div class="page" id="page-fournisseurs">
+        <div class="sec-title">
+          <div><h2>Fournisseurs</h2><p>Carnet des fournisseurs & commandes</p></div>
+          <button class="btn btn-p btn-sm" onclick="openModalFourn()">➕ Nouveau fournisseur</button>
+        </div>
+        <div class="fbar" style="margin-bottom:16px">
+          <div class="sbox"><span style="color:var(--muted)">🔍</span><input type="text" id="searchFourn" placeholder="Rechercher…" oninput="renderFourn()"></div>
+        </div>
+        <div id="fournGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px"></div>
+      </div>
+
+      <!-- ═══ ORDONNANCES ═══ -->
+      <div class="page" id="page-ordonnances">
+        <div class="sec-title">
+          <div><h2>Ordonnances & Ventes</h2><p>Enregistrement des ventes quotidiennes</p></div>
+          <button class="btn btn-p btn-sm" onclick="openModalOrdo()">➕ Nouvelle vente</button>
+        </div>
+        <div class="fbar">
+          <div class="sbox"><span style="color:var(--muted)">🔍</span><input type="text" id="searchOrdo" placeholder="Patient, médicament…" oninput="renderOrdo()"></div>
+          <input type="date" id="fOrdoDu" onchange="renderOrdo()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Syne',sans-serif;font-size:.8rem;outline:none;background:var(--white)">
+          <input type="date" id="fOrdoAu" onchange="renderOrdo()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Syne',sans-serif;font-size:.8rem;outline:none;background:var(--white)">
+        </div>
+        <div class="card">
+          <div class="card-h"><span class="card-t">Registre des ventes</span><span id="ordoTot" style="font-size:.76rem;color:var(--muted)"></span></div>
+          <div class="card-b" style="padding-top:12px"><div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Patient</th><th>Médecin</th><th>Médicaments</th><th>Total</th><th>Mode</th><th>Statut</th><th></th></tr></thead><tbody id="tbOrdo"></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ ÉTIQUETTES ═══ -->
+      <div class="page" id="page-etiquettes">
+        <div class="sec-title">
+          <div><h2>Impression d'étiquettes</h2><p>Étiquettes pour les rayons</p></div>
+          <button class="btn btn-p btn-sm" onclick="printEtiq()">🖨️ Imprimer</button>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-h"><span class="card-t">Options</span></div>
+          <div class="card-b">
+            <div class="fg" style="max-width:500px">
+              <div class="ff"><label>Médicament</label><select id="etiqStock" onchange="renderEtiqPreview()" style="appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238AADA5' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px"></select></div>
+              <div class="ff"><label>Nombre d'étiquettes</label><input type="number" id="etiqNb" value="1" min="1" max="50" onchange="renderEtiqPreview()"></div>
+              <div class="ff"><label>Afficher le prix</label><select id="etiqPrix" onchange="renderEtiqPreview()"><option value="1">Oui</option><option value="0">Non</option></select></div>
+              <div class="ff"><label>Afficher péremption</label><select id="etiqPerem" onchange="renderEtiqPreview()"><option value="1">Oui</option><option value="0">Non</option></select></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h"><span class="card-t">Aperçu</span></div>
+          <div class="card-b" id="etiqPreview"></div>
+        </div>
+      </div>
+
+      <!-- ═══ CRÉDITS PATIENTS ═══ -->
+      <div class="page" id="page-credits">
+        <div class="sec-title">
+          <div><h2>Crédits patients</h2><p>Suivi des impayés et remboursements</p></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-s btn-sm" onclick="exportCreditsCSV()">📤 CSV</button>
+            <button class="btn btn-p btn-sm" onclick="openModalCredit()">➕ Nouveau crédit</button>
+          </div>
+        </div>
+        <!-- KPIs crédits -->
+        <div class="kpi-grid" style="margin-bottom:18px">
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#C0392B,#E74C3C)"></div><div class="kpi-ico">💳</div><div class="kpi-lbl">Total impayé</div><div class="kpi-val" id="kCrTot">0<small>FCFA</small></div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#E9A820,#F1C40F)"></div><div class="kpi-ico">👤</div><div class="kpi-lbl">Patients débiteurs</div><div class="kpi-val" id="kCrNb">0</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#059669,#10B981)"></div><div class="kpi-ico">✅</div><div class="kpi-lbl">Remboursé ce mois</div><div class="kpi-val" id="kCrRmb">0<small>FCFA</small></div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#6C3483,#9B59B6)"></div><div class="kpi-ico">⚠️</div><div class="kpi-lbl">En retard +30j</div><div class="kpi-val" id="kCrLate">0</div></div>
+        </div>
+        <!-- Filtres -->
+        <div class="fbar" style="margin-bottom:14px">
+          <div class="sbox"><span style="color:var(--muted)">🔍</span><input type="text" id="searchCredit" placeholder="Rechercher un patient…" oninput="renderCredits()"></div>
+          <select id="filterCreditStat" onchange="renderCredits()" style="padding:8px 14px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'Syne',sans-serif;font-size:.8rem;outline:none;background:var(--white);appearance:none;min-width:150px">
+            <option value="">Tous les statuts</option>
+            <option value="En cours">En cours</option>
+            <option value="Partiellement remboursé">Partiellement remboursé</option>
+            <option value="Remboursé">Remboursé</option>
+            <option value="En retard">En retard</option>
+          </select>
+        </div>
+        <!-- Liste crédits -->
+        <div id="creditsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px"></div>
+      </div>
+
       <!-- ═══ JOURNAL ═══ -->
       <div class="page" id="page-journal">
         <div class="sec-title"><div><h2>Journal d'accès</h2><p>Audit complet</p></div><button class="btn btn-d btn-sm" onclick="clearLog()">🗑️ Vider</button></div>
@@ -527,14 +776,14 @@ tbody tr:last-child td{border-bottom:none}
         <div class="ff s2"><label>Description <span class="req">*</span></label><input type="text" id="fLib" placeholder="Libellé de la dépense…"></div>
         <div class="ff"><label>Bénéficiaire</label><input type="text" id="fBenef" placeholder="Nom du bénéficiaire"></div>
         <div class="ff"><label>Mode de paiement</label><select id="fMode"><option>Virement bancaire</option><option>Espèces</option><option>Chèque</option><option>Mobile Money</option><option>Orange Money</option><option>Wave</option></select></div>
-        <div class="ff"><label>Référence</label><input type="text" id="fRef" placeholder="Ex : VIR-2025-001"></div>
+        <div class="ff"><label>N° Facture / Référence <button onclick="genRef()" type="button" style="background:var(--foam);border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:.65rem;cursor:pointer;margin-left:5px;font-family:Syne,sans-serif">🔢 Auto</button></label><input type="text" id="fRef" placeholder="Ex : FAC-2025-001"></div>
         <div class="ff"><label>Montant (FCFA) <span class="req">*</span></label><input type="number" id="fMt" placeholder="0" min="0"></div>
         <div class="ff"><label>Statut</label><select id="fStat"><option>En attente</option><option>En cours</option><option>Validé</option><option>Annulé</option><option>Litigieux</option></select></div>
         <div class="ff s2"><label>Observations</label><textarea id="fObs" placeholder="Notes…"></textarea></div>
         <div class="ff s2">
-          <label>📎 Pièces justificatives (photos, factures)</label>
-          <div class="upload-zone" id="uploadZone">
-            <input type="file" id="fFiles" accept="image/*,.pdf" multiple onchange="handleFiles(event)">
+          <label>📎 Pièces justificatives — Photos & PDF (glisser-déposer supporté)</label>
+          <div class="upload-zone" id="uploadZone" ondragover="this.classList.add('drag');event.preventDefault()" ondragleave="this.classList.remove('drag')" ondrop="dropFiles(event)">
+            <input type="file" id="fFiles" accept="image/*,.pdf,application/pdf" multiple onchange="handleFiles(event)">
             <div id="uploadPlaceholder">
               <div style="font-size:1.8rem;margin-bottom:8px">📎</div>
               <p style="font-size:.84rem;font-weight:600;color:var(--sub)">Cliquer ou glisser les fichiers</p>
@@ -619,6 +868,8 @@ tbody tr:last-child td{border-bottom:none}
         <div class="ff"><label>Stock maximum</label><input type="number" id="sMax" placeholder="Ex : 100" min="0"></div>
         <div class="ff"><label>Prix unitaire (FCFA)</label><input type="number" id="sPrix" placeholder="0" min="0"></div>
         <div class="ff"><label>Fournisseur</label><input type="text" id="sFourn" placeholder="Nom du fournisseur"></div>
+        <div class="ff"><label>Date de péremption</label><input type="date" id="sPerem"></div>
+        <div class="ff"><label>Numéro de lot</label><input type="text" id="sLot" placeholder="Ex : LOT-2025-001"></div>
         <div class="ff s2"><label>Notes</label><textarea id="sNotes" placeholder="Informations complémentaires…" style="min-height:56px"></textarea></div>
       </div>
       <div class="f-actions">
@@ -648,6 +899,28 @@ tbody tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- ═══ MODAL SUCCURSALE ═══ -->
+<div class="modal-bg" id="mSucc">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-h"><h3 id="mSuccTtl">🏥 Nouvelle succursale</h3><button class="modal-x" onclick="closeModal('mSucc')">✕</button></div>
+    <div class="modal-b">
+      <div class="fg">
+        <div class="ff s2"><label>Nom <span class="req">*</span></label><input type="text" id="scNom" placeholder="Ex : Pharmacie Rahmane Nord"></div>
+        <div class="ff"><label>Ville</label><input type="text" id="scVille" placeholder="Ex : Thiès"></div>
+        <div class="ff"><label>Téléphone</label><input type="tel" id="scTel" placeholder="+221 XX XXX XX XX"></div>
+        <div class="ff s2"><label>Adresse</label><input type="text" id="scAdr" placeholder="Quartier, rue…"></div>
+        <div class="ff"><label>Responsable</label><input type="text" id="scResp" placeholder="Nom du responsable"></div>
+        <div class="ff"><label>Email</label><input type="email" id="scEmail" placeholder="contact@pharmacie.sn"></div>
+        <div class="ff s2"><label>Notes</label><textarea id="scNotes" placeholder="Informations complémentaires…" style="min-height:56px"></textarea></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveSucc()">💾 Enregistrer</button>
+        <button class="btn btn-s" onclick="closeModal('mSucc')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ MODAL PDF ═══ -->
 <div class="modal-bg" id="mPDF">
   <div class="modal" style="max-width:460px">
@@ -660,6 +933,183 @@ tbody tr:last-child td{border-bottom:none}
         <button class="btn btn-s" onclick="printPage('stocks')" style="justify-content:flex-start;gap:12px;padding:13px 16px"><span style="font-size:1.05rem">📦</span><div style="text-align:left"><div style="font-weight:600">État des stocks</div><div style="font-size:.72rem;color:var(--muted)">Inventaire complet</div></div></button>
         <button class="btn btn-g" onclick="genMonthly()" style="justify-content:flex-start;gap:12px;padding:13px 16px;margin-top:3px"><span style="font-size:1.05rem">📑</span><div style="text-align:left"><div style="font-weight:600">Rapport mensuel signable</div><div style="font-size:.72rem">Entête officielle + signatures</div></div></button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CAISSE ═══ -->
+<div class="modal-bg" id="mCaisse">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-h"><h3 id="mCaisseTtl">💰 Nouvelle recette</h3><button class="modal-x" onclick="closeModal('mCaisse')">✕</button></div>
+    <div class="modal-b">
+      <div class="fg">
+        <div class="ff"><label>Type</label><select id="cType"><option value="recette">💚 Recette</option><option value="depense">❤️ Dépense</option></select></div>
+        <div class="ff"><label>Heure</label><input type="time" id="cHeure"></div>
+        <div class="ff s2"><label>Description <span class="req">*</span></label><input type="text" id="cDesc" placeholder="Ex : Ventes du matin, Achat fournitures…"></div>
+        <div class="ff"><label>Montant (FCFA) <span class="req">*</span></label><input type="number" id="cMt" placeholder="0" min="0"></div>
+        <div class="ff"><label>Mode de paiement</label><select id="cMode"><option>Espèces</option><option>Orange Money</option><option>Wave</option><option>Virement</option><option>Chèque</option></select></div>
+        <div class="ff s2"><label>Référence</label><input type="text" id="cRef" placeholder="Optionnel"></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveCaisse()">💾 Enregistrer</button>
+        <button class="btn btn-s" onclick="closeModal('mCaisse')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL FOURNISSEUR ═══ -->
+<div class="modal-bg" id="mFourn">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-h"><h3 id="mFournTtl">🏭 Nouveau fournisseur</h3><button class="modal-x" onclick="closeModal('mFourn')">✕</button></div>
+    <div class="modal-b">
+      <div class="fg">
+        <div class="ff s2"><label>Nom <span class="req">*</span></label><input type="text" id="fNom" placeholder="Nom du fournisseur"></div>
+        <div class="ff"><label>Contact</label><input type="text" id="fContact" placeholder="Nom du représentant"></div>
+        <div class="ff"><label>Téléphone</label><input type="tel" id="fTel" placeholder="+221 XX XXX XX XX"></div>
+        <div class="ff"><label>Email</label><input type="email" id="fEmail" placeholder="contact@fournisseur.sn"></div>
+        <div class="ff s2"><label>Adresse</label><input type="text" id="fAdr" placeholder="Ville, quartier…"></div>
+        <div class="ff"><label>Délai livraison</label><input type="text" id="fDelai" placeholder="Ex : 2-3 jours"></div>
+        <div class="ff"><label>Conditions paiement</label><input type="text" id="fConditions" placeholder="Ex : 30 jours net"></div>
+        <div class="ff s2"><label>Médicaments fournis</label><input type="text" id="fProduits" placeholder="Ex : Antibiotiques, Antalgiques…"></div>
+        <div class="ff s2"><label>Notes</label><textarea id="fNotes" placeholder="Informations complémentaires…" style="min-height:56px"></textarea></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveFourn()">💾 Enregistrer</button>
+        <button class="btn btn-s" onclick="closeModal('mFourn')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL ORDONNANCE ═══ -->
+<div class="modal-bg" id="mOrdo">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-h"><h3 id="mOrdoTtl">💊 Nouvelle vente</h3><button class="modal-x" onclick="closeModal('mOrdo')">✕</button></div>
+    <div class="modal-b">
+      <div class="fg">
+        <div class="ff"><label>Date <span class="req">*</span></label><input type="date" id="oDate"></div>
+        <div class="ff"><label>N° Ordonnance</label><input type="text" id="oRef" placeholder="ORD-2025-001"><button onclick="genOrdoRef()" type="button" style="background:var(--foam);border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:.65rem;cursor:pointer;margin-left:5px;font-family:Syne,sans-serif">🔢 Auto</button></div>
+        <div class="ff"><label>Nom du patient</label><input type="text" id="oPat" placeholder="Prénom Nom"></div>
+        <div class="ff"><label>Médecin prescripteur</label><input type="text" id="oMed" placeholder="Dr. Nom"></div>
+        <div class="ff s2"><label>Médicaments vendus <span class="req">*</span></label><textarea id="oMeds" placeholder="Ex : Paracétamol 500mg x2 boîtes, Amoxicilline 250mg x1 boîte…" style="min-height:70px"></textarea></div>
+        <div class="ff"><label>Total (FCFA) <span class="req">*</span></label><input type="number" id="oTotal" placeholder="0" min="0"></div>
+        <div class="ff"><label>Mode de paiement</label><select id="oMode"><option>Espèces</option><option>Orange Money</option><option>Wave</option><option>Assurance</option><option>Crédit</option></select></div>
+        <div class="ff"><label>Statut</label><select id="oStat"><option>Payé</option><option>Crédit</option><option>Assurance en attente</option></select></div>
+        <div class="ff s2"><label>Notes</label><textarea id="oNotes" placeholder="Observations…" style="min-height:50px"></textarea></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveOrdo()">💾 Enregistrer</button>
+        <button class="btn btn-s" onclick="closeModal('mOrdo')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CRÉDIT ═══ -->
+<div class="modal-bg" id="mCredit">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-h"><h3 id="mCreditTtl">💳 Nouveau crédit</h3><button class="modal-x" onclick="closeModal('mCredit')">✕</button></div>
+    <div class="modal-b">
+      <div class="fg">
+        <div class="ff s2"><label>Nom du patient <span class="req">*</span></label><input type="text" id="crPat" placeholder="Prénom Nom"></div>
+        <div class="ff"><label>Téléphone</label><input type="tel" id="crTel" placeholder="+221 77 XXX XX XX"></div>
+        <div class="ff"><label>Date du crédit <span class="req">*</span></label><input type="date" id="crDate"></div>
+        <div class="ff s2"><label>Médicaments</label><textarea id="crMeds" placeholder="Médicaments vendus à crédit…" style="min-height:56px"></textarea></div>
+        <div class="ff"><label>Montant total (FCFA) <span class="req">*</span></label><input type="number" id="crMt" placeholder="0" min="0"></div>
+        <div class="ff"><label>Acompte versé (FCFA)</label><input type="number" id="crAcompte" placeholder="0" min="0" value="0"></div>
+        <div class="ff"><label>Date d'échéance</label><input type="date" id="crEcheance"></div>
+        <div class="ff"><label>Médecin prescripteur</label><input type="text" id="crMed" placeholder="Dr. Nom"></div>
+        <div class="ff s2"><label>Notes</label><textarea id="crNotes" placeholder="Observations…" style="min-height:48px"></textarea></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveCredit()">💾 Enregistrer</button>
+        <button class="btn btn-s" onclick="closeModal('mCredit')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL REMBOURSEMENT ═══ -->
+<div class="modal-bg" id="mRemb">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-h"><h3>💵 Enregistrer un remboursement</h3><button class="modal-x" onclick="closeModal('mRemb')">✕</button></div>
+    <div class="modal-b">
+      <p id="mRembInfo" style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;margin-bottom:4px"></p>
+      <p id="mRembSolde" style="font-size:.8rem;color:var(--muted);margin-bottom:16px"></p>
+      <div class="fg" style="grid-template-columns:1fr">
+        <div class="ff"><label>Montant remboursé (FCFA) <span class="req">*</span></label><input type="number" id="rembMt" placeholder="0" min="0"></div>
+        <div class="ff"><label>Date</label><input type="date" id="rembDate"></div>
+        <div class="ff"><label>Mode de paiement</label><select id="rembMode"><option>Espèces</option><option>Orange Money</option><option>Wave</option><option>Virement</option></select></div>
+        <div class="ff"><label>Notes</label><input type="text" id="rembNotes" placeholder="Optionnel…"></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveRemb()">✅ Valider</button>
+        <button class="btn btn-s" onclick="closeModal('mRemb')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL CRÉDIT ═══ -->
+<div class="modal-bg" id="mCredit">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-h"><h3 id="mCreditTtl">💳 Nouveau crédit</h3><button class="modal-x" onclick="closeModal('mCredit')">✕</button></div>
+    <div class="modal-b">
+      <div class="fg">
+        <div class="ff s2"><label>Nom du patient <span class="req">*</span></label><input type="text" id="crPat" placeholder="Prénom Nom"></div>
+        <div class="ff"><label>Téléphone</label><input type="tel" id="crTel" placeholder="+221 XX XXX XX XX"></div>
+        <div class="ff"><label>Date du crédit <span class="req">*</span></label><input type="date" id="crDate"></div>
+        <div class="ff s2"><label>Médicaments <span class="req">*</span></label><textarea id="crMeds" placeholder="Ex : Paracétamol 500mg x2, Amoxicilline x1…" style="min-height:60px"></textarea></div>
+        <div class="ff"><label>Montant total (FCFA) <span class="req">*</span></label><input type="number" id="crMontant" placeholder="0" min="0"></div>
+        <div class="ff"><label>Acompte versé (FCFA)</label><input type="number" id="crAcompte" placeholder="0" min="0"></div>
+        <div class="ff"><label>Date d'échéance</label><input type="date" id="crEcheance"></div>
+        <div class="ff"><label>Statut</label><select id="crStat"><option>En cours</option><option>Partiellement remboursé</option><option>Remboursé</option><option>En retard</option></select></div>
+        <div class="ff s2"><label>Notes</label><textarea id="crNotes" placeholder="Observations…" style="min-height:48px"></textarea></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveCredit()">💾 Enregistrer</button>
+        <button class="btn btn-s" onclick="closeModal('mCredit')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL REMBOURSEMENT ═══ -->
+<div class="modal-bg" id="mRmb">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-h"><h3>💵 Enregistrer remboursement</h3><button class="modal-x" onclick="closeModal('mRmb')">✕</button></div>
+    <div class="modal-b">
+      <p id="mRmbPat" style="font-family:'Fraunces',serif;font-size:1rem;font-weight:600;margin-bottom:4px"></p>
+      <p id="mRmbReste" style="font-size:.8rem;color:var(--muted);margin-bottom:16px"></p>
+      <div class="fg" style="grid-template-columns:1fr">
+        <div class="ff"><label>Montant remboursé (FCFA) <span class="req">*</span></label><input type="number" id="rmbMt" placeholder="0" min="0"></div>
+        <div class="ff"><label>Date</label><input type="date" id="rmbDate"></div>
+        <div class="ff"><label>Mode de paiement</label><select id="rmbMode"><option>Espèces</option><option>Orange Money</option><option>Wave</option><option>Virement</option></select></div>
+        <div class="ff"><label>Notes</label><input type="text" id="rmbNotes" placeholder="Optionnel"></div>
+      </div>
+      <div class="f-actions">
+        <button class="btn btn-p" onclick="saveRmb()">✅ Valider remboursement</button>
+        <button class="btn btn-s" onclick="closeModal('mRmb')">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL WHATSAPP ALERTES ═══ -->
+<div class="modal-bg" id="mWA">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-h"><h3>📱 Alertes WhatsApp / SMS</h3><button class="modal-x" onclick="closeModal('mWA')">✕</button></div>
+    <div class="modal-b">
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:16px">Envoyez les alertes de stock critique directement sur WhatsApp ou par SMS.</p>
+      <div class="ff" style="margin-bottom:14px"><label>Numéro WhatsApp du responsable</label><input type="tel" id="waNum" placeholder="+221 XX XXX XX XX" value=""></div>
+      <div id="waAlertesList" style="margin-bottom:16px"></div>
+      <div style="display:grid;gap:8px">
+        <button class="btn btn-wa" onclick="sendWAStock()" style="justify-content:center;padding:12px">📲 Envoyer alerte stock sur WhatsApp</button>
+        <button class="btn btn-wa" onclick="sendWACredits()" style="justify-content:center;padding:12px;background:#128C7E">💳 Envoyer rappel crédits sur WhatsApp</button>
+        <button class="btn btn-s" onclick="sendSMS()" style="justify-content:center;padding:12px">📩 Préparer SMS (copier le message)</button>
+      </div>
+      <p style="font-size:.72rem;color:var(--muted);margin-top:12px;line-height:1.6">ℹ️ WhatsApp s'ouvre avec le message pré-rempli. Vous n'avez plus qu'à appuyer sur Envoyer.</p>
     </div>
   </div>
 </div>
@@ -690,10 +1140,10 @@ const DB_OK = SUPA_URL.startsWith('https://') && SUPA_KEY.startsWith('eyJ');
 // ═══════════════════════════════════════════
 const S = {
   user:null, role:null, logo:null,
-  dep:[], users:[], logs:[], types:[], stocks:[], params:{},
-  editId:null, editStockId:null, ajustStockId:null,
+  dep:[], users:[], logs:[], types:[], stocks:[], succs:[], caisse:[], fournisseurs:[], ordonnances:[], credits:[], params:{},
+  editId:null, editStockId:null, ajustStockId:null, editSuccId:null, editFournId:null, editOrdoId:null, editCreditId:null, rembCreditId:null,
   filterType:'', selColor:'#0B3D2E',
-  pendingFiles:[], attempts:0,
+  pendingFiles:[], attempts:0, darkMode:false,
   cPie:null, cBar:null, cMonth:null, cRecapBar:null, cLine:null,
 };
 
@@ -714,12 +1164,15 @@ const DEF_USERS = [
   {id:'u3',login:'Compta',pwd:hp('Compta@2026'),role:'Lecture',nom:'Compta (Comptable)',email:'rahmanepharmacie@gmail.com',actif:true,derniere_connexion:null},
 ];
 const DEF_STOCKS = [
-  {id:'s1',nom:'Paracétamol 500mg',cat:'Antalgique',unite:'Boîte',qte:45,min:10,max:100,prix:500,fourn:'Pharma Dakar',notes:'',created_at:new Date().toISOString()},
-  {id:'s2',nom:'Amoxicilline 250mg',cat:'Antibiotique',unite:'Boîte',qte:8,min:15,max:60,prix:2500,fourn:'MedSupply',notes:'',created_at:new Date().toISOString()},
-  {id:'s3',nom:'Métronidazole 250mg',cat:'Antibiotique',unite:'Boîte',qte:22,min:10,max:50,prix:1800,fourn:'Pharma Dakar',notes:'',created_at:new Date().toISOString()},
-  {id:'s4',nom:'Soluté glucosé 5%',cat:'Perfusion',unite:'Flacon',qte:3,min:20,max:80,prix:800,fourn:'MedSupply',notes:'Urgence',created_at:new Date().toISOString()},
+  {id:'s1',nom:'Paracétamol 500mg',cat:'Antalgique',unite:'Boîte',qte:45,min:10,max:100,prix:500,fourn:'Pharma Dakar',perem:'2026-12-31',lot:'LOT-2025-001',notes:'',created_at:new Date().toISOString()},
+  {id:'s2',nom:'Amoxicilline 250mg',cat:'Antibiotique',unite:'Boîte',qte:8,min:15,max:60,prix:2500,fourn:'MedSupply',perem:'2026-06-30',lot:'LOT-2025-002',notes:'',created_at:new Date().toISOString()},
+  {id:'s3',nom:'Métronidazole 250mg',cat:'Antibiotique',unite:'Boîte',qte:22,min:10,max:50,prix:1800,fourn:'Pharma Dakar',perem:'2027-03-31',lot:'LOT-2025-003',notes:'',created_at:new Date().toISOString()},
+  {id:'s4',nom:'Soluté glucosé 5%',cat:'Perfusion',unite:'Flacon',qte:3,min:20,max:80,prix:800,fourn:'MedSupply',perem:'2025-09-30',lot:'LOT-2024-010',notes:'Urgence',created_at:new Date().toISOString()},
 ];
-const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Grand Standing EDK ,Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
+const DEF_SUCCS = [
+  {id:'sc1',nom:'Pharmacie Rahmane ',ville:'Thiès',adr:'Grans Standing EDK',tel:'+221 33 951 XX XX',resp:'Dr. Khady Diene',email:'rahmanepharmacie@gmail.com',notes:'Siège principal',created_at:new Date().toISOString()},
+];
+const DEF_PARAMS = {nom:'Pharmacie Rahmane',ville:'Thiès, Sénégal',email:'rahmanepharmacie@gmail.com',tel:'',prop:'Dr. Khady Diene',lic:''};
 
 // ═══════════════════════════════════════════
 //  UTILS
@@ -752,7 +1205,13 @@ function lsSave(){
     localStorage.setItem('pr2_log',JSON.stringify(S.logs.slice(0,200)));
     localStorage.setItem('pr2_types',JSON.stringify(S.types));
     localStorage.setItem('pr2_stocks',JSON.stringify(S.stocks));
+    localStorage.setItem('pr2_succs',JSON.stringify(S.succs));
+    localStorage.setItem('pr2_caisse',JSON.stringify(S.caisse));
+    localStorage.setItem('pr2_fourn',JSON.stringify(S.fournisseurs));
+    localStorage.setItem('pr2_ordo',JSON.stringify(S.ordonnances));
+    localStorage.setItem('pr2_credits',JSON.stringify(S.credits));
     localStorage.setItem('pr2_params',JSON.stringify(S.params));
+    localStorage.setItem('pr2_dark',S.darkMode?'1':'0');
     if(S.logo)localStorage.setItem('pr2_logo',S.logo);
     else localStorage.removeItem('pr2_logo');
   }catch(e){}
@@ -764,8 +1223,15 @@ function lsLoad(){
     S.logs   = JSON.parse(localStorage.getItem('pr2_log')||'[]');
     S.types  = JSON.parse(localStorage.getItem('pr2_types')||'null')||[...DEF_TYPES];
     S.stocks = JSON.parse(localStorage.getItem('pr2_stocks')||'null')||[...DEF_STOCKS];
+    S.succs       = JSON.parse(localStorage.getItem('pr2_succs')||'null')||[...DEF_SUCCS];
+    S.caisse      = JSON.parse(localStorage.getItem('pr2_caisse')||'[]');
+    S.fournisseurs= JSON.parse(localStorage.getItem('pr2_fourn')||'[]');
+    S.ordonnances = JSON.parse(localStorage.getItem('pr2_ordo')||'[]');
+    S.credits     = JSON.parse(localStorage.getItem('pr2_credits')||'[]');
+    S.credits     = JSON.parse(localStorage.getItem('pr2_credits')||'[]');
     S.params = JSON.parse(localStorage.getItem('pr2_params')||'null')||{...DEF_PARAMS};
     S.logo   = localStorage.getItem('pr2_logo')||null;
+    S.darkMode = localStorage.getItem('pr2_dark')==='1';
   }catch(e){
     S.dep=[];S.users=[...DEF_USERS];S.logs=[];
     S.types=[...DEF_TYPES];S.stocks=[...DEF_STOCKS];S.params={...DEF_PARAMS};
@@ -801,6 +1267,8 @@ async function addLog(action,detail=''){
 // ═══════════════════════════════════════════
 function boot(){
   lsLoad();applyLogo();
+  if(S.darkMode)document.documentElement.setAttribute('data-theme','dark');
+  document.getElementById('btnDark')&&(document.getElementById('btnDark').textContent=S.darkMode?'☀️':'🌙');
   document.getElementById('loginScreen').style.display='flex';
 }
 
@@ -808,38 +1276,44 @@ async function syncDB(){
   if(!DB_OK){setConn(false);return;}
   document.getElementById('syncTxt').textContent='🔄 Synchronisation…';
   try{
-    const[dep,types]=await Promise.all([
+    // ── Données principales ──────────────────────
+    const[dep,types,stocks,caisse,fourn,ordo,credits]=await Promise.all([
       dbGet('depenses','?order=created_at.asc'),
       dbGet('types_depenses','?order=created_at.asc').catch(()=>null),
+      dbGet('stocks','?order=created_at.asc').catch(()=>null),
+      dbGet('caisse','?order=ts.asc').catch(()=>null),
+      dbGet('fournisseurs','?order=created_at.asc').catch(()=>null),
+      dbGet('ordonnances','?order=created_at.asc').catch(()=>null),
+      dbGet('credits','?order=created_at.asc').catch(()=>null),
     ]);
-    if(dep&&dep.length)S.dep=dep;
-    if(types&&types.length){S.types=types;}
-    else if(!types||!types.length){
-      for(const t of DEF_TYPES)await dbPost('types_depenses',t).catch(()=>{});
-      S.types=[...DEF_TYPES];
-    }
 
-    // Stocks depuis Supabase
-    const stocks=await dbGet('stocks','?order=created_at.asc').catch(()=>null);
+    if(dep&&dep.length)S.dep=dep;
+
+    if(types&&types.length)S.types=types;
+    else{for(const t of DEF_TYPES)await dbPost('types_depenses',t).catch(()=>{});S.types=[...DEF_TYPES];}
+
     if(stocks&&stocks.length)S.stocks=stocks;
-    else if(!stocks||!stocks.length){
-      for(const st of DEF_STOCKS)await dbPost('stocks',st).catch(()=>{});
-    }
+    else{for(const st of DEF_STOCKS)await dbPost('stocks',st).catch(()=>{});}
+
+    if(caisse&&caisse.length)S.caisse=caisse;
+    if(fourn&&fourn.length)S.fournisseurs=fourn;
+    if(ordo&&ordo.length)S.ordonnances=ordo;
+    if(credits&&credits.length)S.credits=credits;
 
     refresh();
     document.getElementById('syncTxt').textContent='🟢 Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
     setConn(true);
 
-    const[usr,logs]=await Promise.all([
+    // ── Users + journal (moins urgent) ───────────
+    const[usr,logs,succs]=await Promise.all([
       dbGet('utilisateurs','?order=created_at.asc').catch(()=>null),
-      dbGet('journal','?order=ts.desc').catch(()=>null),
+      dbGet('journal','?order=ts.desc&limit=200').catch(()=>null),
+      dbGet('succursales','?order=created_at.asc').catch(()=>null),
     ]);
     if(usr&&usr.length)S.users=usr;
-    else if(!usr||!usr.length){
-      for(const u of DEF_USERS)await dbPost('utilisateurs',u).catch(()=>{});
-      S.users=[...DEF_USERS];
-    }
+    else{for(const u of DEF_USERS)await dbPost('utilisateurs',u).catch(()=>{});S.users=[...DEF_USERS];}
     if(logs&&logs.length)S.logs=logs;
+    if(succs&&succs.length)S.succs=succs;
     lsSave();
   }catch(e){
     console.warn('Sync échoué:',e.message);
@@ -913,16 +1387,59 @@ function initApp(){
   if(S.role!=='Administrateur')document.getElementById('adminNav').style.display='none';
   if(S.role==='Lecture')document.getElementById('topAct').style.display='none';
   setInterval(()=>{document.getElementById('tbTime').textContent=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
-  if(DB_OK)setInterval(async()=>{
+  if(DB_OK){
+    setInterval(async()=>{
+      try{
+        const[dep,stocks,caisse,ordo,credits]=await Promise.all([
+          dbGet('depenses','?order=created_at.asc'),
+          dbGet('stocks','?order=created_at.asc').catch(()=>null),
+          dbGet('caisse','?order=ts.asc').catch(()=>null),
+          dbGet('ordonnances','?order=created_at.asc').catch(()=>null),
+          dbGet('credits','?order=created_at.asc').catch(()=>null),
+        ]);
+        if(dep&&dep.length)S.dep=dep;
+        if(stocks&&stocks.length)S.stocks=stocks;
+        if(caisse&&caisse.length)S.caisse=caisse;
+        if(ordo&&ordo.length)S.ordonnances=ordo;
+        if(credits&&credits.length)S.credits=credits;
+        refresh();
+        document.getElementById('syncTxt').textContent='🟢 Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+      }catch(e){document.getElementById('syncTxt').textContent='🔴 Hors ligne';}
+    },30000);
+
+    // ── PING toutes les 48h pour garder Supabase actif (plan gratuit) ──
+    async function pingSupabase(){
+      try{
+        await dbGet('utilisateurs','?limit=1');
+        const last=new Date().toISOString();
+        localStorage.setItem('pr2_lastping',last);
+        console.log('Supabase ping OK',last);
+      }catch(e){console.warn('Ping échoué',e.message);}
+    }
+    const lastPing=localStorage.getItem('pr2_lastping');
+    const pingAge=lastPing?(Date.now()-new Date(lastPing).getTime()):Infinity;
+    if(pingAge > 47*60*60*1000) pingSupabase();
+    setInterval(pingSupabase, 48*60*60*1000);
+  }
+
+  // ── PING toutes les 47h pour éviter la pause Supabase (plan gratuit) ──
+  async function pingSupabase(){
+    if(!DB_OK)return;
     try{
-      const dep=await dbGet('depenses','?order=created_at.asc');
-      if(dep&&dep.length)S.dep=dep;
-      const stocks=await dbGet('stocks','?order=created_at.asc').catch(()=>null);
-      if(stocks&&stocks.length)S.stocks=stocks;
-      refresh();
-      document.getElementById('syncTxt').textContent='🟢 Synchronisé · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-    }catch(e){document.getElementById('syncTxt').textContent='🔴 Hors ligne';}
-  },30000);
+      await dbGet('utilisateurs','?limit=1');
+      const last=new Date().toISOString();
+      localStorage.setItem('pr2_lastping',last);
+      console.log('🏓 Ping Supabase OK —',last);
+    }catch(e){console.warn('Ping échoué:',e.message);}
+  }
+  // Vérifier si le dernier ping date de plus de 47h
+  const lastPing=localStorage.getItem('pr2_lastping');
+  const hoursSince=lastPing?(Date.now()-new Date(lastPing).getTime())/(1000*60*60):999;
+  if(hoursSince>47)pingSupabase();
+  setInterval(pingSupabase, 47*60*60*1000);
+  demandNotif();
+  setTimeout(checkStockAlertes, 2000);
+  setInterval(checkStockAlertes, 60*60*1000);
   refresh();go('dashboard');
 }
 
@@ -934,6 +1451,13 @@ const PAGES={
   registre:{t:'Registre des dépenses',s:'Toutes les opérations'},
   recap:{t:'Récapitulatif',s:'Analyse par type'},
   stocks:{t:'Gestion des stocks',s:'Médicaments et fournitures'},
+  succursales:{t:'Succursales',s:'Points de vente'},
+  caisse:{t:'Caisse journalière',s:'Recettes & Dépenses du jour'},
+  fournisseurs:{t:'Fournisseurs',s:'Carnet & commandes'},
+  ordonnances:{t:'Ordonnances & Ventes',s:'Registre des ventes'},
+  etiquettes:{t:'Étiquettes',s:'Impression étiquettes médicaments'},
+  credits:{t:'Crédits patients',s:'Suivi des impayés et remboursements'},
+  credits:{t:'Crédits patients',s:'Suivi des impayés et remboursements'},
   parametres:{t:'Paramètres & Logo',s:'Personnalisation'},
   types:{t:'Types de dépenses',s:'Catégories'},
   users:{t:'Utilisateurs',s:'Gestion des accès'},
@@ -955,6 +1479,13 @@ function go(id){
   if(id==='types')renderTypes();
   if(id==='parametres')loadParams();
   if(id==='stocks')renderStocks();
+  if(id==='succursales')renderSucc();
+  if(id==='caisse'){initCaisseDate();renderCaisse();}
+  if(id==='fournisseurs')renderFourn();
+  if(id==='ordonnances')renderOrdo();
+  if(id==='etiquettes')initEtiquettes();
+  if(id==='credits'){renderCredits();}
+  if(id==='caisse'&&document.getElementById('cCaisse30'))renderCaisse30();
   if(id==='dashboard')renderDash();
 }
 
@@ -1295,6 +1826,16 @@ function renderStocks(){
       const pct=st.max>0?Math.min(100,Math.round(st.qte/st.max*100)):st.qte>0?100:0;
       const isAlerte=st.qte<=st.min;
       const barColor=isAlerte?'#C0392B':pct>60?'#059669':'#E9A820';
+      let peremHtml='';
+      if(st.perem){
+        const dPerem=new Date(st.perem);const now2=new Date();
+        const daysLeft=Math.round((dPerem-now2)/(1000*60*60*24));
+        const peremStr=dPerem.toLocaleDateString('fr-FR');
+        if(daysLeft<0)peremHtml=`<div style="font-size:.7rem;font-weight:700;color:#C0392B;margin-top:5px">⛔ Expiré le ${peremStr}</div>`;
+        else if(daysLeft<=30)peremHtml=`<div style="font-size:.7rem;font-weight:700;color:#E9A820;margin-top:5px">⚠️ Expire dans ${daysLeft}j (${peremStr})</div>`;
+        else peremHtml=`<div style="font-size:.7rem;color:var(--muted);margin-top:5px">📅 Exp. ${peremStr}</div>`;
+      }
+      if(st.lot)peremHtml+=`<div style="font-size:.68rem;color:var(--muted)">🏷️ ${st.lot}</div>`;
       return`<div class="stock-card ${isAlerte?'alerte':'ok'}">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
           <div class="stock-name">${st.nom}</div>
@@ -1308,7 +1849,8 @@ function renderStocks(){
         </div>
         ${st.fourn?`<div style="font-size:.7rem;color:var(--muted);margin-top:6px">🏭 ${st.fourn}</div>`:''}
         ${st.prix?`<div style="font-size:.7rem;color:var(--muted)">💰 ${Number(st.prix).toLocaleString('fr-FR')} FCFA/unité</div>`:''}
-        <div class="stock-actions">
+        ${peremHtml}
+      <div class="stock-actions">
           <button class="btn btn-p btn-sm" onclick="openAjust('${st.id}')">📥 Ajuster</button>
           ${S.role==='Administrateur'?`<button class="btn btn-s btn-sm" onclick="editStock('${st.id}')">✏️</button><button class="btn btn-d btn-sm" onclick="delStock('${st.id}')">🗑️</button>`:''}
         </div>
@@ -1334,6 +1876,8 @@ function editStock(id){
   document.getElementById('sMax').value=st.max||'';
   document.getElementById('sPrix').value=st.prix||'';
   document.getElementById('sFourn').value=st.fourn||'';
+  document.getElementById('sPerem').value=st.perem||'';
+  document.getElementById('sLot').value=st.lot||'';
   document.getElementById('sNotes').value=st.notes||'';
   openModal('mStock');
 }
@@ -1342,7 +1886,7 @@ async function saveStock(){
   const qte=Number(document.getElementById('sQte').value);
   const min=Number(document.getElementById('sMin').value);
   if(!nom){toast('Nom requis','warn');return;}
-  const data={nom,cat:document.getElementById('sCat').value.trim(),unite:document.getElementById('sUnit').value,qte,min,max:Number(document.getElementById('sMax').value)||0,prix:Number(document.getElementById('sPrix').value)||0,fourn:document.getElementById('sFourn').value.trim(),notes:document.getElementById('sNotes').value.trim()};
+  const data={nom,cat:document.getElementById('sCat').value.trim(),unite:document.getElementById('sUnit').value,qte,min,max:Number(document.getElementById('sMax').value)||0,prix:Number(document.getElementById('sPrix').value)||0,fourn:document.getElementById('sFourn').value.trim(),perem:document.getElementById('sPerem').value||'',lot:document.getElementById('sLot').value.trim(),notes:document.getElementById('sNotes').value.trim()};
   try{
     if(S.editStockId){
       if(DB_OK)await dbPatch('stocks',S.editStockId,data);
@@ -1706,6 +2250,944 @@ async function logout(){
 //  REFRESH
 // ═══════════════════════════════════════════
 function refresh(){renderDash();renderReg();}
+
+// ═══════════════════════════════════════════
+//  CAISSE DASHBOARD 30 JOURS
+// ═══════════════════════════════════════════
+let cCaisse30Chart=null;
+function renderCaisse30(){
+  const now=new Date();
+  const labels=[],rec=[],dep=[],sol=[];
+  for(let i=29;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+    const jour=d.toISOString().split('T')[0];
+    const ops=S.caisse.filter(c=>c.jour===jour);
+    const r=ops.filter(c=>c.ctype==='recette').reduce((s,c)=>s+Number(c.montant),0);
+    const dp=ops.filter(c=>c.ctype==='depense').reduce((s,c)=>s+Number(c.montant),0);
+    labels.push(d.getDate()+'/'+String(d.getMonth()+1).padStart(2,'0'));
+    rec.push(r);dep.push(dp);sol.push(r-dp);
+  }
+  const tot30rec=rec.reduce((s,v)=>s+v,0);
+  const tot30dep=dep.reduce((s,v)=>s+v,0);
+  const sol30=tot30rec-tot30dep;
+  document.getElementById('cSolde30').innerHTML=(sol30>=0?'':'−')+Math.abs(sol30).toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('cSolde30').className='kpi-val '+(sol30>=0?'solde-positif':'solde-negatif');
+  const ctx=document.getElementById('cCaisse30');
+  if(!ctx)return;
+  if(cCaisse30Chart)cCaisse30Chart.destroy();
+  cCaisse30Chart=new Chart(ctx.getContext('2d'),{
+    type:'bar',
+    data:{labels,datasets:[
+      {label:'Recettes',data:rec,backgroundColor:'rgba(5,150,105,.6)',borderColor:'#059669',borderWidth:1,borderRadius:4,borderSkipped:false,order:2},
+      {label:'Dépenses',data:dep,backgroundColor:'rgba(192,57,43,.6)',borderColor:'#C0392B',borderWidth:1,borderRadius:4,borderSkipped:false,order:2},
+      {label:'Solde',data:sol,type:'line',borderColor:'#0B3D2E',backgroundColor:'rgba(11,61,46,.08)',borderWidth:2.5,pointRadius:2,tension:.4,fill:true,order:1},
+    ]},
+    options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+' : '+c.parsed.y.toLocaleString('fr-FR')+' FCFA'}}},scales:{y:{ticks:{callback:v=>v.toLocaleString('fr-FR'),font:{size:9}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:8},maxRotation:45},grid:{display:false}}}}
+  });
+}
+
+// ═══════════════════════════════════════════
+//  CRÉDITS PATIENTS
+// ═══════════════════════════════════════════
+function renderCredits(){
+  const s=(document.getElementById('searchCredit')?.value||'').toLowerCase();
+  const fStat=document.getElementById('filterCreditStat')?.value||'';
+  let list=[...S.credits].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if(s)list=list.filter(c=>(c.pat||'').toLowerCase().includes(s));
+  if(fStat)list=list.filter(c=>c.statut===fStat);
+
+  const now=new Date();
+  const allActifs=S.credits.filter(c=>c.statut!=='Soldé');
+  const totImpaye=allActifs.reduce((s,c)=>s+(Number(c.montant)-Number(c.rembourse||0)),0);
+  const urgent=allActifs.filter(c=>(now-new Date(c.date))/(1000*60*60*24)>30);
+  const totUrgent=urgent.reduce((s,c)=>s+(Number(c.montant)-Number(c.rembourse||0)),0);
+  const moisDebut=new Date(now.getFullYear(),now.getMonth(),1).toISOString().split('T')[0];
+  const rembMois=S.credits.flatMap(c=>c.rembs||[]).filter(r=>r.date>=moisDebut).reduce((s,r)=>s+Number(r.mt),0);
+  const totTotal=S.credits.reduce((s,c)=>s+Number(c.montant),0);
+  const totRemb=S.credits.reduce((s,c)=>s+Number(c.rembourse||0),0);
+  const taux=totTotal>0?Math.round(totRemb/totTotal*100):0;
+
+  document.getElementById('kCredTot').innerHTML=totImpaye.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('kCredNb').textContent=allActifs.length+' patient(s)';
+  document.getElementById('kCredUrgent').innerHTML=totUrgent.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('kCredUrgentNb').textContent=urgent.length+' crédit(s) > 30j';
+  document.getElementById('kCredRembMois').innerHTML=rembMois.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('kCredTaux').innerHTML=taux+'<small>%</small>';
+
+  const badge=document.getElementById('creditBadge');
+  if(badge){badge.style.display=urgent.length>0?'inline-flex':'none';badge.textContent=urgent.length;}
+
+  const CSTAT={'En cours':'ba','Partiellement remboursé':'bc','Soldé':'bv'};
+
+  document.getElementById('creditGrid').innerHTML=list.length===0
+    ?'<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted)">Aucun crédit trouvé</div>'
+    :list.map(c=>{
+      const restant=Number(c.montant)-Number(c.rembourse||0);
+      const pct=Number(c.montant)>0?Math.round(Number(c.rembourse||0)/Number(c.montant)*100):0;
+      const jours=Math.round((now-new Date(c.date))/(1000*60*60*24));
+      const cls=c.statut==='Soldé'?'ok':jours>30?'urgent':'recent';
+      const barColor=c.statut==='Soldé'?'#059669':jours>30?'#C0392B':'#E9A820';
+      const statBadge=CSTAT[c.statut]||'bg';
+      const dernRembs=c.rembs&&c.rembs.length?c.rembs.slice(-2).map(r=>'💵 '+fd(r.date)+' : '+Number(r.mt).toLocaleString('fr-FR')+' FCFA ('+r.mode+')').join(' · '):'';
+      let html2='<div class="credit-card '+cls+'">';
+      html2+='<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">';
+      html2+='<div style="font-family:Fraunces,serif;font-size:1rem;font-weight:600">👤 '+c.pat+'</div>';
+      html2+='<span class="badge '+statBadge+'">'+c.statut+'</span>';
+      html2+='</div>';
+      if(c.tel)html2+='<div style="font-size:.73rem;color:var(--muted)">📞 <a href="tel:'+c.tel+'" style="color:var(--forest)">'+c.tel+'</a> · <a href="https://wa.me/'+c.tel.replace(/[^0-9]/g,'')+'" target="_blank" style="color:#25D366;font-weight:600">WhatsApp</a></div>';
+      html2+='<div style="font-size:.73rem;color:var(--muted)">📅 '+fd(c.date)+' (il y a '+jours+'j)'+(c.echeance?' · ⏰ Échéance : '+fd(c.echeance):'')+'</div>';
+      if(c.meds)html2+='<div style="font-size:.73rem;color:var(--muted);margin-top:4px">💊 '+c.meds+'</div>';
+      html2+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div>';
+      html2+='<div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:10px">';
+      html2+='<span>Remboursé : <span class="amt" style="color:#059669">'+Number(c.rembourse||0).toLocaleString('fr-FR')+'</span> FCFA</span>';
+      html2+='<span>Restant : <span class="amt" style="color:'+barColor+'">'+restant.toLocaleString('fr-FR')+'</span> FCFA</span>';
+      html2+='</div>';
+      if(dernRembs)html2+='<div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">'+dernRembs+'</div>';
+      html2+='<div style="display:flex;gap:6px;flex-wrap:wrap">';
+      if(c.statut!=='Soldé')html2+='<button class="btn btn-p btn-sm" onclick="openRemb(\'' +c.id+ '\')">💵 Remboursement</button>';
+      if(c.tel)html2+='<button class="btn btn-s btn-sm" onclick="alerteWhatsApp(\'' +c.id+ '\')" style="color:#25D366;border-color:#25D366">📲 WhatsApp</button>';
+      if(S.role==='Administrateur')html2+='<button class="btn btn-d btn-sm" onclick="delCredit(\'' +c.id+ '\')" style="padding:5px 8px">🗑️</button>';
+      html2+='</div></div>';
+      return html2;
+    }).join('');
+}
+
+function openModalCredit(){
+  S.editCreditId=null;
+  document.getElementById('mCreditTtl').textContent='💳 Nouveau crédit';
+  ['crPat','crTel','crMeds','crMt','crNotes','crMed'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('crAcompte').value='0';
+  document.getElementById('crDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('crEcheance').value='';
+  openModal('mCredit');
+}
+
+async function saveCredit(){
+  const pat=document.getElementById('crPat').value.trim();
+  const mt=Number(document.getElementById('crMt').value);
+  const acompte=Number(document.getElementById('crAcompte').value||0);
+  if(!pat||!mt){toast('Patient et montant requis','warn');return;}
+  const data={
+    pat,tel:document.getElementById('crTel').value.trim(),
+    date:document.getElementById('crDate').value,
+    echeance:document.getElementById('crEcheance').value||'',
+    meds:document.getElementById('crMeds').value.trim(),
+    med:document.getElementById('crMed').value.trim(),
+    montant:mt,rembourse:acompte,
+    rembs:acompte>0?[{mt:acompte,date:document.getElementById('crDate').value,mode:'Espèces',notes:'Acompte initial'}]:[],
+    statut:acompte>=mt?'Soldé':acompte>0?'Partiellement remboursé':'En cours',
+    notes:document.getElementById('crNotes').value.trim(),
+    created_by:S.user,ts:new Date().toISOString()
+  };
+  let nc={id:uid(),...data,created_at:new Date().toISOString()};
+  if(DB_OK){const r=await dbPost('credits',nc).catch(()=>null);if(r&&r[0])nc=r[0];}
+  S.credits.push(nc);
+  addLog('CRÉDIT',pat+' · '+mt.toLocaleString('fr-FR')+' FCFA');
+  lsSave();closeModal('mCredit');renderCredits();toast('Crédit enregistré ✓');
+}
+
+function openRemb(id){
+  const c=S.credits.find(x=>x.id===id);if(!c)return;
+  S.rembCreditId=id;
+  const restant=Number(c.montant)-Number(c.rembourse||0);
+  document.getElementById('mRembInfo').textContent='👤 '+c.pat;
+  document.getElementById('mRembSolde').textContent='Restant dû : '+restant.toLocaleString('fr-FR')+' FCFA / Total : '+Number(c.montant).toLocaleString('fr-FR')+' FCFA';
+  document.getElementById('rembMt').value='';document.getElementById('rembMt').max=restant;
+  document.getElementById('rembDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('rembMode').value='Espèces';
+  document.getElementById('rembNotes').value='';
+  openModal('mRemb');
+}
+
+async function saveRemb(){
+  const c=S.credits.find(x=>x.id===S.rembCreditId);if(!c)return;
+  const mt=Number(document.getElementById('rembMt').value);
+  if(!mt||mt<=0){toast('Montant requis','warn');return;}
+  const restant=Number(c.montant)-Number(c.rembourse||0);
+  if(mt>restant){toast('Montant supérieur au restant dû ('+restant.toLocaleString('fr-FR')+' FCFA)','warn');return;}
+  const remb={mt,date:document.getElementById('rembDate').value,mode:document.getElementById('rembMode').value,notes:document.getElementById('rembNotes').value.trim()};
+  c.rembourse=Number(c.rembourse||0)+mt;
+  c.rembs=[...(c.rembs||[]),remb];
+  c.statut=c.rembourse>=Number(c.montant)?'Soldé':c.rembourse>0?'Partiellement remboursé':'En cours';
+  if(DB_OK)await dbPatch('credits',c.id,{rembourse:c.rembourse,rembs:c.rembs,statut:c.statut}).catch(()=>{});
+  addLog('REMBOURSEMENT',c.pat+' · '+mt.toLocaleString('fr-FR')+' FCFA');
+  lsSave();closeModal('mRemb');renderCredits();
+  toast(c.statut==='Soldé'?'Crédit soldé ! ✓':'Remboursement enregistré ✓');
+}
+
+async function delCredit(id){
+  const c=S.credits.find(x=>x.id===id);if(!c)return;
+  if(!confirm('Supprimer le crédit de '+c.pat+' ?'))return;
+  if(DB_OK)await dbDel('credits',id).catch(()=>{});
+  S.credits=S.credits.filter(x=>x.id!==id);
+  addLog('CRÉDIT SUPPRIMÉ',c.pat);lsSave();renderCredits();toast('Crédit supprimé');
+}
+
+// ═══════════════════════════════════════════
+//  ALERTES WHATSAPP
+// ═══════════════════════════════════════════
+function alerteWhatsApp(creditId){const c=S.credits.find(x=>x.id===creditId);if(!c||!c.tel)return;const restant=Number(c.montant)-Number(c.rembourse||0);const p=S.params;const nom=p.nom||'Pharmacie Rahmane';const ville=p.ville||'Thies';const echeanceStr=c.echeance?('\nDate d echeance : '+fd(c.echeance))  :'';const telStr=p.tel?('\n\uD83D\uDCDE '+p.tel):'';const msg='Bonjour '+c.pat+',\n\nNous vous contactons de la part de la '+nom+' de '+ville+'.'+'\n\nVotre credit du '+fd(c.date)+' d un montant de '+Number(c.montant).toLocaleString('fr-FR')+' FCFA presente un solde restant de *'+restant.toLocaleString('fr-FR')+' FCFA*.'+echeanceStr+'\n\nMerci de bien vouloir regulariser votre situation.'+telStr+'\n\nCordialement,\n'+nom;const tel=c.tel.replace(/[^0-9]/g,'');window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg),'_blank');addLog('WHATSAPP',c.pat+' relance credit');}
+
+function alertesStockWhatsApp(){
+  const alertes=S.stocks.filter(s=>s.qte<=s.min);
+  if(alertes.length===0){toast('Aucun stock en alerte','warn');return;}
+  const p=S.params;
+  const tel=prompt('Numéro WhatsApp du fournisseur (ex: 221771234567) :');
+  if(!tel)return;
+  const lines=['🚨 *ALERTE STOCK — '+(p.nom||'Pharmacie Rahmane').toUpperCase()+'*','','Médicaments en rupture ou stock critique :',''];
+  alertes.forEach(s=>lines.push('❌ *'+s.nom+'* — Stock : '+s.qte+' '+s.unite+' (min : '+s.min+')'));
+  lines.push('','Merci de nous contacter rapidement.');
+  if(p.tel)lines.push('📞 '+p.tel);
+  const msg=lines.join('\n');
+  window.open('https://wa.me/'+tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+  addLog('WHATSAPP STOCK',alertes.length+' alerte(s)');
+  toast('Message WhatsApp ouvert ✓');
+}
+
+// ═══════════════════════════════════════════
+//  MOBILE MENU
+// ═══════════════════════════════════════════
+function openMobMenu(){
+  document.querySelector('.sidebar').classList.add('open');
+  document.getElementById('mobOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMobMenu(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('mobOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+// Fermer menu après clic nav sur mobile
+document.querySelectorAll('.snav-it').forEach(el=>{
+  const orig=el.getAttribute('onclick');
+  el.addEventListener('click',()=>{if(window.innerWidth<=768)closeMobMenu();});
+});
+
+// ═══════════════════════════════════════════
+//  RECHERCHE GLOBALE
+// ═══════════════════════════════════════════
+function doGlobalSearch(){
+  const q=(document.getElementById('globalSearch').value||'').toLowerCase().trim();
+  const el=document.getElementById('gsResults');
+  if(q.length<2){el.classList.remove('open');return;}
+  const res=[];
+  // Dépenses
+  S.dep.filter(d=>(d.libelle||'').toLowerCase().includes(q)||(d.benef||'').toLowerCase().includes(q)).slice(0,4).forEach(d=>{
+    res.push({section:'Dépenses',ic:'📋',label:d.libelle,sub:d.type+' · '+Number(d.montant).toLocaleString('fr-FR')+' FCFA',action:`go('registre')`});
+  });
+  // Stocks
+  S.stocks.filter(s=>(s.nom||'').toLowerCase().includes(q)||(s.cat||'').toLowerCase().includes(q)).slice(0,4).forEach(s=>{
+    res.push({section:'Stocks',ic:'📦',label:s.nom,sub:s.qte+' '+s.unite+' · '+s.cat,action:`go('stocks')`});
+  });
+  // Fournisseurs
+  S.fournisseurs.filter(f=>(f.nom||'').toLowerCase().includes(q)).slice(0,3).forEach(f=>{
+    res.push({section:'Fournisseurs',ic:'🏭',label:f.nom,sub:f.tel||f.email||'',action:`go('fournisseurs')`});
+  });
+  // Ordonnances
+  S.ordonnances.filter(o=>(o.pat||'').toLowerCase().includes(q)||(o.meds||'').toLowerCase().includes(q)).slice(0,3).forEach(o=>{
+    res.push({section:'Ordonnances',ic:'💊',label:o.pat||'Patient inconnu',sub:o.meds?.substring(0,40)+'…',action:`go('ordonnances')`});
+  });
+  if(res.length===0){el.innerHTML='<div style="padding:16px;text-align:center;color:var(--muted);font-size:.82rem">Aucun résultat</div>';el.classList.add('open');return;}
+  let html='';let lastSec='';
+  res.forEach(r=>{
+    if(r.section!==lastSec){html+=`<div class="sr-section">${r.section}</div>`;lastSec=r.section;}
+    html+=`<div class="sr-item" onclick="${r.action};closeGS()"><div class="sr-item-ic" style="background:var(--foam)">${r.ic}</div><div><div style="font-weight:600">${r.label}</div><div style="font-size:.72rem;color:var(--muted)">${r.sub||''}</div></div></div>`;
+  });
+  el.innerHTML=html;el.classList.add('open');
+}
+function closeGS(){
+  document.getElementById('gsResults').classList.remove('open');
+  document.getElementById('globalSearch').value='';
+}
+
+// ═══════════════════════════════════════════
+//  CAISSE JOURNALIÈRE
+// ═══════════════════════════════════════════
+function initCaisseDate(){
+  const el=document.getElementById('caisseJour');
+  if(!el.value)el.value=new Date().toISOString().split('T')[0];
+  renderCaisseDash();
+}
+function renderCaisse(){
+  const jour=document.getElementById('caisseJour')?.value||new Date().toISOString().split('T')[0];
+  const d=new Date(jour);
+  document.getElementById('caisseDate').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const ops=S.caisse.filter(c=>c.jour===jour);
+  const recettes=ops.filter(c=>c.ctype==='recette').reduce((s,c)=>s+Number(c.montant),0);
+  const dep=ops.filter(c=>c.ctype==='depense').reduce((s,c)=>s+Number(c.montant),0);
+  const solde=recettes-dep;
+  const soldeEl=document.getElementById('cSolde');
+  soldeEl.textContent=solde.toLocaleString('fr-FR')+' FCFA';
+  soldeEl.style.color=solde>=0?'#fff':'#FCA5A5';
+  document.getElementById('cSoldeSub').textContent=`${ops.length} opération(s) · ${recettes.toLocaleString('fr-FR')} recettes · ${dep.toLocaleString('fr-FR')} dépenses`;
+  document.getElementById('cRecettes').innerHTML=`${recettes.toLocaleString('fr-FR')}<small>FCFA</small>`;
+  document.getElementById('cDepenses').innerHTML=`${dep.toLocaleString('fr-FR')}<small>FCFA</small>`;
+  document.getElementById('cRecNb').textContent=ops.filter(c=>c.ctype==='recette').length+' op.';
+  document.getElementById('cDepNb').textContent=ops.filter(c=>c.ctype==='depense').length+' op.';
+  const kSolde=document.getElementById('cSoldeKpi');
+  kSolde.innerHTML=(solde>=0?'':'-')+Math.abs(solde).toLocaleString('fr-FR')+'<small>FCFA</small>';
+  kSolde.className='kpi-val '+(solde>=0?'solde-positif':'solde-negatif');
+  const hierJour=new Date(new Date(jour).getTime()-86400000).toISOString().split('T')[0];
+  const hierOps=S.caisse.filter(c=>c.jour===hierJour);
+  const hierSolde=hierOps.filter(c=>c.ctype==='recette').reduce((s,c)=>s+Number(c.montant),0)-hierOps.filter(c=>c.ctype==='depense').reduce((s,c)=>s+Number(c.montant),0);
+  const diff=hierSolde>0?Math.round((solde-hierSolde)/hierSolde*100):null;
+  const trendEl=document.getElementById('cSoldeTrend');
+  if(diff===null)trendEl.textContent='vs hier —';
+  else if(diff>0){trendEl.className='kpi-sub trend-up';trendEl.textContent='↑ +'+diff+'% vs hier';}
+  else{trendEl.className='kpi-sub trend-dn';trendEl.textContent='↓ '+diff+'% vs hier';}
+  document.getElementById('cTotJour').textContent=ops.length+' opération(s) · solde : '+solde.toLocaleString('fr-FR')+' FCFA';
+  renderCaisse30();
+  const tbody=document.getElementById('tbCaisse');
+  if(ops.length===0){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">Aucune opération pour ce jour</td></tr>';return;}
+  tbody.innerHTML=[...ops].reverse().map(c=>`<tr>
+    <td class="amt" style="font-size:.76rem;color:var(--muted)">${c.heure||'--:--'}</td>
+    <td><span class="badge ${c.ctype==='recette'?'bv':'bn'}">${c.ctype==='recette'?'💚 Recette':'❤️ Dépense'}</span></td>
+    <td style="font-size:.8rem">${c.desc}</td>
+    <td style="font-size:.76rem;color:var(--muted)">${c.mode||'–'}</td>
+    <td style="font-size:.74rem;color:var(--muted)">${c.ref||'–'}</td>
+    <td><span class="amt" style="color:${c.ctype==='recette'?'#059669':'#C0392B'}">${c.ctype==='recette'?'+':'−'}${Number(c.montant).toLocaleString('fr-FR')}</span> <span style="font-size:.64rem;color:var(--muted)">FCFA</span></td>
+    <td>${S.role!=='Lecture'?`<button class="btn btn-d btn-sm" onclick="delCaisse('${c.id}')" style="padding:4px 7px;font-size:.7rem">🗑️</button>`:'–'}</td>
+  </tr>`).join('');
+}
+function openModalCaisse(type){
+  document.getElementById('mCaisseTtl').textContent=type==='recette'?'💚 Nouvelle recette':'❤️ Nouvelle dépense';
+  document.getElementById('cType').value=type;
+  const now=new Date();
+  document.getElementById('cHeure').value=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('cDesc').value='';
+  document.getElementById('cMt').value='';
+  document.getElementById('cRef').value='';
+  document.getElementById('cMode').value='Espèces';
+  openModal('mCaisse');
+}
+async function saveCaisse(){
+  const desc=document.getElementById('cDesc').value.trim();
+  const mt=Number(document.getElementById('cMt').value);
+  if(!desc||!mt){toast('Description et montant requis','warn');return;}
+  const jour=document.getElementById('caisseJour')?.value||new Date().toISOString().split('T')[0];
+  const op={id:uid(),jour,ctype:document.getElementById('cType').value,heure:document.getElementById('cHeure').value,desc,montant:mt,mode:document.getElementById('cMode').value,ref:document.getElementById('cRef').value.trim(),saisi_par:S.user,ts:new Date().toISOString()};
+  let saved=op;
+  if(DB_OK){const r=await dbPost('caisse',op).catch(()=>null);if(r&&r[0])saved=r[0];}
+  S.caisse.push(saved);
+  addLog('CAISSE',op.ctype==='recette'?'Recette · '+desc+' · '+mt.toLocaleString('fr-FR')+' FCFA':'Dépense · '+desc+' · '+mt.toLocaleString('fr-FR')+' FCFA');
+  lsSave();closeModal('mCaisse');renderCaisse();toast('Opération enregistrée ✓');
+}
+async function delCaisse(id){
+  if(!confirm('Supprimer cette opération ?'))return;
+  if(DB_OK)await dbDel('caisse',id).catch(()=>{});
+  S.caisse=S.caisse.filter(c=>c.id!==id);
+  lsSave();renderCaisse();toast('Opération supprimée');
+}
+function exportCaisseCSV(){const jour=document.getElementById('caisseJour')?.value||new Date().toISOString().split('T')[0];const ops=S.caisse.filter(c=>c.jour===jour);const esc=v=>String(v).replace(/;/g,',');const header='Heure;Type;Description;Mode;Reference;Montant FCFA';const rows=ops.map(c=>[c.heure,c.ctype,c.desc,c.mode||'',c.ref||'',c.montant].map(esc).join(';'));const blob=new Blob(['\uFEFF'+[header,...rows].join('\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Caisse_'+jour+'.csv';a.click();toast('Caisse export\u00e9e \u2713');}
+
+// ═══════════════════════════════════════════
+//  FOURNISSEURS
+// ═══════════════════════════════════════════
+function renderFourn(){
+  const s=(document.getElementById('searchFourn')?.value||'').toLowerCase();
+  let list=[...S.fournisseurs];
+  if(s)list=list.filter(f=>(f.nom||'').toLowerCase().includes(s)||(f.contact||'').toLowerCase().includes(s)||(f.produits||'').toLowerCase().includes(s));
+  document.getElementById('fournGrid').innerHTML=list.length===0
+    ?'<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted)">Aucun fournisseur. Ajoutez-en un avec le bouton +</div>'
+    :list.map(f=>`<div class="fourn-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-family:'Fraunces',serif;font-size:1rem;font-weight:600">🏭 ${f.nom}</div>
+        ${S.role==='Administrateur'?`<div style="display:flex;gap:4px"><button class="btn btn-s btn-sm" onclick="editFourn('${f.id}')" style="padding:4px 7px;font-size:.7rem">✏️</button><button class="btn btn-d btn-sm" onclick="delFourn('${f.id}')" style="padding:4px 7px;font-size:.7rem">🗑️</button></div>`:''}
+      </div>
+      ${f.contact?`<div style="font-size:.76rem;color:var(--muted)">👤 ${f.contact}</div>`:''}
+      ${f.tel?`<div style="font-size:.76rem;color:var(--muted)">📞 <a href="tel:${f.tel}" style="color:var(--forest)">${f.tel}</a></div>`:''}
+      ${f.email?`<div style="font-size:.76rem;color:var(--muted)">📧 <a href="mailto:${f.email}" style="color:var(--forest)">${f.email}</a></div>`:''}
+      ${f.adr?`<div style="font-size:.76rem;color:var(--muted)">📍 ${f.adr}</div>`:''}
+      ${f.delai?`<div style="font-size:.76rem;color:var(--muted);margin-top:6px">🚚 Délai : ${f.delai}</div>`:''}
+      ${f.conditions?`<div style="font-size:.76rem;color:var(--muted)">💳 ${f.conditions}</div>`:''}
+      ${f.produits?`<div style="margin-top:8px"><div style="font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Produits</div><div style="font-size:.76rem;color:var(--sub)">${f.produits}</div></div>`:''}
+      ${f.notes?`<div style="font-size:.74rem;color:var(--muted);margin-top:6px;font-style:italic">${f.notes}</div>`:''}
+    </div>`).join('');
+}
+function openModalFourn(){
+  S.editFournId=null;
+  document.getElementById('mFournTtl').textContent='🏭 Nouveau fournisseur';
+  ['fNom','fContact','fTel','fEmail','fAdr','fDelai','fConditions','fProduits','fNotes'].forEach(id=>document.getElementById(id).value='');
+  openModal('mFourn');
+}
+function editFourn(id){
+  const f=S.fournisseurs.find(x=>x.id===id);if(!f)return;
+  S.editFournId=id;
+  document.getElementById('mFournTtl').textContent='✏️ Modifier fournisseur';
+  document.getElementById('fNom').value=f.nom||'';
+  document.getElementById('fContact').value=f.contact||'';
+  document.getElementById('fTel').value=f.tel||'';
+  document.getElementById('fEmail').value=f.email||'';
+  document.getElementById('fAdr').value=f.adr||'';
+  document.getElementById('fDelai').value=f.delai||'';
+  document.getElementById('fConditions').value=f.conditions||'';
+  document.getElementById('fProduits').value=f.produits||'';
+  document.getElementById('fNotes').value=f.notes||'';
+  openModal('mFourn');
+}
+async function saveFourn(){
+  const nom=document.getElementById('fNom').value.trim();
+  if(!nom){toast('Nom requis','warn');return;}
+  const data={nom,contact:document.getElementById('fContact').value.trim(),tel:document.getElementById('fTel').value.trim(),email:document.getElementById('fEmail').value.trim(),adr:document.getElementById('fAdr').value.trim(),delai:document.getElementById('fDelai').value.trim(),conditions:document.getElementById('fConditions').value.trim(),produits:document.getElementById('fProduits').value.trim(),notes:document.getElementById('fNotes').value.trim()};
+  if(S.editFournId){
+    if(DB_OK)await dbPatch('fournisseurs',S.editFournId,data).catch(()=>{});
+    const i=S.fournisseurs.findIndex(x=>x.id===S.editFournId);
+    if(i>-1)S.fournisseurs[i]={...S.fournisseurs[i],...data};
+    addLog('FOURNISSEUR MODIFIÉ',nom);toast('Fournisseur modifié ✓');
+  }else{
+    let nf={id:uid(),...data,created_at:new Date().toISOString()};
+    if(DB_OK){const r=await dbPost('fournisseurs',nf).catch(()=>null);if(r&&r[0])nf=r[0];}
+    S.fournisseurs.push(nf);
+    addLog('FOURNISSEUR AJOUTÉ',nom);toast('"'+nom+'" ajouté ✓');
+  }
+  lsSave();closeModal('mFourn');renderFourn();
+}
+async function delFourn(id){
+  const f=S.fournisseurs.find(x=>x.id===id);if(!f)return;
+  if(!confirm(`Supprimer "${f.nom}" ?`))return;
+  if(DB_OK)await dbDel('fournisseurs',id).catch(()=>{});
+  S.fournisseurs=S.fournisseurs.filter(x=>x.id!==id);
+  addLog('FOURNISSEUR SUPPRIMÉ',f.nom);lsSave();renderFourn();toast('"'+f.nom+'" supprimé');
+}
+
+// ═══════════════════════════════════════════
+//  ORDONNANCES & VENTES
+// ═══════════════════════════════════════════
+function renderOrdo(){
+  const s=(document.getElementById('searchOrdo')?.value||'').toLowerCase();
+  const du=(document.getElementById('fOrdoDu')?.value)||'';
+  const au=(document.getElementById('fOrdoAu')?.value)||'';
+  let list=[...S.ordonnances].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(s)list=list.filter(o=>(o.pat||'').toLowerCase().includes(s)||(o.meds||'').toLowerCase().includes(s)||(o.ref||'').toLowerCase().includes(s));
+  if(du)list=list.filter(o=>o.date>=du);
+  if(au)list=list.filter(o=>o.date<=au);
+  const tot=list.reduce((s,o)=>s+Number(o.total),0);
+  document.getElementById('ordoTot').textContent=`${list.length} vente(s) · ${tot.toLocaleString('fr-FR')} FCFA`;
+  const OSTAT={'Payé':'bv','Crédit':'bn','Assurance en attente':'ba'};
+  document.getElementById('tbOrdo').innerHTML=list.length===0
+    ?'<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">Aucune vente enregistrée</td></tr>'
+    :list.map(o=>`<tr>
+      <td style="font-size:.76rem;color:var(--muted);white-space:nowrap">${fd(o.date)}</td>
+      <td style="font-size:.82rem;font-weight:600">${o.pat||'–'}</td>
+      <td style="font-size:.76rem;color:var(--muted)">${o.med||'–'}</td>
+      <td style="font-size:.76rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${o.meds||''}">${o.meds||'–'}</td>
+      <td><span class="amt" style="color:var(--jade)">${Number(o.total).toLocaleString('fr-FR')}</span> <span style="font-size:.64rem;color:var(--muted)">FCFA</span></td>
+      <td style="font-size:.76rem;color:var(--muted)">${o.mode||'–'}</td>
+      <td><span class="badge ${OSTAT[o.stat]||'bg'}">${o.stat}</span></td>
+      <td>${S.role!=='Lecture'?`<button class="btn btn-d btn-sm" onclick="delOrdo('${o.id}')" style="padding:4px 7px;font-size:.7rem">🗑️</button>`:'–'}</td>
+    </tr>`).join('');
+}
+function genOrdoRef(){
+  const y=new Date().getFullYear();
+  const existing=S.ordonnances.filter(o=>(o.ref||'').startsWith(`ORD-${y}-`));
+  const maxN=existing.reduce((mx,o)=>{const n=parseInt((o.ref||'').split('-').pop()||0);return n>mx?n:mx;},0);
+  document.getElementById('oRef').value=`ORD-${y}-${String(maxN+1).padStart(4,'0')}`;
+}
+function openModalOrdo(){
+  S.editOrdoId=null;
+  document.getElementById('mOrdoTtl').textContent='💊 Nouvelle vente';
+  document.getElementById('oDate').value=new Date().toISOString().split('T')[0];
+  ['oRef','oPat','oMed','oMeds','oTotal','oNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('oMode').value='Espèces';
+  document.getElementById('oStat').value='Payé';
+  openModal('mOrdo');
+}
+async function saveOrdo(){
+  const pat=document.getElementById('oPat').value.trim();
+  const meds=document.getElementById('oMeds').value.trim();
+  const total=Number(document.getElementById('oTotal').value);
+  if(!meds||!total){toast('Médicaments et total requis','warn');return;}
+  const data={date:document.getElementById('oDate').value,ref:document.getElementById('oRef').value.trim(),pat,med:document.getElementById('oMed').value.trim(),meds,total,mode:document.getElementById('oMode').value,stat:document.getElementById('oStat').value,notes:document.getElementById('oNotes').value.trim(),saisi_par:S.user,ts:new Date().toISOString()};
+  let no={id:uid(),...data};
+  if(DB_OK){const r=await dbPost('ordonnances',no).catch(()=>null);if(r&&r[0])no=r[0];}
+  S.ordonnances.push(no);
+  addLog('VENTE',(pat||'Patient')+' · '+meds.substring(0,40)+' · '+total.toLocaleString('fr-FR')+' FCFA');
+  lsSave();closeModal('mOrdo');renderOrdo();toast('Vente enregistrée ✓');
+}
+async function delOrdo(id){
+  if(!confirm('Supprimer cette vente ?'))return;
+  if(DB_OK)await dbDel('ordonnances',id).catch(()=>{});
+  S.ordonnances=S.ordonnances.filter(x=>x.id!==id);
+  lsSave();renderOrdo();toast('Vente supprimée');
+}
+
+// ═══════════════════════════════════════════
+//  ÉTIQUETTES
+// ═══════════════════════════════════════════
+function initEtiquettes(){
+  const sel=document.getElementById('etiqStock');
+  sel.innerHTML='<option value="">-- Choisir --</option>'+S.stocks.map(s=>`<option value="${s.id}">${s.nom}</option>`).join('');
+  renderEtiqPreview();
+}
+function renderEtiqPreview(){
+  const sid=document.getElementById('etiqStock')?.value;
+  const nb=parseInt(document.getElementById('etiqNb')?.value||1);
+  const showPrix=document.getElementById('etiqPrix')?.value==='1';
+  const showPerem=document.getElementById('etiqPerem')?.value==='1';
+  const st=S.stocks.find(x=>x.id===sid);
+  const prev=document.getElementById('etiqPreview');
+  if(!st){prev.innerHTML='<p style="color:var(--muted);font-size:.82rem;padding:16px">Sélectionnez un médicament</p>';return;}
+  const p=S.params;
+  let etiqHtml='';
+  for(let i=0;i<Math.min(nb,6);i++){
+    etiqHtml+=`<div class="etiq-preview" style="print-color-adjust:exact;-webkit-print-color-adjust:exact">
+      <div style="background:#0B3D2E;color:#fff;padding:3px 6px;border-radius:4px;font-size:7px;font-weight:700;letter-spacing:.06em;margin-bottom:5px;display:inline-block">${p.nom||'Pharmacie Rahmane'}</div>
+      <div style="font-size:10px;font-weight:700;line-height:1.2;margin-bottom:3px;color:#0B1F18">${st.nom}</div>
+      <div style="font-size:8px;color:#8AADA5;margin-bottom:4px">${st.cat||''} · ${st.unite||''}</div>
+      ${showPrix&&st.prix?`<div style="font-size:11px;font-weight:700;color:#0B3D2E">${Number(st.prix).toLocaleString('fr-FR')} FCFA</div>`:''}
+      ${showPerem&&st.perem?`<div style="font-size:7px;color:#C0392B;margin-top:2px">Exp: ${new Date(st.perem).toLocaleDateString('fr-FR')}</div>`:''}
+      ${st.lot?`<div style="font-size:7px;color:#8AADA5">Lot: ${st.lot}</div>`:''}
+    </div>`;
+  }
+  if(nb>6)etiqHtml+=`<div style="padding:12px;color:var(--muted);font-size:.78rem">+ ${nb-6} étiquette(s) supplémentaire(s) à l'impression</div>`;
+  prev.innerHTML=etiqHtml;
+}
+function printEtiq(){
+  const sid=document.getElementById('etiqStock')?.value;
+  const nb=parseInt(document.getElementById('etiqNb')?.value||1);
+  const showPrix=document.getElementById('etiqPrix')?.value==='1';
+  const showPerem=document.getElementById('etiqPerem')?.value==='1';
+  const st=S.stocks.find(x=>x.id===sid);
+  if(!st){toast('Sélectionnez un médicament','warn');return;}
+  const p=S.params;
+  const win=window.open('','_blank','width=600,height=500');
+  let etiqHtml='';
+  for(let i=0;i<nb;i++){
+    etiqHtml+=`<div style="width:200px;height:100px;border:2px solid #0B3D2E;border-radius:8px;padding:8px 10px;display:inline-block;margin:6px;vertical-align:top;font-family:sans-serif">
+      <div style="background:#0B3D2E;color:#fff;padding:2px 5px;border-radius:3px;font-size:7px;font-weight:700;margin-bottom:4px;display:inline-block">${p.nom||'Pharmacie Rahmane'}</div>
+      <div style="font-size:10px;font-weight:700;line-height:1.2;margin-bottom:2px">${st.nom}</div>
+      <div style="font-size:8px;color:#666;margin-bottom:3px">${st.cat||''} · ${st.unite||''}</div>
+      ${showPrix&&st.prix?`<div style="font-size:11px;font-weight:700;color:#0B3D2E">${Number(st.prix).toLocaleString('fr-FR')} FCFA</div>`:''}
+      ${showPerem&&st.perem?`<div style="font-size:7px;color:#C0392B">Exp: ${new Date(st.perem).toLocaleDateString('fr-FR')}</div>`:''}
+      ${st.lot?`<div style="font-size:7px;color:#999">Lot: ${st.lot}</div>`:''}
+    </div>`;
+  }
+  win.document.write(`<!DOCTYPE html><html><head><title>Étiquettes ${st.nom}</title><style>@media print{body{margin:0}}</style></head><body style="background:white;padding:16px">${etiqHtml}<script>window.onload=()=>setTimeout(()=>window.print(),300);<\/script></body></html>`);
+  win.document.close();
+  addLog('ÉTIQUETTES',`${st.nom} · ${nb} étiquette(s)`);
+}
+
+// ═══════════════════════════════════════════
+//  DASHBOARD CAISSE 30 JOURS
+// ═══════════════════════════════════════════
+function renderCaisseDash(){
+  const now=new Date();
+  const ops30=[];
+  for(let i=29;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    const dayOps=S.caisse.filter(c=>c.jour===ds);
+    const rec=dayOps.filter(c=>c.ctype==='recette').reduce((s,c)=>s+Number(c.montant),0);
+    const dep=dayOps.filter(c=>c.ctype==='depense').reduce((s,c)=>s+Number(c.montant),0);
+    ops30.push({d:ds,label:d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'}),rec,dep,sol:rec-dep});
+  }
+  const totRec=ops30.reduce((s,x)=>s+x.rec,0);
+  const totDep=ops30.reduce((s,x)=>s+x.dep,0);
+  const totSol=totRec-totDep;
+  // KPIs
+  document.getElementById('c30Rec').innerHTML=totRec.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('c30RecSub').textContent=ops30.filter(x=>x.rec>0).length+' jours avec recettes';
+  document.getElementById('c30Dep').innerHTML=totDep.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('c30DepSub').textContent=ops30.filter(x=>x.dep>0).length+' jours avec dépenses';
+  document.getElementById('c30Sol').innerHTML=(totSol>=0?'+':'')+totSol.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('c30Sol').style.color=totSol>=0?'var(--emerald)':'#C0392B';
+  document.getElementById('c30SolSub').textContent=totSol>=0?'Bénéficiaire':'Déficitaire';
+  document.getElementById('c30Label').textContent='30 derniers jours';
+  // Chart barres
+  if(S.cCaisseBar)S.cCaisseBar.destroy();
+  const ctxB=document.getElementById('cCaisseBar');
+  if(!ctxB)return;
+  S.cCaisseBar=new Chart(ctxB.getContext('2d'),{
+    type:'bar',
+    data:{
+      labels:ops30.map(x=>x.label),
+      datasets:[
+        {label:'Recettes',data:ops30.map(x=>x.rec),backgroundColor:'rgba(5,150,105,.7)',borderRadius:4,borderSkipped:false},
+        {label:'Dépenses',data:ops30.map(x=>x.dep),backgroundColor:'rgba(192,57,43,.7)',borderRadius:4,borderSkipped:false}
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+' : '+c.parsed.y.toLocaleString('fr-FR')+' FCFA'}}},scales:{y:{ticks:{callback:v=>v>0?v.toLocaleString('fr-FR'):'',font:{size:9}},grid:{color:'rgba(0,0,0,.04)'}},x:{ticks:{font:{size:8},maxRotation:45},grid:{display:false}}}}
+  });
+  // Pie recettes/dépenses
+  if(S.cCaissePie)S.cCaissePie.destroy();
+  const ctxP=document.getElementById('cCaissePie');
+  if(!ctxP)return;
+  S.cCaissePie=new Chart(ctxP.getContext('2d'),{
+    type:'doughnut',
+    data:{labels:['Recettes','Dépenses'],datasets:[{data:[totRec,totDep],backgroundColor:['rgba(5,150,105,.75)','rgba(192,57,43,.75)'],borderColor:['#059669','#C0392B'],borderWidth:2,hoverOffset:5}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},usePointStyle:true}}},cutout:'65%'}
+  });
+}
+
+// ═══════════════════════════════════════════
+//  CRÉDITS PATIENTS
+// ═══════════════════════════════════════════
+function renderCredits(){
+  const s=(document.getElementById('searchCredit')?.value||'').toLowerCase();
+  const stat=document.getElementById('filterCreditStat')?.value||'';
+  let list=[...S.credits].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  if(s)list=list.filter(c=>(c.pat||'').toLowerCase().includes(s));
+  if(stat)list=list.filter(c=>c.stat===stat);
+
+  // KPIs
+  const now=new Date();
+  const actifs=S.credits.filter(c=>c.stat!=='Remboursé');
+  const totImp=actifs.reduce((s,c)=>s+(Number(c.montant)-(Number(c.acompte)||0)-((c.remboursements||[]).reduce((ss,r)=>ss+Number(r.mt),0))),0);
+  const mois=S.credits.flatMap(c=>c.remboursements||[]).filter(r=>{const d=new Date(r.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();}).reduce((s,r)=>s+Number(r.mt),0);
+  const retard=actifs.filter(c=>{if(!c.echeance)return false;return new Date(c.echeance)<now&&c.stat!=='Remboursé';}).length;
+
+  document.getElementById('kCrTot').innerHTML=totImp.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('kCrNb').textContent=actifs.length;
+  document.getElementById('kCrRmb').innerHTML=mois.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  document.getElementById('kCrLate').textContent=retard;
+
+  // Badge sidebar
+  const badge=document.getElementById('creditBadge');
+  if(badge){badge.style.display=retard>0?'inline-flex':'none';badge.textContent=retard;}
+
+  if(list.length===0){
+    document.getElementById('creditsGrid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted)">Aucun crédit enregistré</div>';
+    return;
+  }
+  document.getElementById('creditsGrid').innerHTML=list.map(c=>{
+    const rembTotal=(c.remboursements||[]).reduce((s,r)=>s+Number(r.mt),0);
+    const paye=Number(c.acompte||0)+rembTotal;
+    const reste=Math.max(0,Number(c.montant)-paye);
+    const pct=Number(c.montant)>0?Math.min(100,Math.round(paye/Number(c.montant)*100)):0;
+    const isRetard=c.echeance&&new Date(c.echeance)<now&&c.stat!=='Remboursé';
+    const cardClass=c.stat==='Remboursé'?'ok':isRetard?'urgent':'partiel';
+    const CSTAT={'En cours':'ba','Partiellement remboursé':'bc','Remboursé':'bv','En retard':'bn'};
+    return`<div class="credit-card ${cardClass}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+        <div>
+          <div style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:600">${c.pat||'Patient'}</div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${fd(c.date)}${c.tel?` · 📞 ${c.tel}`:''}</div>
+        </div>
+        <span class="badge ${CSTAT[c.stat]||'bg'}">${c.stat}</span>
+      </div>
+      <div style="font-size:.76rem;color:var(--sub);margin-bottom:8px;line-height:1.5">${(c.meds||'').substring(0,80)}${c.meds&&c.meds.length>80?'…':''}</div>
+      <div class="credit-prog"><div class="credit-prog-bar" style="width:${pct}%;background:${pct>=100?'#059669':pct>50?'#E9A820':'#C0392B'}"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;margin-bottom:8px">
+        <span>Payé : <span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--jade)">${paye.toLocaleString('fr-FR')}</span> FCFA</span>
+        <span>Reste : <span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:#C0392B">${reste.toLocaleString('fr-FR')}</span> FCFA</span>
+      </div>
+      <div style="font-size:.7rem;color:var(--muted);margin-bottom:10px">
+        Total : ${Number(c.montant).toLocaleString('fr-FR')} FCFA
+        ${c.echeance?` · Échéance : ${fd(c.echeance)}`:''}
+        ${isRetard?'<span style="color:#C0392B;font-weight:700"> ⚠️ EN RETARD</span>':''}
+      </div>
+      ${(c.remboursements||[]).length>0?`<div style="font-size:.68rem;color:var(--muted);margin-bottom:8px">${c.remboursements.length} remboursement(s) · dernier : ${fd(c.remboursements[c.remboursements.length-1].date)}</div>`:''}
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${c.stat!=='Remboursé'?`<button class="btn btn-p btn-sm" onclick="openRmb('${c.id}')">💵 Rembourser</button>`:''}
+        ${c.tel?`<button class="btn btn-wa btn-sm" onclick="remindWA('${c.id}')">📱 WhatsApp</button>`:''}
+        <button class="btn btn-s btn-sm" onclick="editCredit('${c.id}')">✏️</button>
+        <button class="btn btn-d btn-sm" onclick="delCredit('${c.id}')">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openModalCredit(){
+  S.editCreditId=null;
+  document.getElementById('mCreditTtl').textContent='💳 Nouveau crédit';
+  ['crPat','crTel','crMeds','crNotes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('crDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('crMontant').value='';
+  document.getElementById('crAcompte').value='';
+  document.getElementById('crEcheance').value='';
+  document.getElementById('crStat').value='En cours';
+  openModal('mCredit');
+}
+function editCredit(id){
+  const c=S.credits.find(x=>x.id===id);if(!c)return;
+  S.editCreditId=id;
+  document.getElementById('mCreditTtl').textContent='✏️ Modifier crédit';
+  document.getElementById('crPat').value=c.pat||'';
+  document.getElementById('crTel').value=c.tel||'';
+  document.getElementById('crDate').value=c.date||'';
+  document.getElementById('crMeds').value=c.meds||'';
+  document.getElementById('crMontant').value=c.montant||'';
+  document.getElementById('crAcompte').value=c.acompte||'';
+  document.getElementById('crEcheance').value=c.echeance||'';
+  document.getElementById('crStat').value=c.stat||'En cours';
+  document.getElementById('crNotes').value=c.notes||'';
+  openModal('mCredit');
+}
+async function saveCredit(){
+  const pat=document.getElementById('crPat').value.trim();
+  const montant=Number(document.getElementById('crMontant').value);
+  const meds=document.getElementById('crMeds').value.trim();
+  if(!pat||!montant||!meds){toast('Patient, médicaments et montant requis','warn');return;}
+  const data={pat,tel:document.getElementById('crTel').value.trim(),date:document.getElementById('crDate').value,meds,montant,acompte:Number(document.getElementById('crAcompte').value)||0,echeance:document.getElementById('crEcheance').value,stat:document.getElementById('crStat').value,notes:document.getElementById('crNotes').value.trim(),saisi_par:S.user};
+  if(S.editCreditId){
+    if(DB_OK)await dbPatch('credits',S.editCreditId,data).catch(()=>{});
+    const i=S.credits.findIndex(x=>x.id===S.editCreditId);
+    if(i>-1)S.credits[i]={...S.credits[i],...data};
+    addLog('CRÉDIT MODIFIÉ',pat);toast('Crédit modifié ✓');
+  }else{
+    const nc={id:uid(),...data,remboursements:[],created_at:new Date().toISOString()};
+    if(DB_OK){const r=await dbPost('credits',nc).catch(()=>null);if(r&&r[0])nc.id=r[0].id;}
+    S.credits.push(nc);
+    addLog('CRÉDIT',pat+' · '+montant.toLocaleString('fr-FR')+' FCFA');toast('Crédit enregistré ✓');
+  }
+  lsSave();closeModal('mCredit');renderCredits();
+}
+async function delCredit(id){
+  const c=S.credits.find(x=>x.id===id);if(!c)return;
+  if(!confirm('Supprimer ce crédit ?'))return;
+  if(DB_OK)await dbDel('credits',id).catch(()=>{});
+  S.credits=S.credits.filter(x=>x.id!==id);
+  lsSave();renderCredits();toast('Crédit supprimé');
+}
+function openRmb(id){
+  const c=S.credits.find(x=>x.id===id);if(!c)return;
+  S.rmbCreditId=id;
+  const paye=Number(c.acompte||0)+((c.remboursements||[]).reduce((s,r)=>s+Number(r.mt),0));
+  const reste=Math.max(0,Number(c.montant)-paye);
+  document.getElementById('mRmbPat').textContent=c.pat||'Patient';
+  document.getElementById('mRmbReste').textContent='Reste à payer : '+reste.toLocaleString('fr-FR')+' FCFA';
+  document.getElementById('rmbMt').value=reste;
+  document.getElementById('rmbDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('rmbMode').value='Espèces';
+  document.getElementById('rmbNotes').value='';
+  openModal('mRmb');
+}
+async function saveRmb(){
+  const c=S.credits.find(x=>x.id===S.rmbCreditId);if(!c)return;
+  const mt=Number(document.getElementById('rmbMt').value);
+  if(!mt){toast('Montant requis','warn');return;}
+  const rmb={mt,date:document.getElementById('rmbDate').value,mode:document.getElementById('rmbMode').value,notes:document.getElementById('rmbNotes').value};
+  if(!c.remboursements)c.remboursements=[];
+  c.remboursements.push(rmb);
+  const totalPaye=Number(c.acompte||0)+c.remboursements.reduce((s,r)=>s+Number(r.mt),0);
+  if(totalPaye>=Number(c.montant))c.stat='Remboursé';
+  else c.stat='Partiellement remboursé';
+  if(DB_OK)await dbPatch('credits',c.id,{remboursements:c.remboursements,stat:c.stat}).catch(()=>{});
+  addLog('REMBOURSEMENT',c.pat+' · '+mt.toLocaleString('fr-FR')+' FCFA');
+  lsSave();closeModal('mRmb');renderCredits();toast('Remboursement enregistré ✓');
+}
+function remindWA(id){
+  const c=S.credits.find(x=>x.id===id);if(!c||!c.tel)return;
+  const paye=Number(c.acompte||0)+((c.remboursements||[]).reduce((s,r)=>s+Number(r.mt),0));
+  const reste=Math.max(0,Number(c.montant)-paye);
+  const ph=S.params;
+  const msg='Bonjour '+c.pat+',\n\nCeci est un rappel de paiement de '+(ph.nom||'Pharmacie Rahmane')+'.\n\nMontant restant : *'+reste.toLocaleString('fr-FR')+' FCFA*\nMédicaments : '+(c.meds||'').substring(0,80)+'\n'+(c.echeance?'Echeance : '+fd(c.echeance)+'\n':'')+'\nMerci de régulariser votre situation.\n\n'+(ph.nom||'Pharmacie Rahmane')+' · '+(ph.tel||'');
+  const num=c.tel.replace(/\s/g,'').replace('+','');
+  window.open('https://wa.me/'+num+'?text='+encodeURIComponent(msg),'_blank');
+  addLog('WHATSAPP RAPPEL',c.pat);
+}
+function exportCreditsCSV(){const h=['Patient','Telephone','Date','Medicaments','Montant','Acompte','Rembourse','Reste','Statut','Echeance'];const rows=S.credits.map(c=>{const rmb=(c.remboursements||[]).reduce((s,r)=>s+Number(r.mt),0);const paye=Number(c.acompte||0)+rmb;const reste=Math.max(0,Number(c.montant)-paye);return[c.pat||'',c.tel||'',c.date||'',(c.meds||'').replace(/;/g,','),c.montant,c.acompte||0,paye,reste,c.stat||'',c.echeance||''];});const esc=v=>String(v).replace(/;/g,',');const csv=[h.join(';'),...rows.map(r=>r.map(esc).join(';'))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));a.download='Credits_PharmaRahmane_'+new Date().toISOString().slice(0,10)+'.csv';a.click();toast('Credits exportes');}
+
+// ═══════════════════════════════════════════
+//  WHATSAPP / SMS ALERTES STOCK
+// ═══════════════════════════════════════════
+function buildWAAlertesContent(){
+  const alertes=S.stocks.filter(s=>s.qte<=s.min);
+  const expires=S.stocks.filter(s=>{
+    if(!s.perem)return false;
+    const diff=(new Date(s.perem)-new Date())/(1000*60*60*24);
+    return diff<=30&&diff>=0;
+  });
+  const el=document.getElementById('waAlertesList');
+  if(!el)return;
+  let html='';
+  if(alertes.length>0){
+    html+='<div style="background:#FEF2F0;border:1px solid rgba(192,57,43,.2);border-radius:var(--rs);padding:10px 14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;color:#922B21;margin-bottom:6px">🔴 STOCKS CRITIQUES ('+alertes.length+')</div>'+alertes.map(s=>`<div style="font-size:.78rem;margin-bottom:2px">· ${s.nom} : ${s.qte} ${s.unite||'unités'} (min: ${s.min})</div>`).join('')+'</div>';
+  }
+  if(expires.length>0){
+    html+='<div style="background:var(--honey);border:1px solid rgba(200,134,10,.2);border-radius:var(--rs);padding:10px 14px;margin-bottom:8px"><div style="font-size:.72rem;font-weight:700;color:#8B5E08;margin-bottom:6px">⚠️ PÉREMPTIONS PROCHES ('+expires.length+')</div>'+expires.map(s=>`<div style="font-size:.78rem;margin-bottom:2px">· ${s.nom} : exp. ${new Date(s.perem).toLocaleDateString('fr-FR')}</div>`).join('')+'</div>';
+  }
+  if(!alertes.length&&!expires.length)html='<div style="text-align:center;padding:16px;color:var(--muted);font-size:.82rem">✅ Tous les stocks sont OK</div>';
+  el.innerHTML=html;
+}
+function sendWAStock(){const num=(document.getElementById('waNum')?.value||'').trim().replace(/\s/g,'').replace('+','');const alertes=S.stocks.filter(s=>s.qte<=s.min);const ph=S.params;if(alertes.length===0){toast('Aucun stock critique actuellement','warn');return;}const lignes=alertes.map(s=>'· '+s.nom+' : '+s.qte+'/'+ s.min+' '+(s.unite||'unités'));const msg='🏥 *'+(ph.nom||'Pharmacie Rahmane')+'* — ALERTE STOCK\n\n🔴 *Stocks critiques :*\n'+lignes.join('\n')+'\n\n📅 '+new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});const url=num?'https://wa.me/'+num+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg);window.open(url,'_blank');addLog('ALERTE WA STOCK',alertes.length+' produit(s)');}
+function sendWACredits(){const num=(document.getElementById('waNum')?.value||'').trim().replace(/\s/g,'').replace('+','');const retards=S.credits.filter(c=>c.echeance&&new Date(c.echeance)<new Date()&&c.stat!=='Remboursé');const ph=S.params;if(retards.length===0){toast('Aucun crédit en retard','warn');return;}const totalReste=retards.reduce((s,c)=>{const p=Number(c.acompte||0)+((c.remboursements||[]).reduce((ss,r)=>ss+Number(r.mt),0));return s+Math.max(0,Number(c.montant)-p);},0);const lignes=retards.map(c=>{const p=Number(c.acompte||0)+((c.remboursements||[]).reduce((ss,r)=>ss+Number(r.mt),0));const r=Math.max(0,Number(c.montant)-p);return'· '+c.pat+' : '+r.toLocaleString('fr-FR')+' FCFA';});const msg='🏥 *'+(ph.nom||'Pharmacie Rahmane')+'* — CRÉDITS EN RETARD\n\n💳 *'+retards.length+' patient(s) en retard :*\n'+lignes.join('\n')+'\n\n💰 Total impayé : *'+totalReste.toLocaleString('fr-FR')+' FCFA*';const url=num?'https://wa.me/'+num+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg);window.open(url,'_blank');addLog('ALERTE WA CRÉDITS',retards.length+' patients');}
+function sendSMS(){
+  const alertes=S.stocks.filter(s=>s.qte<=s.min);
+  const ph=S.params;
+  const msg=ph.nom+' ALERTE: '+alertes.map(s=>s.nom+' ('+s.qte+' restants)').join(', ');
+  navigator.clipboard.writeText(msg).then(()=>toast('Message copié ! Collez-le dans votre SMS 📩')).catch(()=>{
+    prompt('Copiez ce message SMS :',msg);
+  });
+}
+
+// Ouvrir le modal WA et charger les alertes
+const _origOpenModal=openModal;
+function openModal(id){
+  _origOpenModal(id);
+  if(id==='mWA'){
+    buildWAAlertesContent();
+    const saved=localStorage.getItem('pr2_wanum')||'';
+    const el=document.getElementById('waNum');if(el)el.value=saved;
+    const el2=document.getElementById('waNum');
+    if(el2)el2.addEventListener('input',()=>localStorage.setItem('pr2_wanum',el2.value));
+  }
+}
+
+// ═══════════════════════════════════════════
+//  SAUVEGARDE JSON
+// ═══════════════════════════════════════════
+function doBackup(){
+  const backup={
+    version:'Pharmacie Rahmane v4',
+    date:new Date().toISOString(),
+    pharmacie:S.params,
+    depenses:S.dep,
+    caisse:S.caisse,
+    stocks:S.stocks,
+    ordonnances:S.ordonnances,
+    fournisseurs:S.fournisseurs,
+    credits:S.credits,
+    types:S.types,
+    users:S.users.map(u=>({...u,pwd:'[chiffré]'})),
+    succursales:S.succs,
+    journal:S.logs.slice(0,100),
+  };
+  const json=JSON.stringify(backup,null,2);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
+  a.download=`Backup_PharmaRahmane_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  addLog('SAUVEGARDE JSON','Backup complet exporté');
+  toast('Sauvegarde téléchargée ✓');
+}
+
+// ═══════════════════════════════════════════
+//  DARK MODE
+// ═══════════════════════════════════════════
+function toggleDark(){
+  S.darkMode=!S.darkMode;
+  document.documentElement.setAttribute('data-theme',S.darkMode?'dark':'');
+  const btn=document.getElementById('btnDark');
+  if(btn)btn.textContent=S.darkMode?'☀️':'🌙';
+  lsSave();toast(S.darkMode?'Mode nuit activé 🌙':'Mode jour activé ☀️');
+}
+
+// ═══════════════════════════════════════════
+//  NUMÉROTATION AUTOMATIQUE
+// ═══════════════════════════════════════════
+function genRef(){
+  const now=new Date();
+  const y=now.getFullYear();
+  const m=String(now.getMonth()+1).padStart(2,'0');
+  const existing=S.dep.filter(d=>(d.ref||'').startsWith(`FAC-${y}-`));
+  const maxN=existing.reduce((mx,d)=>{const n=parseInt((d.ref||'').split('-').pop()||0);return n>mx?n:mx;},0);
+  document.getElementById('fRef').value=`FAC-${y}-${m}-${String(maxN+1).padStart(4,'0')}`;
+}
+
+// ═══════════════════════════════════════════
+//  DRAG & DROP FICHIERS
+// ═══════════════════════════════════════════
+function dropFiles(e){
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const files=Array.from(e.dataTransfer.files);
+  files.forEach(file=>{
+    if(file.size>5*1024*1024){toast(`${file.name} dépasse 5 MB`,'warn');return;}
+    if(!file.type.startsWith('image/')&&file.type!=='application/pdf'){toast(`Format non supporté : ${file.type}`,'warn');return;}
+    const r=new FileReader();
+    r.onload=ev=>{
+      S.pendingFiles.push({name:file.name,type:file.type.startsWith('image/')?'img':'pdf',data:ev.target.result,size:file.size});
+      renderFileList();
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  NOTIFICATIONS ALERTES STOCK
+// ═══════════════════════════════════════════
+function checkStockAlertes(){
+  const alertes=S.stocks.filter(s=>s.qte<=s.min);
+  const expires=S.stocks.filter(s=>{
+    if(!s.perem)return false;
+    const d=new Date(s.perem);
+    const now=new Date();
+    const diff=(d-now)/(1000*60*60*24);
+    return diff<=30&&diff>=0;
+  });
+  if(alertes.length>0){
+    const msg=`⚠️ Stock critique : ${alertes.map(s=>s.nom).join(', ')}`;
+    if('Notification'in window&&Notification.permission==='granted'){
+      new Notification('Pharmacie Rahmane — Alerte Stock',{body:msg,icon:'icon-192.png'});
+    }
+    toast(msg,'warn');
+  }
+  if(expires.length>0){
+    toast(`📅 ${expires.length} médicament(s) expirent dans moins de 30 jours`,'warn');
+  }
+}
+function demandNotif(){
+  if('Notification'in window&&Notification.permission==='default'){
+    Notification.requestPermission().then(p=>{
+      if(p==='granted')toast('Notifications activées 🔔');
+    });
+  }
+}
+
+// ═══════════════════════════════════════════
+//  SUCCURSALES
+// ═══════════════════════════════════════════
+function renderSucc(){
+  document.getElementById('succGrid').innerHTML=S.succs.length===0
+    ?'<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted)">Aucune succursale. Cliquez sur + pour en ajouter.</div>'
+    :S.succs.map(sc=>`<div class="stock-card ok">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+        <div class="stock-name">🏥 ${sc.nom}</div>
+        <span class="badge bv" style="font-size:.6rem">Active</span>
+      </div>
+      <div class="stock-cat">${sc.ville||'—'}</div>
+      ${sc.adr?`<div style="font-size:.73rem;color:var(--muted);margin-top:4px">📍 ${sc.adr}</div>`:''}
+      ${sc.tel?`<div style="font-size:.73rem;color:var(--muted)">📞 ${sc.tel}</div>`:''}
+      ${sc.resp?`<div style="font-size:.73rem;color:var(--muted)">👤 ${sc.resp}</div>`:''}
+      ${sc.email?`<div style="font-size:.73rem;color:var(--muted)">📧 ${sc.email}</div>`:''}
+      ${sc.notes?`<div style="font-size:.72rem;color:var(--muted);margin-top:6px;font-style:italic">${sc.notes}</div>`:''}
+      <div class="stock-actions" style="margin-top:12px">
+        <button class="btn btn-s btn-sm" onclick="editSucc('${sc.id}')">✏️ Modifier</button>
+        ${sc.id!=='sc1'?`<button class="btn btn-d btn-sm" onclick="delSucc('${sc.id}')">🗑️</button>`:''}
+      </div>
+    </div>`).join('');
+}
+function openModalSucc(){
+  S.editSuccId=null;
+  document.getElementById('mSuccTtl').textContent='🏥 Nouvelle succursale';
+  ['scNom','scVille','scTel','scAdr','scResp','scEmail','scNotes'].forEach(id=>document.getElementById(id).value='');
+  openModal('mSucc');
+}
+function editSucc(id){
+  const sc=S.succs.find(x=>x.id===id);if(!sc)return;
+  S.editSuccId=id;
+  document.getElementById('mSuccTtl').textContent='✏️ Modifier succursale';
+  document.getElementById('scNom').value=sc.nom||'';
+  document.getElementById('scVille').value=sc.ville||'';
+  document.getElementById('scTel').value=sc.tel||'';
+  document.getElementById('scAdr').value=sc.adr||'';
+  document.getElementById('scResp').value=sc.resp||'';
+  document.getElementById('scEmail').value=sc.email||'';
+  document.getElementById('scNotes').value=sc.notes||'';
+  openModal('mSucc');
+}
+async function saveSucc(){
+  const nom=document.getElementById('scNom').value.trim();
+  if(!nom){toast('Nom requis','warn');return;}
+  const data={nom,ville:document.getElementById('scVille').value.trim(),tel:document.getElementById('scTel').value.trim(),adr:document.getElementById('scAdr').value.trim(),resp:document.getElementById('scResp').value.trim(),email:document.getElementById('scEmail').value.trim(),notes:document.getElementById('scNotes').value.trim()};
+  if(S.editSuccId){
+    const i=S.succs.findIndex(x=>x.id===S.editSuccId);
+    if(i>-1)S.succs[i]={...S.succs[i],...data};
+    addLog('SUCCURSALE MODIFIÉE',nom);toast('Succursale modifiée ✓');
+  }else{
+    S.succs.push({id:uid(),...data,created_at:new Date().toISOString()});
+    addLog('SUCCURSALE AJOUTÉE',nom);toast(`"${nom}" ajoutée ✓`);
+  }
+  lsSave();closeModal('mSucc');renderSucc();
+}
+async function delSucc(id){
+  const sc=S.succs.find(x=>x.id===id);if(!sc)return;
+  if(!confirm(`Supprimer "${sc.nom}" ?`))return;
+  S.succs=S.succs.filter(x=>x.id!==id);
+  addLog('SUCCURSALE SUPPRIMÉE',sc.nom);
+  lsSave();renderSucc();toast(`"${sc.nom}" supprimée`);
+}
 
 // ═══════════════════════════════════════════
 //  PWA
