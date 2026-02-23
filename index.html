@@ -624,25 +624,40 @@ tbody tr:last-child td{border-bottom:none}
             <button class="btn btn-s btn-sm" onclick="exportCaisseCSV()">📤 CSV</button>
           </div>
         </div>
-        <!-- KPIs caisse -->
+
+        <!-- KPIs du jour -->
         <div class="kpi-grid" style="margin-bottom:16px">
           <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#059669,#10B981)"></div><div class="kpi-ico">💚</div><div class="kpi-lbl">Recettes du jour</div><div class="kpi-val" id="cRecettes">0<small>FCFA</small></div><div class="kpi-sub" id="cRecNb">0 op.</div></div>
           <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#C0392B,#E74C3C)"></div><div class="kpi-ico">❤️</div><div class="kpi-lbl">Dépenses du jour</div><div class="kpi-val" id="cDepenses">0<small>FCFA</small></div><div class="kpi-sub" id="cDepNb">0 op.</div></div>
           <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#0B3D2E,#14845F)"></div><div class="kpi-ico">💰</div><div class="kpi-lbl">Solde du jour</div><div class="kpi-val" id="cSoldeKpi">0<small>FCFA</small></div><div class="kpi-sub" id="cSoldeTrend">—</div></div>
-          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#1A6B9A,#3498DB)"></div><div class="kpi-ico">📅</div><div class="kpi-lbl">Solde 30 jours</div><div class="kpi-val" id="cSolde30">0<small>FCFA</small></div><div class="kpi-sub">Cumul du mois</div></div>
+          <div class="kpi"><div class="kpi-bar" style="background:linear-gradient(90deg,#1A6B9A,#3498DB)"></div><div class="kpi-ico">📅</div><div class="kpi-lbl" id="c30Label">30 derniers jours</div><div class="kpi-val" id="c30Sol">0<small>FCFA</small></div><div class="kpi-sub" id="c30SolSub">Cumul</div></div>
         </div>
-        <!-- Graphique 30 jours -->
-        <div class="caisse-chart-wrap">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-            <div><span style="font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600">Évolution 30 derniers jours</span></div>
-            <div style="display:flex;gap:14px;font-size:.72rem"><span style="color:#059669;font-weight:600">● Recettes</span><span style="color:#C0392B;font-weight:600">● Dépenses</span><span style="color:#0B3D2E;font-weight:600">● Solde</span></div>
+
+        <!-- Graphiques 30 jours -->
+        <div class="charts-grid" style="margin-bottom:16px">
+          <div class="caisse-chart-wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <span style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:600">Recettes vs Dépenses — 30j</span>
+              <div style="display:flex;gap:10px;font-size:.7rem"><span style="color:#059669;font-weight:600">● Recettes</span><span style="color:#C0392B;font-weight:600">● Dépenses</span></div>
+            </div>
+            <canvas id="cCaisseBar" style="max-height:180px"></canvas>
+            <div style="display:flex;gap:16px;margin-top:10px">
+              <div><div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase">Recettes 30j</div><div class="amt" id="c30Rec" style="color:#059669;font-size:.9rem">0 FCFA</div><div style="font-size:.7rem;color:var(--muted)" id="c30RecSub"></div></div>
+              <div><div style="font-size:.65rem;color:var(--muted);font-weight:700;text-transform:uppercase">Dépenses 30j</div><div class="amt" id="c30Dep" style="color:#C0392B;font-size:.9rem">0 FCFA</div><div style="font-size:.7rem;color:var(--muted)" id="c30DepSub"></div></div>
+            </div>
           </div>
-          <canvas id="cCaisse30" style="max-height:200px"></canvas>
+          <div class="caisse-chart-wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div style="font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;margin-bottom:12px;align-self:flex-start">Répartition 30j</div>
+            <canvas id="cCaissePie" style="max-height:180px;max-width:180px"></canvas>
+          </div>
         </div>
+
         <!-- Opérations du jour -->
         <div class="card">
           <div class="card-h"><span class="card-t">Opérations du jour</span><span id="cTotJour" style="font-size:.76rem;color:var(--muted)"></span></div>
-          <div class="card-b" style="padding-top:12px"><div class="tbl-wrap"><table><thead><tr><th>Heure</th><th>Type</th><th>Description</th><th>Mode</th><th>Réf.</th><th>Montant</th><th></th></tr></thead><tbody id="tbCaisse"></tbody></table></div></div>
+          <div class="card-b" style="padding-top:12px">
+            <div class="tbl-wrap"><table><thead><tr><th>Heure</th><th>Type</th><th>Description</th><th>Mode</th><th>Réf.</th><th>Montant</th><th></th></tr></thead><tbody id="tbCaisse"></tbody></table></div>
+          </div>
         </div>
       </div>
 
@@ -2794,8 +2809,9 @@ function renderCaisseDash(){
   const totRec=ops30.reduce((s,x)=>s+x.rec,0);
   const totDep=ops30.reduce((s,x)=>s+x.dep,0);
   const totSol=totRec-totDep;
-  // KPIs
-  document.getElementById('c30Rec').innerHTML=totRec.toLocaleString('fr-FR')+'<small>FCFA</small>';
+  // KPIs — guard si page pas encore dans le DOM
+  if(!document.getElementById('c30Rec'))return;
+  document.getElementById('c30Rec').innerHTML=totRec.toLocaleString('fr-FR')+' FCFA';
   document.getElementById('c30RecSub').textContent=ops30.filter(x=>x.rec>0).length+' jours avec recettes';
   document.getElementById('c30Dep').innerHTML=totDep.toLocaleString('fr-FR')+'<small>FCFA</small>';
   document.getElementById('c30DepSub').textContent=ops30.filter(x=>x.dep>0).length+' jours avec dépenses';
